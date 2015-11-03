@@ -1,17 +1,22 @@
 #pragma once
+#include <memory>
 
 class Object{
-    public:
-        Object() : id(next_id++) {}
-        int get_id() { return id; }
+public:
+    Object() : id(next_id++) {}
+    int get_id() { return id; }
 
-    private:
-        int id;
-        static int next_id;
+private:
+    int id;
+    static int next_id;
 };
 int Object::next_id = 0;
 
 class VisibleObject : public Object {
-    //EMPTY NOW
+public:
+    VisibleObject();
 };
+
+typedef std::shared_ptr<Object> ObjectPtr;
+typedef std::shared_ptr<VisibleObject> VisibleObjPtr;
 

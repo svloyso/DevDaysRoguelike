@@ -1,5 +1,5 @@
 CC = g++
-CXXFLAG = -Wall -Werror
+CXXFLAG = -Wall -Werror -std=c++11
 
 OBJECTS = #put your object files here
 EXE = main
