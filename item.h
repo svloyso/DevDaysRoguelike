@@ -2,6 +2,7 @@
 #include <memory>
 
 #include "basic.h"
+#include "inflection.h"
 
 class Item : public VisibleObject {
 public:
@@ -24,25 +25,9 @@ public:
     bool movable() { return true; }
 };
 
-struct Damage {
-    double cutting  = 0;
-    double chopping = 0;
-    double picking  = 0;
-    double crushing = 0;
-    double magic    = 0;
-};
-
 class Weapon : public KeepedItem {
 public:
     Weapon(double weight, Damage damage);
-};
-
-struct Defense {
-    double cutting  = 0;
-    double chopping = 0;
-    double picking  = 0;
-    double crushing = 0;
-    double magic    = 0;
 };
 
 class Clothes : public KeepedItem {
