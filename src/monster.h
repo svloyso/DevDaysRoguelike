@@ -11,8 +11,11 @@
 class Monster : public Unit
 {
 public:
-    Monster(const AIPtr ai, MonsterStats stats);
+    Monster(const AIPtr ai, MonsterStats _stats);
     void act();
     void react(ActionPtr action);
+    MonsterStats get_stats();
+private:
+    MonsterStats stats;
 };
 
