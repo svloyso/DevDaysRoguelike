@@ -25,3 +25,8 @@ struct MonsterStats : public UnitStats {
     double area_of_sight;
     Fraction fraction;
 };
+
+
+struct HeroStats : public UnitStats {
+    //TODO
+};

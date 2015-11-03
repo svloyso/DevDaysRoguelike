@@ -1,11 +1,31 @@
 #include "core.h"
 #include <stdexcept>
 
-Core::Core(MapInfo info) :
-    map(std::vector< std::vector< TilePtr > >(info.size.x, std::vector<TilePtr>(info.size.y, TilePtr()))),
+CorePtr main_core;
+
+void init_core(MapInfo info) {
+    main_core = std::make_shared(info);
+}
+
+Core::Core(MapInfo info, std::vector< std::vector< TilePtr > > _map) :
+    map(_map),
     map_info(info)
 {
-    // EMPTY
+    init_tables();
+}
+
+void Core::init_tables() {
+    for (int i = 0; i < map.size(); ++i) {
+        auto& r = map[i];
+        for (int j = 0; j < r.size(); ++j) {
+            auto t = r[j];
+            //TODO
+        }
+    }
+}
+
+HeroPtr get_hero() {
+    return hero;
 }
 
 TilePtr Core::get_tile(Coord c) {
@@ -25,17 +45,23 @@ void Core::subscribe_action(std::function<void(ActionPtr)> f) {
     action_updater = f;
 }
 
+void Core::Move(MovePtr action) {
+    
+}
+
 void Core::do_action(ActionPtr action) {
     switch(action->get_type()) {
         case ActionType::Move:
-            //TODO
+            Move(action);
             break;
         case ActionType::Atack:
-            //TODO
+            Atack(action);
             break;
         case ActionType::Pick:
-            //TODO
+            Pick(action);
             break;
+        case ActionType::Interract:
+            Interract(action);
         default:
             throw std::runtime_error("Invalid action type");
     }

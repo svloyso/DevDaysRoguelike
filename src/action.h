@@ -10,7 +10,8 @@
 enum class ActionType {
     Move,
     Atack,
-    Pick
+    Pick,
+    Interract
 };
 
 class Action : public Object {
@@ -42,7 +43,14 @@ public:
     ActionType get_type() { return ActionType::Pick; }
 };
 
+class Interract : public Action {
+public:
+    Interract(UnitPtr who, VisibleObjPtr what, KeepedItemPtr with);
+    ActionType get_type() { return ActionType::Interract; }
+    virtual KeepedItemPtr get_interractor();
+};
+
 typedef std::shared_ptr<Move>   MovePtr;
 typedef std::shared_ptr<Atack>  AtackPtr;
 typedef std::shared_ptr<Pick>   PickPtr;
-
+typedef std::shared_ptr<Interract> InterractPtr;
