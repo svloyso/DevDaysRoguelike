@@ -19,6 +19,9 @@ public:
         }
     }
     char get_tile(Coord c) {
+        if (c.x < 0 || c.x > map.size() || c.y < 0 || c.y > map[0].size()) {
+            return '#';
+        }
         return map[c.x][c.y];
     }
     Coord get_size() {
