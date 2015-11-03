@@ -2,13 +2,13 @@
 #include <memory>
 
 #include "basic.h"
-#include "action.h"
+#include "action_fwd.h"
 
 class Unit : public VisibleObject {
 public:
     Unit();
-    void act();
-    void react(ActionPtr action);
+    virtual void act();
+    virtual void react(ActionPtr action);
 };
 
 typedef std::shared_ptr<Unit> UnitPtr;

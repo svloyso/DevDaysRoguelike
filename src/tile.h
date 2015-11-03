@@ -3,7 +3,8 @@
 
 #include "basic.h"
 #include "unit.h"
-#include "placeble.h"
+#include "item.h"
+#include "coord.h"
 
 enum class TileType {
     Wall,
@@ -13,13 +14,15 @@ enum class TileType {
 class Tile : public VisibleObject {
     public:
         TileType getType();
-        std::vector<ItemPtr> get_items();
-        std::vector<UnitPtr> get_units();
-
+        virtual std::vector<ItemPtr> get_items();
+        virtual std::vector<UnitPtr> get_units();
+        virtual Coord get_coord();
+        virtual void  set_coord(Coord _c);
     private:
         std::vector<ItemPtr> items;
         std::vector<UnitPtr> units;
         TileType type;
+        Coord c;
 };
 
 typedef std::shared_ptr<Tile> TilePtr;

@@ -7,11 +7,10 @@
 class Item : public VisibleObject {
 public:
     Item(double weight);
-    bool movable() = 0;
-    double get_weight();
+    virtual bool movable() = 0;
+    virtual double get_weight();
 };
 
-typedef std::shared_ptr<Item> ItemPtr;
 
 class PlacedItem : public Item {
 public:
@@ -38,6 +37,13 @@ public:
 class Usable : public KeepedItem {
 public:
     Usable(double weight);
-    void use(Object* obj);
+    virtual void use(Object* obj);
 };
+
+typedef std::shared_ptr<Item>       ItemPtr;
+typedef std::shared_ptr<PlacedItem> PlacedItemPtr;
+typedef std::shared_ptr<KeepedItem> KeepedItemPtr;
+typedef std::shared_ptr<Weapon>     WeaponPtr;
+typedef std::shared_ptr<Clothes>    ClothesPtr;
+typedef std::shared_ptr<Usable>     UsablePtr;
 
