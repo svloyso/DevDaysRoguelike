@@ -1,10 +1,10 @@
 CC = g++
-CXXFLAG = -Wall -Werror -std=c++11
+CXXFLAGS = -Wall -Werror -std=c++11
 
-OBJECTS = #put your object files here
 EXE = main
 BINDIR = bin
 SRCDIR = src
+OBJECTS = $(BINDIR)/core.o
 
 all: $(EXE)
 

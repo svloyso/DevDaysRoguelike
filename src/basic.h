@@ -4,6 +4,7 @@
 class Object{
 public:
     Object() : id(next_id++) {}
+    virtual ~Object();
     int get_id() { return id; }
 
 private:
