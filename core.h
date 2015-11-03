@@ -14,4 +14,6 @@ public:
     void subscribe_map(std::function<void(Coord, TilePtr)> f);
     void subscribe_action(std::function<void(ActionPtr)> f);
     void do_action(ActionPtr action);
+    ObjectPtr get_object(int id);
+    Coord get_object_coord(int id);
 };

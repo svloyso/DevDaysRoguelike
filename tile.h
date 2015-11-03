@@ -2,6 +2,8 @@
 #include <memory>
 
 #include "basic.h"
+#include "unit.h"
+#include "placeble.h"
 
 enum class TileType {
     Wall,
@@ -11,8 +13,8 @@ enum class TileType {
 class Tile : public VisibleObject {
     public:
         TileType getType();
-        const std::vector<ItemPtr>& get_items();
-        const std::vector<UnitPtr>& get_units();
+        std::vector<ItemPtr> get_items();
+        std::vector<UnitPtr> get_units();
 
     private:
         std::vector<ItemPtr> items;
