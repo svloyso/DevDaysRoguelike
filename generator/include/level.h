@@ -6,18 +6,22 @@
 #include <algorithm>
 #include <iostream>
 #include <string>
+#include <vector>
+
+#include "core.h"
+#include "tile.h"
  
  #define TILE_FLOOR 0
  #define TILE_WALL 1
  #define TILE_POINT 2
  #define TILE_DOOR 3
-  
- int **grid;
 
 using namespace std;
 
 int size_x;
 int size_y;
+
+vector< vector<int> > grid;
 
 const int numDoor = 7;
 int *rowDoor = new int[numDoor];
