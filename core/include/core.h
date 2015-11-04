@@ -48,7 +48,7 @@ private:
     MapInfo map_info;
     std::unordered_map<int, ObjectPtr>  objects;
     std::unordered_map<TilePtr, Coord> tiles;
-    Coord hero;
+    HeroPtr hero;
 };
 
 
