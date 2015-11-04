@@ -4,12 +4,12 @@
 #include <unistd.h>
 #include <string>
 #include <ncurses.h>
-#include "core_mock.h"
+#include "core.h"
 #include "coord.h"
 #include "math.h"
 #include "consoleprint.h"
 #include "drawinfo.h"
-
+#include <map>
 using namespace std;
 
 class ConsoleGraphics
@@ -20,14 +20,14 @@ class ConsoleGraphics
     int width;
     int shift;
     Coord hero_pos;
-    CoreMock core_mock;
     DrawInfo info;
+    map <string, string> codes;
 
 public:
     ConsoleGraphics ();
     void init();
     void draw_wall ();
-
+    string GetRenderCellSymbolWall(int r, int c);
     void draw_hero_stats ();
     void draw_coin (Coord x);
     void draw_hero ();

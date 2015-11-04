@@ -2,6 +2,7 @@
 
 #include "core.h"
 #include "getLevel.h"
+#include "runUI.h"
 
 void print_map() {
     MapInfo info = main_core->get_mapinfo();
@@ -28,8 +29,6 @@ void print_map() {
 
 
 int main() {
-    MapInfo info;
-    info.size = Coord();
     getMap();
-    print_map();
+    runUI();
 }

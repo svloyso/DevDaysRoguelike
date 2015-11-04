@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <ncurses.h>
 #include <cstdlib>
+#include "runUI.h"
 
 #include "gameprocess.h"
 using namespace std;
@@ -12,13 +13,15 @@ using namespace std;
 // 				repaint();
 // 	}
 // }
-int main()
+int runUI()
 {
+	
     GameProcess game;
-    system("stty raw");
+    system ("stty raw");
     char input_char;
     while (1)
     {
+		cout << "\033[30m" << "033[0m";
         input_char = getchar();
         cout << "\033[2С" << "\033[00m" << "\033[30m" << " ";
         if (input_char == 'q')
@@ -27,7 +30,7 @@ int main()
             break;
         }
         game.update (input_char);
-       // cout << "\033[1D" << " ";
+        //cout << "\033[2D" << " ";
         system("stty raw");
     }
 
