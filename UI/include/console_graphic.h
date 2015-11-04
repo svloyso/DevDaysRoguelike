@@ -33,7 +33,7 @@ class ConsoleGraphics
 public:
     ConsoleGraphics ();
     void init ();
-    void draw_wall ();
+    //void draw_wall ();
     void draw_wall (Coord c, int h, int w);
     string get_render_cell_symbol_wall (int r, int c);
     void draw_hero_stats ();

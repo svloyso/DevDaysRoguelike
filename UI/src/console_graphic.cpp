@@ -1,17 +1,17 @@
 #include "console_graphic.h"
 
 ConsoleGraphics::ConsoleGraphics()
-    : game_play_point (Coord (1, 10))
-    , game_play (CuttingWindow (game_play_point, Coord (17, 60)))
+    : game_play_point (Coord (9, 1))
+    , game_play (CuttingWindow (game_play_point, Coord (20, 60)))
 {
     initscr ();
     getmaxyx (stdscr, console_size_y, console_size_x);
-    endwin();
+    endwin ();
 
     game_play.get_size (game_play_width, game_play_height);
-    shift   = 8;
-    width   = 16;
-    height  = 70;  // смещение по у
+    // shift   = 8;
+    // width   = 16;
+    // height  = 70;  // смещение по у
     init_map ();
     refresh ();
 }
@@ -89,25 +89,25 @@ void ConsoleGraphics::draw_wall (Coord c, int h, int w)
     print_string (Coord (w  + c.x - 1, h + c.y - 1), "\u251B", 15);    // ┛
     print_string (Coord (c.x, h + c.y - 1), "\u2513", 15);  //правый верхний угол
 } 
-void ConsoleGraphics::draw_wall ()
-{
-    //cout << "\033[2J";
-    for (int i = 1; i <= height + 2; i++)
-    {
-        print_symbol(Coord(shift, i), "\u2501", 15);               // -
-        print_symbol(Coord(width  +  shift + 1, i), "\u2501", 15);
-    }
-    for (int i = shift; i <= width + shift; i++)
-    {
-        print_symbol(Coord(i, 0), "\u2503", 15);                     // |
-        print_symbol(Coord(i + 1, height + 2), "\u2503", 15);
-    }
+// void ConsoleGraphics::draw_wall ()
+// {
+//     //cout << "\033[2J";
+//     for (int i = 1; i <= height + 2; i++)
+//     {
+//         print_symbol(Coord(shift, i), "\u2501", 15);               // -
+//         print_symbol(Coord(width  +  shift + 1, i), "\u2501", 15);
+//     }
+//     for (int i = shift; i <= width + shift; i++)
+//     {
+//         print_symbol(Coord(i, 0), "\u2503", 15);                     // |
+//         print_symbol(Coord(i + 1, height + 2), "\u2503", 15);
+//     }
 
-    print_symbol (Coord(shift, 0), "\u250F", 15);                       // левый верхний угол
-    print_symbol (Coord(width  + shift + 1, 0), "\u2517", 15);          //левый нижний угол
-    print_symbol (Coord(width  + shift + 1, height + 2), "\u251B", 15);    // ┛
-    print_symbol (Coord(shift, height + 2), "\u2513", 15);  //правый верхний угол
-}
+//     print_symbol (Coord(shift, 0), "\u250F", 15);                       // левый верхний угол
+//     print_symbol (Coord(width  + shift + 1, 0), "\u2517", 15);          //левый нижний угол
+//     print_symbol (Coord(width  + shift + 1, height + 2), "\u251B", 15);    // ┛
+//     print_symbol (Coord(shift, height + 2), "\u2513", 15);  //правый верхний угол
+// }
 
 void ConsoleGraphics::draw_coin (Coord x)
 {
@@ -120,7 +120,7 @@ void ConsoleGraphics::draw_coin (Coord x)
 // }
 void ConsoleGraphics::draw_hero ()
 {
-    Coord hero_pos_in_window (width / 2,  height / 2 );
+    Coord hero_pos_in_window (game_play_width / 2,  game_play_height / 2 );
     game_play.print (hero_pos_in_window, "\u2654", 31);
 }
 // void ConsoleGraphics::draw_in_window  (Coord x, string symb_code, int color)
@@ -141,10 +141,10 @@ void ConsoleGraphics::refresh ()
 	Coord hero_pos;
     HeroPtr hero = main_core->get_hero();
     hero_pos = main_core->get_coord(hero->get_pos());
-    int x_left  = hero_pos.x - width / 2;
-    int x_right = hero_pos.x + width / 2;
-    int y_left  = hero_pos.y - height / 2;
-    int y_right = hero_pos.y + height / 2;
+    int x_left  = hero_pos.x -game_play_width / 2;
+    int x_right = hero_pos.x + game_play_width / 2;
+    int y_left  = hero_pos.y - game_play_height / 2;
+    int y_right = hero_pos.y + game_play_height / 2;
 
     for (int j = x_left;  j < x_right ; ++j)
     {
@@ -155,8 +155,9 @@ void ConsoleGraphics::refresh ()
 			if (tile->get_type() == TileType::Wall) 
 			{
                 str = get_render_cell_symbol_wall (j, i);
+                game_play.print (Coord (j - x_left, i - y_left), str, 15);
                 //draw_in_window (Coord (j - x_left, i - y_left), str, 15);
-                
+
                 continue;
             } 
 			else if ( tile->get_type() == TileType::Floor ) 
@@ -174,7 +175,7 @@ void ConsoleGraphics::refresh ()
 			else {
 				str = 'x';
 			}
-			draw_in_window (Coord (j - x_left, i - y_left), str, 15);
+			game_play.print (Coord (j - x_left, i - y_left), str, 15);
 /*
             switch(obj_pos)
             {
@@ -192,28 +193,29 @@ void ConsoleGraphics::refresh ()
         }
     }
     draw_hero();
-    draw_wall();
+    draw_wall( Coord (game_play_point.x - 1, game_play_point.y - 1), 
+        game_play_height + 2, game_play_width + 2);
     info.draw_hero_stats();
     //set_cursor_in_win_center();
 }
 void ConsoleGraphics::move_hero_right ()
 {
-    main_core->move_hero(Direction::Right);
+    main_core->move_hero(Direction::Left);
     refresh();
 }
 void ConsoleGraphics::move_hero_left ()
 {
-    main_core->move_hero(Direction::Left);
+    main_core->move_hero(Direction::Right);
     refresh();
 }
 void ConsoleGraphics::move_hero_up ()
 {
-    main_core->move_hero(Direction::Up);
+    main_core->move_hero(Direction::Down);
     refresh();
 }
 void ConsoleGraphics::move_hero_down ()
 {
-    main_core->move_hero(Direction::Down);
+    main_core->move_hero(Direction::Up);
     refresh();
 }
 ConsoleGraphics::~ConsoleGraphics ()
