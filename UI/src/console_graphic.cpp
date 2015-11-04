@@ -2,16 +2,29 @@
 
 ConsoleGraphics::ConsoleGraphics ()
     : core_mock ("map.txt")
+    , hero_pos (0,0)
 {
     initscr();
-
     getmaxyx (stdscr, console_size_y, console_size_x);
     endwin();
-    shift = 6;
-    width = 16;
-    height = 70;  // смещение по у
-}
 
+    shift = 6;
+    width = 10;
+    height = 70;  // смещение по у
+    refresh();
+}
+void ConsoleGraphics::init()
+{
+    core_mock.set_hero (Coord (0, 0));
+    initscr();
+    getmaxyx (stdscr, console_size_y, console_size_x);
+    endwin();
+
+    shift = 6;
+    width = 10;
+    height = 70;  // смещение по у
+    refresh();
+}
 void ConsoleGraphics::draw_wall ()
 {
     //cout << "\033[2J";
@@ -102,14 +115,18 @@ void ConsoleGraphics::draw_in_window (Coord x, string symb_code, int color, int 
 {
     print_symbol (Coord(x.x + shift + 1, x.y + 2), symb_code, color, bg_color);
 }
+void ConsoleGraphics::set_cursor_in_win_center ()
+{
+    cout << "\033[" << width / 2 + shift + 1 << ";" <<  height / 2 + 1 << "#H";
+}
 
 void ConsoleGraphics::refresh ()
 {
-    //Coord hero_pos (10,10);
-    int x_left  = round (hero_pos.x - width / 2);
-    int x_right = round (hero_pos.x + width / 2);
-    int y_left  = round (hero_pos.y - height / 2);
-    int y_right = round (hero_pos.y + height / 2);
+    hero_pos = core_mock.get_hero();
+    int x_left  = hero_pos.x - width / 2;
+    int x_right = hero_pos.x + width / 2;
+    int y_left  = hero_pos.y - height / 2;
+    int y_right = hero_pos.y + height / 2;
 
     for (int j = x_left;  j < x_right ; ++j)
     {
@@ -122,21 +139,38 @@ void ConsoleGraphics::refresh ()
                 draw_in_window (Coord (j - x_left, i - y_left), "0", 15);
                 break;
             case ' ':
-                print_symbol (Coord (j - x_left , i - y_left), " ", 15);
+                draw_in_window (Coord (j - x_left , i - y_left), " ", 15);
                 break;
+//            case 'x':
+//                print_symbol (Coord (j - x_left , i - y_left), "x", 15);
+//                break;
             }
         }
     }
     draw_hero();
     draw_wall();
     draw_hero_stats();
+    set_cursor_in_win_center();
 }
-void ConsoleGraphics::move_hero_rigth ()
+void ConsoleGraphics::move_hero_right ()
 {
     core_mock.set_hero (Coord (hero_pos.x, hero_pos.y + 1));
     refresh();
 }
-
+void ConsoleGraphics::move_hero_left ()
+{
+    core_mock.set_hero (Coord (hero_pos.x, hero_pos.y - 1));
+    refresh();
+}
+void ConsoleGraphics::move_hero_up ()
+{
+    core_mock.set_hero (Coord (hero_pos.x - 1, hero_pos.y));
+    refresh();
+}
+void ConsoleGraphics::move_hero_down ()
+{
+    core_mock.set_hero (Coord (hero_pos.x + 1, hero_pos.y));
+    refresh();
+}
 ConsoleGraphics::~ConsoleGraphics ()
 {}
-

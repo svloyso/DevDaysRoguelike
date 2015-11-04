@@ -21,6 +21,7 @@ class ConsoleGraphics
 
 public:
     ConsoleGraphics ();
+    void init();
     void draw_wall ();
     void clear_screen ();
     void print_symbol (Coord x, string symb_code, int color, int bg_color = 30);
@@ -31,9 +32,10 @@ public:
     void refresh ();
     void draw_hp_line (int max_hp, int cur_hp);
     void draw_in_window (Coord x, string symb_code, int color, int bg_color = 30);
-    void move_hero_rigth();
+    void move_hero_right ();
+    void move_hero_up();
+    void move_hero_left();
+    void move_hero_down();
+    void set_cursor_in_win_center ();
     ~ConsoleGraphics ();
-
-
 };
-
