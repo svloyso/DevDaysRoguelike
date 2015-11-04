@@ -165,8 +165,8 @@ bool GenerateMobs(int from, int to, bool* visited)
         {
             if (rand() % 1000 < fraction[i].probability)
             {
-                MyMob tempmob = genMob(fraction[i]);
-                mobs.push_back(tempmob);
+                //MyMob tempmob = genMob(fraction[i]);
+                //mobs.push_back(tempmob);
                 grid[r][c] = TILE_ORC;                
                 /*cout << "Fract: " << tempmob.fraction << endl;
                 cout << "Health: " << tempmob.health << endl;
@@ -565,6 +565,9 @@ void genRooms()
  
 void initmap(void)
  {
+    genFraction();
+    genItems();
+
     grid = vector< vector<int> >(size_y+3, vector<int>(size_x+3));
     
     ClearField();   
@@ -671,6 +674,12 @@ void getMap()
         {
             TilePtr tile;
             std::vector< ImmovablePtr > imms;
+
+            MyMob tempmob;
+            MonsterStatsPtr m;
+            SkeletonAIPtr skelAI;
+            MonsterPtr mob;
+
             switch(grid[i][j]) 
             {
                 case TILE_WALL:
@@ -680,8 +689,31 @@ void getMap()
                     imms.push_back(std::make_shared<Door>());
                     tile = std::make_shared<FloorTile>(UnitPtr(), std::vector<ItemPtr>(), imms);
                     break;
+                case TILE_ORC:
+
+                    tempmob = genMob(fraction[0]);
+                    //for (int i = 0; i < numFractions; ++i)
+                    //    if (rand() % 1000 < fraction[i].probability)
+
+                    m = MonsterStats::make_Ptr();
+                    m->strength = tempmob.strength;
+                    m->hit_points = tempmob.health;
+                    m->area_of_sight = 5;
+                    if (tempmob.fraction)
+                        m->fraction = Fraction::Undead;
+                    else
+                        m->fraction = Fraction::Orc;
+
+                    skelAI = SkeletonAI::make_Ptr();
+
+                    mob = Monster::make_Ptr(skelAI, m);
+                    tile = std::make_shared<FloorTile>(mob);
+
+                    break;
                 case TILE_EXIT:
                     info.hero_init = Coord(i, j);
+                    tile = std::make_shared<FloorTile>();
+                    break;
                 default:
                     tile = std::make_shared<FloorTile>();
                     break;
@@ -792,7 +824,20 @@ void genItems()
         stuff.push_back(it);
     }
 }
- 
+
+/*getMobs()
+{
+    for (int i = 0; i < mobs.size(); ++i)
+    {
+        MonsterStatsPtr m = MonsterStats::make_Ptr();
+        m->strength = mobs[i].strength;
+        m->health = mobs[i].health;
+        m->area_of_sight = 5;
+    }
+    
+}*/
+
+
 /*int main(int argc, char **argv)
 {
     srand(time(NULL));
