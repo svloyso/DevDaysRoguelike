@@ -3,22 +3,36 @@
 #include <unistd.h>
 #include <vector>
 #include <string>
-#include <wstring>
 #include <ncurses.h>
-
+#include "core_mock.h"
+#include "coord.h"
+#include "math.h"
 using namespace std;
- 
-class console_graphic
+
+class ConsoleGraphics
 {
-	int  width;
-	int height;
+    int console_size_y;
+    int console_size_x;
+    int height;
+    int width;
+    int shift;
+    Coord hero_pos;
+    CoreMock core_mock;
 
 public:
-	console_graphic ();
-	void print_wall ();
-	void clear_screen ();
-	void print_symbol (int pos_x, int pos_y, string symb_code);
-	void draw_coin (int pos_x, int pos_y);
-	~console_graphic ();
+    ConsoleGraphics ();
+    void draw_wall ();
+    void clear_screen ();
+    void print_symbol (Coord x, string symb_code, int color, int bg_color = 30);
+    void print_string (Coord x, string str, int color);
+    void draw_hero_stats ();
+    void draw_coin (Coord x);
+    void draw_hero ();
+    void refresh ();
+    void draw_hp_line (int max_hp, int cur_hp);
+    void draw_in_window (Coord x, string symb_code, int color, int bg_color = 30);
+    void move_hero_rigth();
+    ~ConsoleGraphics ();
 
-}
+
+};
