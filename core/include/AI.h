@@ -41,12 +41,16 @@ public:
 };
 
 class SkeletonAI : public AI {
+public:
     void act(MonsterPtr monster);
     void react(MonsterPtr monster, ActionPtr action);
+    DECLARE_COMMON_METHODS(SkeletonAI)
 };
 
-class OrkAI : public AI {
+class OrcAI : public AI {
+public:
     void act(MonsterPtr monster);
     void react(MonsterPtr monster, ActionPtr action);
+    DECLARE_COMMON_METHODS(OrcAI)
 };
 

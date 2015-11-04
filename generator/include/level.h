@@ -13,6 +13,9 @@
 #include "core.h"
 #include "tile.h"
 #include "door.h"
+#include "monster.h"
+#include "stats.h"
+#include "AI.h"
  
  #define TILE_FLOOR 0
  #define TILE_WALL 1
@@ -90,4 +93,4 @@ vector<MyItem> stuff;
 bool fractPower(MyFraction i, MyFraction j);
 void genFraction();
 MyMob genMob(MyFraction fract);
-void genSimpleItems();
+void genItems();
