@@ -9,6 +9,7 @@
 #include "action.h"
 #include "coord.h"
 #include "hero.h"
+#include "door.h"
 
 struct MapInfo {
     Coord size;
