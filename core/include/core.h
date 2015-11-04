@@ -16,7 +16,7 @@ struct MapInfo {
 
 class Core {
 public:
-    Core(MapInfo info, std::vector< std::vector< TilePtr > > _map);
+    Core(MapInfo info, const std::vector< std::vector< TilePtr > >& _map);
     TilePtr get_tile(Coord c);
     void subscribe_map(std::function<void(Coord)> f);
     void subscribe_action(std::function<void(ActionPtr)> f);
@@ -46,5 +46,5 @@ private:
 };
 
 
-void init_core(MapInfo info);
+void init_core(MapInfo info, const std::vector< std::vector< TilePtr > >& map);
 

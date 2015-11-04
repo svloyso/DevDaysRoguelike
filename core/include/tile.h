@@ -18,7 +18,7 @@ public:
         immovables(_immovables), 
         unit(_unit) 
     {}
-    virtual TileType getType() = 0;
+    virtual TileType get_type() = 0;
     virtual std::vector<ItemPtr> get_items();
     virtual std::vector<ImmovablePtr> get_immovables();
     virtual UnitPtr get_unit();
@@ -44,7 +44,7 @@ public:
              const std::vector<ImmovablePtr>& immovables = std::vector<ImmovablePtr>()) 
         : Tile(_unit, items, immovables) 
     {}
-    TileType getType() { return TileType::Wall; }
+    TileType get_type() { return TileType::Wall; }
     bool free() { return false; }
     virtual Result put_item(ItemPtr item) { return Result::Failure; }
     virtual Result take_item(int item_id) { return Result::Failure; }
@@ -57,6 +57,6 @@ public:
 class FloorTile: public Tile {
 public:
     FloorTile(UnitPtr _unit = UnitPtr(), const std::vector<ItemPtr>& items = std::vector<ItemPtr>(), const std::vector<ImmovablePtr>& immovables = std::vector<ImmovablePtr>()) : Tile(_unit, items, immovables)  {}
-    TileType getType() { return TileType::Floor; }
+    TileType get_type() { return TileType::Floor; }
 };
 

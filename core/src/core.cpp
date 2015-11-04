@@ -1,13 +1,14 @@
 #include "core.h"
 #include <stdexcept>
+#include <memory>
 
 CorePtr main_core;
 
-void init_core(MapInfo info) {
-    main_core = std::make_shared<Core>(info, std::vector< std::vector< TilePtr > >());
+void init_core(MapInfo info, const std::vector< std::vector< TilePtr > >& map) {
+    main_core = std::make_shared<Core>(info, std::ref(map));
 }
 
-Core::Core(MapInfo info, std::vector< std::vector< TilePtr > > _map) :
+Core::Core(MapInfo info, const std::vector< std::vector< TilePtr > >& _map) :
     map(_map),
     map_info(info)
 {
@@ -22,8 +23,10 @@ void Core::init_tables() {
             objects[t->get_id()] = t;
             tiles[t] = Coord(i, j);
             auto unit = t->get_unit();
-            objects[unit->get_id()] = unit;
-            unit->set_pos(t);
+            if(unit) {
+                objects[unit->get_id()] = unit;
+                unit->set_pos(t);
+            }
             auto immovables = t->get_immovables();
             auto items = t->get_items();
             for (auto imm : immovables) {
@@ -42,6 +45,8 @@ HeroPtr Core::get_hero() {
 }
 
 TilePtr Core::get_tile(Coord c) {
+    if (c.x < 0 || c.x >= (int)map.size() || c.y < 0 || c.y >= (int)map[c.x].size())
+        return std::make_shared<WallTile>();
     return map[c.x][c.y];
 }
 
