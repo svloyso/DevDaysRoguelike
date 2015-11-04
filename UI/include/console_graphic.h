@@ -42,7 +42,7 @@ public:
     void draw_hero ();
     void refresh ();
     void init_map ();
-    void draw_in_window (Coord x, string symb_code, int color);
+    //void draw_in_window (Coord x, string symb_code, int color);
     void move_hero_right ();
     void move_hero_up ();
     void move_hero_left ();
