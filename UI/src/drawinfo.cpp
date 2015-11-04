@@ -12,7 +12,7 @@ DrawInfo::DrawInfo(int _hero_max_hp, int _hero_cur_hp)
 void DrawInfo::draw_hp()
 {
     Coord x (2, 4);
-    print_string (x, "HERO", 35);
+    print_string (x, "HERO", 31);
     x = Coord (4, 4);
     print_string (x, "               ", 35);
     x = Coord (4, 4);

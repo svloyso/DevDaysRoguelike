@@ -92,20 +92,23 @@ void ConsoleGraphics::draw_wall ()
 
 void ConsoleGraphics::draw_coin (Coord x)
 {
-    print_symbol (x, "\u26C0", 14);
+    print_symbol (x, "\u26C0", 14, 30);
 }
 
 void ConsoleGraphics::draw_hero ()
 {
     Coord hero_pos_in_window (width / 2,  height / 2 );
-    draw_in_window (hero_pos_in_window, "\uC720", 35);
+    draw_in_window (hero_pos_in_window, "\uC720", 31);
 }
 
-void ConsoleGraphics::draw_in_window (Coord x, string symb_code, int color, int bg_color)
+void ConsoleGraphics::draw_in_window  (Coord x, string symb_code, int color)
 {
-    print_symbol (Coord(x.x + shift + 1, x.y + 2), symb_code, color, bg_color);
+    print_symbol (Coord (x.x + shift + 1, x.y + 2), symb_code, color);
 }
-
+void ConsoleGraphics::draw_door (Coord x)
+{
+	draw_in_window (x, "\u2592", 14);
+}
 void ConsoleGraphics::refresh ()
 {
 	cout << "\033[2J";
@@ -131,7 +134,8 @@ void ConsoleGraphics::refresh ()
 			{
                 if (tile->get_immovables().size()) 
 				{
-                    str = "D";
+                   str = "D";
+                    continue;
                 } 
 				else 
 				{
