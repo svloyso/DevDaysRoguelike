@@ -10,7 +10,7 @@
 class Unit : public ActableObject {
 public:
     Unit(UnitStatsPtr _stats) : ActableObject(_stats) {}
-    virtual UnitStats* get_stats() { return UnitStats::to_UnitStatsPtr(stats).get(); }
+    virtual UnitStats* get_stats() { return UnitStats::to_Ptr(stats).get(); }
 
     DECLARE_COMMON_METHODS(Unit)
 };
