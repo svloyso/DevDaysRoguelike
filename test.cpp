@@ -61,6 +61,6 @@ void print_map() {
 
 int main() {
     getMap();
-    print_map();
-    //runUI();
+    //print_map();
+    runUI();
 }

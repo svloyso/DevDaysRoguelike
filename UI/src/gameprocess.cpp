@@ -7,19 +7,19 @@ void GameProcess::update (char input_char)
     switch (input_char)
     {
     case 'd':
-        cons.move_hero_right();
+        cons.move_hero_down();
         cout << "\033[" << "0"  << ";" << "0" << "H"<< "\033[30m" << "\033[0m";
         break;
     case 's':
-        cons.move_hero_down();
+        cons.move_hero_left();
         cout << "\033["<< "0"  << ";" << "0" << "H" << "\033[30m" << "\033[0m";
         break;
     case 'a':
-        cons.move_hero_left();
+        cons.move_hero_up();
         cout << "\033[" << "0"  << ";" << "0" << "H" << "\033[30m" << "\033[0m";
         break;
     case 'w':
-        cons.move_hero_up();
+        cons.move_hero_right();
         cout << "\033[" << "0"  << ";" << "0" << "H" << "\033[30m" << "\033[0m";
         break;
     case 'r':
