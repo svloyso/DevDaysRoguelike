@@ -1,7 +1,11 @@
-#include "core.h"
-#include "hero.h"
 #include <stdexcept>
 #include <memory>
+#include <string>
+#include <map>
+
+#include "tile.h"
+#include "core.h"
+#include "hero.h"
 
 CorePtr main_core;
 
@@ -44,6 +48,7 @@ void Core::init_tables() {
             auto unit = t->get_unit();
             if(unit) {
                 objects[unit->get_id()] = unit;
+                actable[unit->get_id()] = unit;
                 unit->set_pos(t);
             }
             auto immovables = t->get_immovables();
@@ -59,6 +64,69 @@ void Core::init_tables() {
     }
 }
 
+WallType get_walltype(const bool* code) {
+    if (code[0] && code[1] && code[2] && code[3] && code[4] && code[5] && code[6] && code[7]) return WallType::filled;
+    if (code[0] && code[2] && code[4] && code[6]) {
+        if (code[1] && code[3] && code[5]) return WallType::ru_corner;
+        if (code[3] && code[5] && code[7]) return WallType::rb_corner;
+        if (code[5] && code[7] && code[1]) return WallType::lb_corner;
+        if (code[7] && code[1] && code[3]) return WallType::lu_corner;
+        if ((code[1] && code[5]) || (code[3] && code[7])) return WallType::cross;
+        if (code[1] && code[3]) return WallType::t_down;
+        if (code[3] && code[5]) return WallType::t_left;
+        if (code[5] && code[7]) return WallType::t_up;
+        if (code[7] && code[1]) return WallType::t_right;
+        return WallType::cross;
+    }
+    if (code[0] && code[2] && code[4]) return WallType::t_up;
+    if (code[2] && code[4] && code[6]) return WallType::t_right;
+    if (code[4] && code[6] && code[0]) return WallType::t_down;
+    if (code[6] && code[0] && code[2]) return WallType::t_left;
+    if (code[0] && code[4]) return WallType::horizontal;
+    if (code[2] && code[6]) return WallType::vertical;
+    if (code[0] && code[2]) return WallType::rb_corner;
+    if (code[2] && code[4]) return WallType::lb_corner;
+    if (code[4] && code[6]) return WallType::lu_corner;
+    if (code[6] && code[0]) return WallType::ru_corner;
+    if (code[0] || code[4]) return WallType::horizontal;
+    if (code[2] || code[6]) return WallType::vertical;
+    return WallType::single;
+}
+
+void Core::init_tiles() {
+    int w = map_info.size.x;
+    int h = map_info.size.y;
+    for (int i = 0; i < w; ++i) {
+        for(int j = 0; j < h; ++j) {
+            TilePtr tile = get_tile(Coord(i, j));
+            if (tile->get_type() == TileType::Wall) {
+                auto wall_tile = WallTile::to_Ptr(tile);
+                bool code[8];
+                TilePtr around_tiles[8] = {
+                    get_tile(Coord(i - 1, j)),
+                    get_tile(Coord(i - 1, j - 1)),
+                    get_tile(Coord(i, j - 1)),
+                    get_tile(Coord(i + 1, j - 1)),
+                    get_tile(Coord(i + 1, j)),
+                    get_tile(Coord(i + 1, j + 1)),
+                    get_tile(Coord(i, j + 1)),
+                    get_tile(Coord(i - 1, j + 1))
+                };
+                for (int k = 0; k < 8; ++k) {
+                    code[i] = around_tiles[k]->get_type() == TileType::Wall;
+                }
+                wall_tile->set_walltype(get_walltype(code));
+            }
+        }
+    }
+}
+
+void Core::make_turn() {
+    for(auto a : actable) {
+        a.second->act();
+    }
+}
+
 HeroPtr Core::get_hero() {
     return hero;
 }
@@ -67,7 +135,11 @@ Result Core::move_hero(Direction dir) {
     TilePtr tile_from = hero->get_pos();
     TilePtr tile_to   = get_tile(get_coord(tile_from).move(dir));
     ActionPtr action = Move::make_Ptr(hero, tile_to);
-    return do_action(action);
+    Result res = do_action(action);
+    if (res == Result::Success) {
+        make_turn();
+    }
+    return res;
 }
 
 Coord Core::get_coord(TilePtr tile) {
@@ -138,6 +210,7 @@ Result Core::do_destroy(DestroyedPtr action) {
     }
 
     objects.erase(actor->get_id());
+    actable.erase(actor->get_id());
     map_updater(tiles[place_of_death]);
     return Result::Success;
 }

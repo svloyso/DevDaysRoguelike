@@ -33,7 +33,6 @@ public:
 
     Coord get_coord(TilePtr tile);
 
-    void run_game();
 private:
     Result do_move(MovePtr action);
     Result do_atack(AtackPtr action);
@@ -44,12 +43,15 @@ private:
     void init_tables();
 
     void find_hero_pos();
+    void make_turn();
+    void init_tiles();
 private:
     std::vector< std::vector< TilePtr > > map;
     std::function<void(Coord)> map_updater;
     std::function<void(ActionPtr)> action_updater;
     MapInfo map_info;
     std::unordered_map<int, ObjectPtr>  objects;
+    std::unordered_map<int, ActableObjPtr> actable;
     std::unordered_map<TilePtr, Coord> tiles;
     HeroPtr hero;
 };
