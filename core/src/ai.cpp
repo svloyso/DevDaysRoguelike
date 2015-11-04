@@ -1,4 +1,4 @@
-#include "../include/AI.h"
+#include "../include/AI.h"  
 #include "vector"
 #include <map>
 #include <vector>
@@ -23,19 +23,9 @@ static int directions[dir][4] = {
     { 1, 0, 0,-1}  //north-east-east
 };
 
-AI::AI()
-{
-
-}
-
-void AI::act(MonsterPtr monster)
-{
-
-}
-
 bool **AI::get_field_of_view(MonsterPtr monster)
 {
-    int radius = monster->get_stats().area_of_sight;
+    int radius = monster->get_stats()->area_of_sight;
     bool** field_of_view = new bool*[radius * 2 + 1];
     for (int i = 0; i < radius * 2 + 1; i++) {
         field_of_view[i] = new bool[radius * 2 + 1];
@@ -108,7 +98,7 @@ void AI::cast_light(bool **field_of_view, int start_pos_x, int start_pos_y, int 
 
 std::vector<UnitPtr> AI::get_all_enemies(MonsterPtr monster, RelationType **unit_map)
 {
-    int radius = monster->get_stats().area_of_sight;
+    int radius = monster->get_stats()->area_of_sight;
     Coord pos = monster->get_pos()->get_coord();
     int fov_size = radius * 2 + 1;
 
@@ -168,7 +158,7 @@ MovePtr AI::make_move(MonsterPtr monster)
 
 RelationType **AI::get_unit_map(MonsterPtr monster, bool **fov)
 {
-    int radius = monster->get_stats().area_of_sight;
+    int radius = monster->get_stats()->area_of_sight;
     int fov_size = radius * 2 + 1;
 
     RelationType** unit_map = new RelationType*[fov_size];
@@ -183,7 +173,7 @@ RelationType **AI::get_unit_map(MonsterPtr monster, bool **fov)
            if (fov[row][col]) {
                TilePtr tile = main_core->get_tile(Coord{pos.x + col - radius, pos.y + row - radius});
                if (tile->get_unit()) { //means we see unit
-                   if (tile->get_unit()->get_stats().fraction != monster->get_stats().fraction) {
+                   if (tile->get_unit()->get_stats()->fraction != monster->get_stats()->fraction) {
                         unit_map[row][col] = RelationType::Enemy;
                    } else {
                         unit_map[row][col] = RelationType::Friend;
@@ -227,7 +217,7 @@ void SkeletonAI::act(MonsterPtr monster)
         main_core->do_action(make_move(monster));
     }
 
-    int radius = monster->get_stats().area_of_sight;
+    int radius = monster->get_stats()->area_of_sight;
     int fov_size = radius * 2 + 1;
     for (int i = 0; i < fov_size; i++) {
         delete[] fov[i];

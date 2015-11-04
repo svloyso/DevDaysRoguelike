@@ -10,15 +10,15 @@
 #include "stats_fwd.h"
 
 #define DECLARE_COMMON_METHODS(name) \
-    static name##Ptr to_##name##Ptr(ObjectPtr obj) {\
+    static name##Ptr to_Ptr(ObjectPtr obj) {\
         return std::dynamic_pointer_cast<name>(obj);\
     }\
     template< class... Args >\
-    static name##Ptr make_##name##Ptr(const Args&... args) {\
+    static name##Ptr make_Ptr(const Args&... args) {\
         return std::make_shared<name>(args...);\
     }\
     name##Ptr get_my_ptr() {\
-        return to_##name##Ptr(main_core->get_object(get_id()));\
+        return to_Ptr(main_core->get_object(get_id()));\
     }
     
 #define DECLARE_VISIT(name) void visit(Visitor* v) { v->visit##name(this); }
@@ -44,7 +44,7 @@ public:
     virtual void set_pos(TilePtr t) { tile = t; }
     virtual ActableStats* get_stats() { return stats.get(); }
 
-    static ActableObjPtr to_ActableObjPtr(ObjectPtr obj) {
+    static ActableObjPtr to_Ptr(ObjectPtr obj) {
         return std::dynamic_pointer_cast<ActableObject>(obj);
     }
 protected:

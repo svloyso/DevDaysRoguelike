@@ -7,7 +7,7 @@ bool Tile::free() {
 }
 
 Coord Tile::get_coord(){
-    return Coord(); //main_core->get_coord(Tile::to_TilePtr(main_core->get_object(get_id())));
+    return Coord(); //main_core->get_coord(Tile::to_Ptr(main_core->get_object(get_id())));
 }
 UnitPtr Tile::get_unit() {
     return unit;
@@ -44,7 +44,7 @@ Result Tile::put_item(ItemPtr item) {
 Result Tile::move_to(UnitPtr _unit) { 
     if (unit) { return Result::Failure; }
     unit = _unit;
-    unit->set_pos(Tile::to_TilePtr(main_core->get_object(this->get_id())));
+    unit->set_pos(Tile::to_Ptr(main_core->get_object(this->get_id())));
     return Result::Success;
 }
 
