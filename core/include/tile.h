@@ -31,9 +31,7 @@ public:
     virtual Result move_from();
     virtual bool free();
 
-    virtual Coord get_coord() {
-        return main_core->get_coord(Tile::to_TilePtr(main_core->get_object(get_id())));
-    }
+    virtual Coord get_coord();
     
     void visit(Visitor* v) { v->visitTile(this); }
     DECLARE_TO_PTR(Tile)
