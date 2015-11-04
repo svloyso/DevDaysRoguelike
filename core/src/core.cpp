@@ -16,7 +16,7 @@ Core::Core(MapInfo info, const std::vector< std::vector< TilePtr > >& _map) :
     init_tables();
     hero = Hero::make_HeroPtr(HeroStats::make_HeroStatsPtr());
     objects[hero->get_id()] = hero;
-    map[0][0]->unit = hero;
+    get_tile(map_info.hero_init)->unit = hero;
 }
 
 void Core::init_tables() {
