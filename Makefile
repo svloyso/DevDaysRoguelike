@@ -4,7 +4,7 @@ CXXFLAGS = -Wall -Werror -std=c++11
 EXE = main
 BINDIR = bin
 SRCDIR = src
-OBJECTS = $(BINDIR)/core.o $(BINDIR)/basic.o $(BINDIR)/tile.o
+OBJECTS = $(BINDIR)/core.o $(BINDIR)/basic.o $(BINDIR)/tile.o $(BINDIR)/main_mock.o
 
 all: $(EXE)
 

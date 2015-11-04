@@ -77,7 +77,7 @@ Result Core::do_atack(AtackPtr action) {
     return Result::Success;
 }
 
-Result do_interact(InteractPtr action) {
+Result Core::do_interact(InteractPtr action) {
     UnitPtr actor = Unit::to_UnitPtr(action->get_actor());
     ActableObjPtr reactor = ActableObject::to_ActableObjPtr(action->get_reactor());
     
@@ -85,7 +85,7 @@ Result do_interact(InteractPtr action) {
     return Result::Success;
 }
 
-Result do_pick(PickPtr action) {
+Result Core::do_pick(PickPtr action) {
     //TODO
     return Result::Success;
 }

@@ -14,7 +14,7 @@ enum class Result {
 class Object{
 public:
     Object() : id(next_id++) {}
-    virtual ~Object();
+    virtual ~Object() {}
     int get_id() { return id; }
 private:
     int id;
@@ -24,8 +24,8 @@ private:
 class ActableObject : public Object {
 public:
     ActableObject();
-    virtual void act();
-    virtual void react(ActionPtr action);
+    virtual void act()=0;
+    virtual void react(ActionPtr action)=0;
     virtual TilePtr get_pos() { return tile; }
     virtual void set_pos(TilePtr t) { tile = t; }
 
