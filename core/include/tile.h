@@ -43,12 +43,28 @@ protected:
     UnitPtr unit;
 };
 
+enum class WallType {
+    lu_corner,
+    ru_corner,
+    lb_corner,
+    rb_corner,
+    horizontal,
+    vertical,
+    cross,
+    t_down,
+    t_up,
+    t_right,
+    t_left,
+    filled,
+    single
+};
+
 class WallTile : public Tile {
 public:
     WallTile(UnitPtr _unit = UnitPtr(), 
              const std::vector<ItemPtr>& _items = std::vector<ItemPtr>(), 
              const std::vector<ImmovablePtr>& _immovables = std::vector<ImmovablePtr>()) 
-        : Tile(_unit, _items, _immovables) 
+        : Tile(_unit, _items, _immovables), type(WallType::filled)
     {}
     TileType get_type() { return TileType::Wall; }
     bool free() { return false; }
@@ -59,9 +75,13 @@ public:
     virtual Result add_immovable(ImmovablePtr imm) { return Result::Failure; }
     virtual Result del_immovable(int imm_id) { return Result::Failure; }
 
-     
+    WallType get_walltype() { return type; }
+    void set_walltype(WallType _type) { type = _type; }
+
     DECLARE_COMMON_METHODS(WallTile)
     DECLARE_VISIT(WallTile)
+private:
+    WallType type;
 };
 
 class FloorTile: public Tile {
