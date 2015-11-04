@@ -22,8 +22,7 @@ public:
     TilePtr get_tile(Coord c);
     void subscribe_map(std::function<void(Coord)> f);
     void subscribe_action(std::function<void(ActionPtr)> f);
-    Coord get_hero();
-	void set_hero(Coord c);
+    HeroPtr get_hero();
 
     Result move_hero(Direction dir);
 
