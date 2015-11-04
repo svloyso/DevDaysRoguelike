@@ -3,6 +3,8 @@
 #include "core.h"
 #include "getLevel.h"
 #include "runUI.h"
+#include "tile.h"
+#include "basic.h"
 
 void print_map() {
     MapInfo info = main_core->get_mapinfo();
