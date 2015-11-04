@@ -16,7 +16,18 @@ Core::Core(MapInfo info, const std::vector< std::vector< TilePtr > >& _map) :
     init_tables();
     hero = Hero::make_HeroPtr(HeroStats::make_HeroStatsPtr());
     objects[hero->get_id()] = hero;
-    get_tile(map_info.hero_init)->unit = hero;
+    find_hero_pos();
+    //get_tile(map_info.hero_init)->unit = hero;
+}
+
+void Core::find_hero_pos() {
+    for(int x = 1; x < map_info.size.x; ++x) {
+        TilePtr tile(get_tile(Coord(x, x)));
+        if (tile->get_type() != TileType::Wall) {
+            tile->unit = hero;
+            return;
+        }
+    }
 }
 
 void Core::init_tables() {

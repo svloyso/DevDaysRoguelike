@@ -7,7 +7,7 @@ COREDIR = core
 GENERATORDIR = generator
 UIDIR = UI
 
-CXXFLAGS = -Wall -Werror -std=c++11 -I$(COREDIR)/include -I$(GENERATORDIR)/include -I$(UIDIR)/include
+CXXFLAGS = -g -Wall -Werror -std=c++11 -I$(COREDIR)/include -I$(GENERATORDIR)/include -I$(UIDIR)/include
 
 include $(COREDIR)/MakeList
 include $(GENERATORDIR)/MakeList

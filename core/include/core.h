@@ -42,6 +42,8 @@ private:
     Result do_pick(PickPtr action);
 
     void init_tables();
+
+    void find_hero_pos();
 private:
     std::vector< std::vector< TilePtr > > map;
     std::function<void(Coord)> map_updater;
