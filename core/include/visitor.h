@@ -17,10 +17,7 @@
 
 class Visitor {
 public:
-    void visit(ObjectPtr obj) {
-        return obj->visit(this);
-    }
-
+    void visit(ObjectPtr obj);
     virtual void visitMove(Move* m)    { defaultVisit(); }
     virtual void visitAtack(Atack* a)  { defaultVisit(); }
     virtual void visitPick(Pick* p)    { defaultVisit(); }
@@ -36,7 +33,6 @@ public:
     virtual void visitTile(Tile* t)    { defaultVisit(); }
     virtual void visitWallTile(WallTile* w)    { defaultVisit(); }
     virtual void visitFloorTile(FloorTile* f)  { defaultVisit(); }
-    virtual void visitUnit(Unit* u)    { defaultVisit(); }
     
     virtual void defaultVisit()=0;
 

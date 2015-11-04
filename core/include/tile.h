@@ -5,11 +5,13 @@
 #include "basic.h"
 #include "unit.h"
 #include "item.h"
-#include "coord.h"
+#include "utils.h"
 #include "tile_fwd.h"
 #include "visitor.h"
+#include "core_fwd.h"
 
 class Tile : public Object {
+    friend class Core;
 public:
     Tile(
         UnitPtr _unit, 
@@ -33,8 +35,8 @@ public:
 
     virtual Coord get_coord();
     
-    void visit(Visitor* v) { v->visitTile(this); }
-    DECLARE_TO_PTR(Tile)
+    DECLARE_VISIT(Tile)
+    DECLARE_COMMON_METHODS(Tile)
 protected:
     std::vector<ItemPtr> items;
     std::vector<ImmovablePtr> immovables;
@@ -58,8 +60,8 @@ public:
     virtual Result del_immovable(int imm_id) { return Result::Failure; }
 
      
-    void visit(Visitor* v) { v->visitWallTile(this); }
-    DECLARE_TO_PTR(WallTile)
+    DECLARE_COMMON_METHODS(WallTile)
+    DECLARE_VISIT(WallTile)
 };
 
 class FloorTile: public Tile {
@@ -68,8 +70,8 @@ public:
     TileType get_type() { return TileType::Floor; }
 
     
-    void visit(Visitor* v) { v->visitFloorTile(this); }
 
-    DECLARE_TO_PTR(FloorTile)
+    DECLARE_VISIT(FloorTile)
+    DECLARE_COMMON_METHODS(FloorTile)
 };
 

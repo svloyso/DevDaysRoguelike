@@ -5,12 +5,17 @@
 #include "stats.h"
 #include "hero_fwd.h"
 #include "visitor.h"
+#include "action.h"
 
 class Hero : public Unit {
 public:
-    Hero(HeroStats _stats) : Unit(_stats) {}
-
+    Hero(HeroStatsPtr _stats) : Unit(_stats) {}
+    void act() {}
+    void react(ActionPtr action) {}
     
-    void visit(Visitor* v) { v->visitHero(this); }
+    HeroStats* get_stats() { return HeroStats::to_HeroStatsPtr(stats).get(); }
+
+    DECLARE_COMMON_METHODS(Hero)
+    DECLARE_VISIT(Hero)
 };
 

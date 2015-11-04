@@ -9,15 +9,9 @@
 
 class Unit : public ActableObject {
 public:
-    Unit(UnitStats _stats) : stats(_stats) {}
-    
-    virtual UnitStats get_stats() { return stats; }
-    
-    void visit(Visitor* v) { v->visitUnit(this); }
+    Unit(UnitStatsPtr _stats) : ActableObject(_stats) {}
+    virtual UnitStats* get_stats() { return UnitStats::to_UnitStatsPtr(stats).get(); }
 
-    DECLARE_TO_PTR(Unit)
-private:
-    UnitStats stats;
+    DECLARE_COMMON_METHODS(Unit)
 };
-
 

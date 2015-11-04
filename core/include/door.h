@@ -13,11 +13,12 @@ enum class DoorState {
 class Door : public Immovable {
 
 public:
-    Door() : state(DoorState::Closed) {}
+    Door(ActableStatsPtr _stats = ActableStatsPtr()) : Immovable(_stats), state(DoorState::Closed) {}
     void act() {}
     void react(ActionPtr action) {}
     
-    void visit(Visitor* v) { v->visitDoor(this); }
+    DECLARE_COMMON_METHODS(Door)
+    DECLARE_VISIT(Door)
 private:
     DoorState state;
 };

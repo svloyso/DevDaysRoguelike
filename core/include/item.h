@@ -7,45 +7,48 @@
 
 class Item : public Object {
 public:
-    Item(Stats _stats) : stats(_stats) {}
-    virtual Stats get_stats() { return stats; }
+    Item(StatsPtr _stats) : stats(_stats) {}
+    virtual Stats* get_stats() { return stats.get(); }
 
-    DECLARE_TO_PTR(Item)
+    DECLARE_COMMON_METHODS(Item)
 protected:
-    Stats stats;
+    StatsPtr stats;
 };
 
 class Weapon : public Item {
 public:
-    Weapon(WeaponStats _stats) : Item(_stats) {}
+    Weapon(WeaponStatsPtr _stats) : Item(_stats) {}
     
-    void visit(Visitor* v) { v->visitWeapon(this); }
-    DECLARE_TO_PTR(Weapon)
+    WeaponStats* get_stats() { return WeaponStats::to_WeaponStatsPtr(stats).get(); }
+    DECLARE_VISIT(Weapon)
+    DECLARE_COMMON_METHODS(Weapon)
 };
 
 class Clothes : public Item {
 public:
-    Clothes(ClothesStats _stats) : Item(_stats) {}
+    Clothes(ClothesStatsPtr _stats) : Item(_stats) {}
     
-    void visit(Visitor* v) { v->visitClothes(this); }
-    DECLARE_TO_PTR(Clothes)
+    ClothesStats* get_stats() { return ClothesStats::to_ClothesStatsPtr(stats).get(); }
+    DECLARE_VISIT(Clothes)
+    DECLARE_COMMON_METHODS(Clothes)
 };
 
 class Usable : public Item {
 public:
-    Usable(UsableStats _stats) : Item(_stats) {}
+    Usable(UsableStatsPtr _stats) : Item(_stats) {}
     virtual void use(ObjectPtr obj) {}
     
-    void visit(Visitor* v) { v->visitUsable(this); }
-    DECLARE_TO_PTR(Usable)
+    UsableStats* get_stats() { return UsableStats::to_UsableStatsPtr(stats).get(); }
+    DECLARE_VISIT(Usable)
+    DECLARE_COMMON_METHODS(Usable)
 };
 
 class Misc : public Item {
-
 public:
-    Misc(MiscStats _stats) : Item(_stats) {}
-    
-    void visit(Visitor* v) { v->visitMisc(this); }
-    DECLARE_TO_PTR(Misc)
+    Misc(MiscStatsPtr _stats) : Item(_stats) {}
+
+    MiscStats* get_stats() { return MiscStats::to_MiscStatsPtr(stats).get(); }
+    DECLARE_VISIT(Misc)
+    DECLARE_COMMON_METHODS(Misc)
 };
 
