@@ -47,7 +47,7 @@ void Generate()
 	int from = 2*size_x + 2;
 	int to = (size_y - 3) * size_x + size_x - 3; 
 
-	//grid[from / size_x][from % size_x] = TILE_POINT;
+	grid[from / size_x][from % size_x] = TILE_EXIT;
 	//grid[to / size_x][to % size_x] = TILE_POINT;
 
 	for (int i = 0; i < numDoor; i++)
@@ -601,7 +601,12 @@ void getMap()
  	initmap();
 
 	vector< vector< TilePtr > > tiles;
-
+    MapInfo info;
+    info.size = Coord(size_y, size_x);
+    info.hero_init = Coord(0, 0);
+    //int from = 2*size_x + 2;
+    //info.hero_init = Coord(from / size_x, from % size_x);
+    
 	for (int i = 0; i < size_y; ++i)
 	{
 		vector< TilePtr > row;
@@ -618,6 +623,8 @@ void getMap()
                     imms.push_back(std::make_shared<Door>());
                     tile = std::make_shared<FloorTile>(UnitPtr(), std::vector<ItemPtr>(), imms);
                     break;
+                case TILE_EXIT:
+                    info.hero_init = Coord(i, j);
                 default:
                     tile = std::make_shared<FloorTile>();
                     break;
@@ -626,10 +633,6 @@ void getMap()
 		}
 		tiles.push_back(row);
 	}
-    MapInfo info;
-    info.size = Coord(size_y, size_x);
-    int from = 2*size_x + 2;
-    info.hero_init = Coord(from / size_x, from % size_x);
     init_core(info, tiles);
 }
 

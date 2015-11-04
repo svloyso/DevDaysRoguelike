@@ -18,6 +18,7 @@
  #define TILE_WALL 1
  #define TILE_POINT 2
  #define TILE_DOOR 3
+ #define TILE_EXIT 4
 
 using namespace std;
 
