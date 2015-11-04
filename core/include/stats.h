@@ -42,23 +42,24 @@ struct ActableStats : public Stats {
     DECLARE_COMMON_METHODS(ActableStats)
 };
 
+enum class Fraction {
+     Undead,
+     Orc,
+     Hero
+};
+
 struct UnitStats : public ActableStats {
     double strength;
     double agility;
     double intellegence;
+    int area_of_sight;
+    Fraction fraction;
     DECLARE_COMMON_METHODS(UnitStats)
-};
-
-enum class Fraction {
-     Undead,
-     Orc
 };
 
 struct MonsterStats : public UnitStats {
     double morale;
     double agression;
-    double area_of_sight;
-    Fraction fraction;
     DECLARE_COMMON_METHODS(MonsterStats)
 };
 
