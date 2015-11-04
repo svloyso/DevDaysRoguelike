@@ -28,6 +28,8 @@ void GameProcess::update (char input_char)
 //    case 'e':
 //        isGameActive = false;
 //        break;
+    default:
+        cout << "\033[" << 50 << ";" << 80 << "#H";
     }
 
 //    if (unitsData[heroIndex].health <= 0)
