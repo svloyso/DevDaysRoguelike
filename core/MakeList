@@ -1,0 +1,2 @@
+COREOBJ = $(BINDIR)/core.o $(BINDIR)/basic.o $(BINDIR)/tile.o 
+

@@ -1,18 +1,37 @@
 CC = g++
-CXXFLAGS = -Wall -Werror -std=c++11
 
 EXE = main
 BINDIR = bin
 SRCDIR = src
-OBJECTS = $(BINDIR)/core.o $(BINDIR)/basic.o $(BINDIR)/tile.o $(BINDIR)/main_mock.o
+COREDIR = core
+GENERATORDIR = generator
+UIDIR = UI
+
+CXXFLAGS = -Wall -Werror -std=c++11 -I$(COREDIR)/include -I$(GENERATORDIR)/include -I$(UIDIR)/include
+
+include $(COREDIR)/MakeList
+include $(GENERATORDIR)/MakeList
+include $(UIDIR)/MakeList
+
+OTHEROBJ = bin/test.o
 
 all: $(EXE)
 
-$(EXE): $(BINDIR) $(OBJECTS)
-	$(CC) $(OBJECTS) -o $(EXE)
+$(EXE): $(BINDIR) $(OTHEROBJ) $(COREOBJ) $(GENERATOROBJ) # $(UIOBJ)
+	$(CC) -o $(EXE) $(OTHEROBJ) $(COREOBJ) $(GENERATOROBJ) # $(UIOBJ) 
 
-bin/%.o: $(SRCDIR)/%.cpp
+$(BINDIR)/%.o: $(COREDIR)/$(SRCDIR)/%.cpp
 	$(CC) $(CXXFLAGS) -c -MMD -o $@ $<
+
+$(BINDIR)/%.o: $(GENERATORDIR)/$(SRCDIR)/%.cpp
+	$(CC) $(CXXFLAGS) -c -MMD -o $@ $<
+
+$(BINDIR)/%.o: $(UIDIR)/$(SRCDIR)/%.cpp
+	$(CC) $(CXXFLAGS) -c -MMD -o $@ $<
+
+$(BINDIR)/%.o: %.cpp
+	$(CC) $(CXXFLAGS) -c -MMD -o $@ $<
+
 
 include $(wildcard $(BINDIR)/*.d)
 

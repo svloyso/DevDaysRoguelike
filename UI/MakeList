@@ -1,0 +1,2 @@
+UIOBJ = $(BINDIR)/console_graphic.o $(BINDIR)/consoleprint.o $(BINDIR)/drawinfo.o $(BINDIR)/gameprocess.o
+

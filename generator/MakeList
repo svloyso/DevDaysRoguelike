@@ -1,0 +1,2 @@
+GENERATOROBJ = $(BINDIR)/level.o
+
