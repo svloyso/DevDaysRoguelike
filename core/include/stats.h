@@ -3,12 +3,15 @@
 #include "basic.h"
 
 struct Stats {
-    double hit_points;
     double weight;
-    double defense;
 };
 
-struct UnitStats : public Stats {
+struct ActableStats : public Stats {
+    double hit_points;
+    double defence;
+};
+
+struct UnitStats : public ActableStats {
     double strength;
     double agility;
     double intellegence;
