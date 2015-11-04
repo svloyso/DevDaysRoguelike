@@ -21,7 +21,8 @@ public:
     TilePtr get_tile(Coord c);
     void subscribe_map(std::function<void(Coord)> f);
     void subscribe_action(std::function<void(ActionPtr)> f);
-    HeroPtr get_hero();
+    Coord get_hero();
+    void set_hero(Coord c);
 
     void do_action(ActionPtr action);
     ObjectPtr get_object(int id);
@@ -43,7 +44,7 @@ private:
     MapInfo map_info;
     std::unordered_map<int, ObjectPtr>  objects;
     std::unordered_map<TilePtr, Coord> tiles;
-    HeroPtr hero;
+    Coord hero;
 };
 
 

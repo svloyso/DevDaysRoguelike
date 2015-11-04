@@ -40,8 +40,12 @@ void Core::init_tables() {
     }
 }
 
-HeroPtr Core::get_hero() {
+Coord Core::get_hero() {
     return hero;
+}
+
+void Core::set_hero(Coord c) {
+    hero = c;
 }
 
 TilePtr Core::get_tile(Coord c) {

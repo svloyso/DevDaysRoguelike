@@ -13,12 +13,12 @@ include $(COREDIR)/MakeList
 include $(GENERATORDIR)/MakeList
 include $(UIDIR)/MakeList
 
-OTHEROBJ = bin/test.o
+MAINOBJ = bin/test.o
 
 all: $(EXE)
 
-$(EXE): $(BINDIR) $(OTHEROBJ) $(COREOBJ) $(GENERATOROBJ) # $(UIOBJ)
-	$(CC) -o $(EXE) $(OTHEROBJ) $(COREOBJ) $(GENERATOROBJ) # $(UIOBJ) 
+$(EXE): $(BINDIR) $(MAINOBJ) $(COREOBJ) $(GENERATOROBJ) # $(UIOBJ)
+	$(CC) -o $(EXE) $(MAINOBJ) $(COREOBJ) $(GENERATOROBJ) # $(UIOBJ) 
 
 $(BINDIR)/%.o: $(COREDIR)/$(SRCDIR)/%.cpp
 	$(CC) $(CXXFLAGS) -c -MMD -o $@ $<
