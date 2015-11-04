@@ -12,6 +12,7 @@
 
 #include "core.h"
 #include "tile.h"
+#include "door.h"
  
  #define TILE_FLOOR 0
  #define TILE_WALL 1
