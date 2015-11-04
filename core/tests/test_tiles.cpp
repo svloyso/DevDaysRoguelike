@@ -14,16 +14,25 @@ void fill_tiles(std::string filename, std::vector< std::vector< TilePtr > >& til
         std::getline(map, str);
         std::vector< TilePtr > row;
         for(size_t i = 0; i < str.size(); ++i) {
+            TilePtr tile;
+            std::vector< ImmovablePtr > imms;
             switch(str[i]) {
                 case '#':
-                    row.push_back(std::make_shared<WallTile>());
+                    tile = std::make_shared<WallTile>();
+                    break;
+                case 'D':
+                    imms.push_back(std::make_shared<Door>());
+                    tile = std::make_shared<FloorTile>(UnitPtr(), std::vector<ItemPtr>(), imms);
                     break;
                 default:
-                    row.push_back(std::make_shared<FloorTile>());
+                    tile = std::make_shared<FloorTile>();
                     break;
             }
+            row.push_back(tile);
         }
-        tiles.push_back(row);
+        if(row.size()) {
+            tiles.push_back(row);
+        }
     }
 }
 
@@ -37,9 +46,13 @@ void print_map() {
             TilePtr tile = main_core->get_tile(Coord(x, y));
             if( tile->get_type() == TileType::Wall ) {
                 std::cout << '#';
-            }
-            if( tile->get_type() == TileType::Floor ) {
-                std::cout << '.';
+            } 
+            if ( tile->get_type() == TileType::Floor ) {
+                if (tile->get_immovables().size()) {
+                    std::cout << 'D';
+                } else {
+                    std::cout << '.';
+                }
             }
         }
         std::cout << std::endl;
