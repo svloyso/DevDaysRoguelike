@@ -21,22 +21,22 @@ public:
         return obj->visit(this);
     }
 
-    void visitMove(Move* m)    { defaultVisit(); }
-    void visitAtack(Atack* a)  { defaultVisit(); }
-    void visitPick(Pick* p)    { defaultVisit(); }
-    void visitInteract(Interact* i)    { defaultVisit(); }
-    void visitDestroyed(Destroyed* d)  { defaultVisit(); }
-    void visitDoor(Door* d)    { defaultVisit(); }
-    void visitHero(Hero* h)    { defaultVisit(); }
-    void visitWeapon(Weapon* w){ defaultVisit(); }
-    void visitClothes(Clothes* c)      { defaultVisit(); }
-    void visitUsable(Usable* u)        { defaultVisit(); }
-    void visitMonster(Monster* m)      { defaultVisit(); }
-    void visitMisc(Misc* m)    { defaultVisit(); }
-    void visitTile(Tile* t)    { defaultVisit(); }
-    void visitWallTile(WallTile* w)    { defaultVisit(); }
-    void visitFloorTile(FloorTile* f)  { defaultVisit(); }
-    void visitUnit(Unit* u)    { defaultVisit(); }
+    virtual void visitMove(Move* m)    { defaultVisit(); }
+    virtual void visitAtack(Atack* a)  { defaultVisit(); }
+    virtual void visitPick(Pick* p)    { defaultVisit(); }
+    virtual void visitInteract(Interact* i)    { defaultVisit(); }
+    virtual void visitDestroyed(Destroyed* d)  { defaultVisit(); }
+    virtual void visitDoor(Door* d)    { defaultVisit(); }
+    virtual void visitHero(Hero* h)    { defaultVisit(); }
+    virtual void visitWeapon(Weapon* w){ defaultVisit(); }
+    virtual void visitClothes(Clothes* c)      { defaultVisit(); }
+    virtual void visitUsable(Usable* u)        { defaultVisit(); }
+    virtual void visitMonster(Monster* m)      { defaultVisit(); }
+    virtual void visitMisc(Misc* m)    { defaultVisit(); }
+    virtual void visitTile(Tile* t)    { defaultVisit(); }
+    virtual void visitWallTile(WallTile* w)    { defaultVisit(); }
+    virtual void visitFloorTile(FloorTile* f)  { defaultVisit(); }
+    virtual void visitUnit(Unit* u)    { defaultVisit(); }
     
     virtual void defaultVisit()=0;
 

@@ -7,7 +7,7 @@
 #include "tile.h"
 #include "visitor.h"
 
-class MyVisistor : Visitor {
+class MyVisistor : public Visitor {
 public:
     void visitWallTile (WallTile* w) {
         val = '#';
@@ -16,6 +16,7 @@ public:
         auto imm = f->get_immovables();
         if (imm.empty()) {
             val = '.';
+            return;
         }
         visit(imm[0]);
     }
@@ -70,16 +71,9 @@ void print_map() {
     for(int x = 0; x < width; ++x) {
         for(int y = 0; y < height; ++y) {
             TilePtr tile = main_core->get_tile(Coord(x, y));
-            if( tile->get_type() == TileType::Wall ) {
-                std::cout << '#';
-            } 
-            if ( tile->get_type() == TileType::Floor ) {
-                if (tile->get_immovables().size()) {
-                    std::cout << 'D';
-                } else {
-                    std::cout << '.';
-                }
-            }
+            visitor.visit(tile);
+            char c = visitor.get_val();
+            std::cout << c;
         }
         std::cout << std::endl;
     }

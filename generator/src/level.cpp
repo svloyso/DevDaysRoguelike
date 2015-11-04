@@ -42,9 +42,24 @@ void Generate()
 	//int *columnStuff = new int[numStuff];	
 
 	//GenerateStuff(rowStuff, columnStuff);
+	
 
-	int from = (size_y - 2) * size_x + 2;
-	int to = size_x + size_x - 3; 
+	int from = 2*size_x + 2;
+	int to = (size_y - 3) * size_x + size_x - 3; 
+
+	//grid[from / size_x][from % size_x] = TILE_POINT;
+	//grid[to / size_x][to % size_x] = TILE_POINT;
+
+	for (int i = 0; i < numDoor; i++)
+	{
+		for (int j = 0; j < num; j++)
+			visited[j] = false;
+		if (!exploreMatr(rowDoor[i] * size_x + columnDoor[i], to, visited))
+		{
+			rowDoor[i] = from / size_x;
+			columnDoor[i] = from % size_x;
+		}
+	}
 
 	
 	for (int i = 0; i < (num / 10) * 5; i++)
@@ -205,8 +220,8 @@ void genRoom(int row, int column, int door)
 	for(int yi = 0; yi < 10; ++yi)
 		room[yi] = (int*)malloc(sizeof(int) * (20));
 
-	int size_room_x = 20;
-	int size_room_y = 10;
+	size_room_x = 20;
+	size_room_y = 10;
 	int x = size_room_x / 2;
 	int y = size_room_y / 2;
 
@@ -476,35 +491,20 @@ void genRoom(int row, int column, int door)
 
 void genRooms()
 {
-	int row = 2 + rand() % (size_y / 5);
-	int column = 2 + (rand() % (size_x / 8));
-	genRoom(row, column, 0);
-
-	row = 2 + rand() % (size_y / 5);
-	column = (size_x / 4) + (rand() % (size_x / 8));
-	genRoom(row, column, 1);
-
-	row = 2 + rand() % (size_y / 5);
-	column = (size_x / 2) + (rand() % (size_x / 8));
-	genRoom(row, column, 2);
-
-	row = (size_y / 2) + (rand() % (size_y / 4));
-	column = 2 + (rand() % (size_x / 8));
-	genRoom(row, column, 3);
-
-	row = (size_y / 2) + (rand() % (size_y / 4));
-	column = (size_x / 4) + (rand() % (size_x / 8));
-	genRoom(row, column, 4);
-
-	row = (size_y / 2) + (rand() % (size_y / 4));
-	column = (size_x / 2) + (rand() % (size_x / 8));
-	genRoom(row, column, 5);
-
-	row = (size_y / 2) + (rand() % (size_y / 4));
-	column = (3 * size_x / 4) + ((rand() % (size_x / 8)));
-	genRoom(row, column, 6);
-
-	return;
+	for (int i = 0; i < size_y / (size_room_y + 5); ++i)
+	{
+		for (int j = 0; j < size_x / (size_room_x + 5); ++j)
+		{
+			if ((i == size_y / (size_room_y + 5) - 1) && (j == size_x / (size_room_x + 5) - 1))
+				break;
+			else
+			{
+				int row = i * (size_room_y + 5) + 2 + rand() % (size_room_y / 2);
+				int column = j * (size_room_x + 5) + rand() % (size_room_x / 2);
+				genRoom(row, column, i * size_x / (size_room_x + 5) + j);
+			}
+		}
+	}
 }
  
 void initmap(void)
@@ -585,7 +585,7 @@ void printmap(void)
  				//case TILE_WALL:  putchar('#'); break;
  				case TILE_FLOOR: putchar(' '); break;
  				case TILE_POINT: putchar(' '); break;
- 				case TILE_DOOR: putchar('D'); break;
+ 				case TILE_DOOR: cout << "\u2593"; break;
  			}
  		}
  		putchar('\n');
@@ -631,39 +631,10 @@ void getMap()
     init_core(info, tiles);
 }
 
-/*void print_map() {
-    MapInfo info = main_core->get_mapinfo();
-    int width = info.size.x;
-    int height = info.size.y;
-
-    for(int x = 0; x < width; ++x) {
-        for(int y = 0; y < height; ++y) {
-            TilePtr tile = main_core->get_tile(Coord(x, y));
-            if( tile->get_type() == TileType::Wall ) {
-                std::cout << '#';
-            } 
-            if ( tile->get_type() == TileType::Floor ) {
-                if (tile->get_immovables().size()) {
-                    std::cout << 'D';
-                } else {
-                    std::cout << '.';
-                }
-            }
-        }
-        std::cout << std::endl;
-    }
-}
-
-int main() 
-{
-    getMap();
-    print_map();
-}*/
- 
 /*int main(int argc, char **argv)
 {
- 	size_x     = 100;
- 	size_y     = 30;
+ 	//size_x     = 100;
+ 	//size_y     = 30;
  
  	srand(time(NULL));
  	initmap();

@@ -15,14 +15,22 @@ struct MapInfo {
     Coord size;
 };
 
+enum class Direction {
+    Left,
+    Right,
+    Up,
+    Down
+};
+
 class Core {
 public:
     Core(MapInfo info, const std::vector< std::vector< TilePtr > >& _map);
     TilePtr get_tile(Coord c);
     void subscribe_map(std::function<void(Coord)> f);
     void subscribe_action(std::function<void(ActionPtr)> f);
-    Coord get_hero();
-    void set_hero(Coord c);
+    HeroPtr get_hero();
+
+    Result move_hero(Direction dir);
 
     void do_action(ActionPtr action);
     ObjectPtr get_object(int id);
@@ -44,7 +52,7 @@ private:
     MapInfo map_info;
     std::unordered_map<int, ObjectPtr>  objects;
     std::unordered_map<TilePtr, Coord> tiles;
-    Coord hero;
+    HeroPtr hero;
 };
 
 

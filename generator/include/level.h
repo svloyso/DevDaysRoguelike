@@ -8,6 +8,8 @@
 #include <string>
 #include <vector>
 
+#include "levelParams.h"
+
 #include "core.h"
 #include "tile.h"
  
@@ -18,12 +20,9 @@
 
 using namespace std;
 
-int size_x;
-int size_y;
-
 vector< vector<int> > grid;
 
-const int numDoor = 7;
+int numDoor = (size_x / size_room_x) * (size_y / size_room_y) - 1;
 int *rowDoor = new int[numDoor];
 int *columnDoor = new int[numDoor];	
 void GenerateStuff(int *rowStuff, int *columnStuff);
