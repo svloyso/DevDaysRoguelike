@@ -61,7 +61,4 @@ Result Tile::move_from() {
     return Result::Success;
 }
 
-TilePtr Tile::to_TilePtr(ObjectPtr obj) {
-    return std::dynamic_pointer_cast<Tile>(obj);
-}
 

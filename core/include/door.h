@@ -3,7 +3,7 @@
 
 #include "basic.h"
 #include "door_fwd.h"
-//#include "visitor.h"
+#include "visitor.h"
 
 enum class DoorState {
     Open,
@@ -14,8 +14,10 @@ class Door : public Immovable {
 
 public:
     Door() : state(DoorState::Closed) {}
-    //template <class T>
-    //T visit(Visitor* v) { return v->visitDoor(); }
+    void act() {}
+    void react(ActionPtr action) {}
+    
+    void visit(Visitor* v) { v->visitDoor(this); }
 private:
     DoorState state;
 };

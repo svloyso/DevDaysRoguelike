@@ -3,4 +3,3 @@
 
 int Object::next_id = 0;
 
-

@@ -3,38 +3,49 @@
 
 #include "basic.h"
 #include "influence.h"
+#include "item_fwd.h"
 
 class Item : public Object {
 public:
     Item(Stats _stats) : stats(_stats) {}
     virtual Stats get_stats() { return stats; }
-private:
+
+    DECLARE_TO_PTR(Item)
+protected:
     Stats stats;
 };
 
-/*
-class Weapon : public KeepedItem {
+class Weapon : public Item {
 public:
-    Weapon(double weight, Damage damage);
+    Weapon(WeaponStats _stats) : Item(_stats) {}
+    
+    void visit(Visitor* v) { v->visitWeapon(this); }
+    DECLARE_TO_PTR(Weapon)
 };
 
-class Clothes : public KeepedItem {
+class Clothes : public Item {
 public:
-    Clothes(double weight, Defense defense);
+    Clothes(ClothesStats _stats) : Item(_stats) {}
+    
+    void visit(Visitor* v) { v->visitClothes(this); }
+    DECLARE_TO_PTR(Clothes)
 };
 
-class Usable : public KeepedItem {
+class Usable : public Item {
 public:
-    Usable(double weight);
-    virtual void use(Object* obj);
+    Usable(UsableStats _stats) : Item(_stats) {}
+    virtual void use(ObjectPtr obj) {}
+    
+    void visit(Visitor* v) { v->visitUsable(this); }
+    DECLARE_TO_PTR(Usable)
 };
-*/
 
-typedef std::shared_ptr<Item>       ItemPtr;
-/*typedef std::shared_ptr<PlacedItem> PlacedItemPtr;
-typedef std::shared_ptr<KeepedItem> KeepedItemPtr;
-typedef std::shared_ptr<Weapon>     WeaponPtr;
-typedef std::shared_ptr<Clothes>    ClothesPtr;
-typedef std::shared_ptr<Usable>     UsablePtr;
-*/
+class Misc : public Item {
+
+public:
+    Misc(MiscStats _stats) : Item(_stats) {}
+    
+    void visit(Visitor* v) { v->visitMisc(this); }
+    DECLARE_TO_PTR(Misc)
+};
 

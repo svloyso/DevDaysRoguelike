@@ -7,6 +7,7 @@
 #include "item.h"
 #include "coord.h"
 #include "tile_fwd.h"
+#include "visitor.h"
 
 class Tile : public Object {
 public:
@@ -30,7 +31,9 @@ public:
     virtual Result move_from();
     virtual bool free();
 
-    static TilePtr to_TilePtr(ObjectPtr obj);
+    
+    void visit(Visitor* v) { v->visitTile(this); }
+    DECLARE_TO_PTR(Tile)
 protected:
     std::vector<ItemPtr> items;
     std::vector<ImmovablePtr> immovables;
@@ -40,9 +43,9 @@ protected:
 class WallTile : public Tile {
 public:
     WallTile(UnitPtr _unit = UnitPtr(), 
-             const std::vector<ItemPtr>& items = std::vector<ItemPtr>(), 
-             const std::vector<ImmovablePtr>& immovables = std::vector<ImmovablePtr>()) 
-        : Tile(_unit, items, immovables) 
+             const std::vector<ItemPtr>& _items = std::vector<ItemPtr>(), 
+             const std::vector<ImmovablePtr>& _immovables = std::vector<ImmovablePtr>()) 
+        : Tile(_unit, _items, _immovables) 
     {}
     TileType get_type() { return TileType::Wall; }
     bool free() { return false; }
@@ -52,11 +55,20 @@ public:
     virtual Result move_from() { return Result::Failure; }
     virtual Result add_immovable(ImmovablePtr imm) { return Result::Failure; }
     virtual Result del_immovable(int imm_id) { return Result::Failure; }
+
+     
+    void visit(Visitor* v) { v->visitWallTile(this); }
+    DECLARE_TO_PTR(WallTile)
 };
 
 class FloorTile: public Tile {
 public:
-    FloorTile(UnitPtr _unit = UnitPtr(), const std::vector<ItemPtr>& items = std::vector<ItemPtr>(), const std::vector<ImmovablePtr>& immovables = std::vector<ImmovablePtr>()) : Tile(_unit, items, immovables)  {}
+    FloorTile(UnitPtr _unit = UnitPtr(), const std::vector<ItemPtr>& _items = std::vector<ItemPtr>(), const std::vector<ImmovablePtr>& _immovables = std::vector<ImmovablePtr>()) : Tile(_unit, _items, _immovables)  {}
     TileType get_type() { return TileType::Floor; }
+
+    
+    void visit(Visitor* v) { v->visitFloorTile(this); }
+
+    DECLARE_TO_PTR(FloorTile)
 };
 

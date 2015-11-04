@@ -5,6 +5,12 @@
 #include "coord.h"
 #include "action_fwd.h"
 #include "tile_fwd.h"
+#include "visitor_fwd.h"
+
+#define DECLARE_TO_PTR(name) \
+    static name##Ptr to_##name##Ptr(ObjectPtr obj) {\
+        return std::dynamic_pointer_cast<name>(obj);\
+    }
 
 enum class Result {
     Success,
@@ -16,6 +22,7 @@ public:
     Object() : id(next_id++) {}
     virtual ~Object() {}
     int get_id() { return id; }
+    virtual void visit(Visitor* v)=0;
 private:
     int id;
     static int next_id;
@@ -23,9 +30,8 @@ private:
 
 class ActableObject : public Object {
 public:
-    ActableObject();
-    virtual void act()=0;
-    virtual void react(ActionPtr action)=0;
+    virtual void act() = 0;
+    virtual void react(ActionPtr action) = 0;
     virtual TilePtr get_pos() { return tile; }
     virtual void set_pos(TilePtr t) { tile = t; }
 
@@ -38,9 +44,6 @@ private:
 
 class Immovable : public ActableObject {
 public:    
-    Immovable();
-    static ImmovablePtr to_ImmovablePtr(ObjectPtr obj) {
-        return std::dynamic_pointer_cast<Immovable>(obj);
-    }
+    DECLARE_TO_PTR(Immovable)
 };
 

@@ -5,6 +5,31 @@
 
 #include "core.h"
 #include "tile.h"
+#include "visitor.h"
+
+class MyVisistor : Visitor {
+public:
+    void visitWallTile (WallTile* w) {
+        val = '#';
+    }
+    void visitFloorTile (FloorTile* f) {
+        auto imm = f->get_immovables();
+        if (imm.empty()) {
+            val = '.';
+        }
+        visit(imm[0]);
+    }
+    void visitDoor (Door* d) {
+        val = 'D';
+    }
+    void defaultVisit() {
+        val = 'X';
+    }
+    char get_val() { return val; }
+
+private:
+    char val;
+};
 
 void fill_tiles(std::string filename, std::vector< std::vector< TilePtr > >& tiles) {
     std::ifstream map(filename);
@@ -40,6 +65,7 @@ void print_map() {
     MapInfo info = main_core->get_mapinfo();
     int width = info.size.x;
     int height = info.size.y;
+    MyVisistor visitor;
 
     for(int x = 0; x < width; ++x) {
         for(int y = 0; y < height; ++y) {
