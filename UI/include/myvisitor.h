@@ -58,6 +58,11 @@ public:
         color = 31;
     }
 
+    void visitMonster(Monster* m) {
+        val = "\u2D65";
+        color = 15;
+    }
+
     void visitDoor (Door* d) {
         val = "\u2592";
         color = 14;
