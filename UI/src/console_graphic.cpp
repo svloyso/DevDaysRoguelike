@@ -8,7 +8,7 @@ ConsoleGraphics::ConsoleGraphics ()
     getmaxyx (stdscr, console_size_y, console_size_x);
     endwin();
 
-    shift = 6;
+    shift = 8;
     width = 10;
     height = 70;  // смещение по у
     refresh();
@@ -45,79 +45,20 @@ void ConsoleGraphics::draw_wall ()
     print_symbol (Coord(shift, height + 2), "\u2513", 15);  //правый верхний угол
 }
 
-void ConsoleGraphics::clear_screen ()
-{
-    cout << "\033[2J";
-}
 void ConsoleGraphics::draw_coin (Coord x)
 {
-    print_symbol (x, "\u26C0", 15);
+    print_symbol (x, "\u26C0", 14);
 }
-void ConsoleGraphics::print_symbol (Coord x, string symb_code, int color, int bg_color)
-{
-    cout << "\033[" << x.x << ";" << x.y << "H" << "\033[" << color << "m"<< symb_code<< "\033[00m";
-}
-void ConsoleGraphics::print_string (Coord x, string str, int color)
-{
-    cout << "\033[" << x.x << ";" << x.y << "H" << "\033[" << color << "m"<< str << "\033[00m";
-}
+
 void ConsoleGraphics::draw_hero ()
 {
     Coord hero_pos_in_window (width / 2,  height / 2 );
     draw_in_window (hero_pos_in_window, "\uC720", 35);
 }
-void ConsoleGraphics::draw_hp_line (int max_hp, int cur_hp)
-{
-    if (cur_hp == max_hp)
-    {
-        cout << "\033[4;8H" << "|";
-        cout << "\033[42m" << "    "<<  "\033[00m" << "|";
-        cout << "\033[42m" << "    "<<  "\033[00m" << "|";
-        cout << "\033[42m" << "    "<<  "\033[00m" << "|";
-        cout << "\033[42m" << "    "<<  "\033[00m" << "|";
-        cout << "\033[42m" << "    "<<  "\033[00m" << "|";
-    }
-}
 
-void ConsoleGraphics::draw_hero_stats ()
-{
-    Coord x (2, 4);
-    print_string (x, "HERO", 35);
-    x = Coord (4, 4);
-    print_string (x, "               ", 35);
-    x = Coord (4, 4);
-    print_string (x, "HP: ", 15);
-    x = Coord (4, 7);
-    cout << "400/400";
-    draw_hp_line (400,400);
-    // printf("%i / %i", unitsData[heroIndex].health, GetUnitDefaultHealth(UnitType_Hero));
-
-    // SetConsoleCursorPosition(consoleHandle, cursor_coord);
-    // SetConsoleTextAttribute(consoleHandle, ConsoleColor_Gray);
-    // for (int i = 1; i <= GetUnitDefaultHealth(UnitType_Hero) / 20; i++)
-    // {
-    //     printf("%c", 219);
-    //     if (i % 5 == 0)
-    //         printf("%c", 179);
-    // }
-
-    // cursor_coord = { 11, 8 };
-    // SetConsoleCursorPosition(consoleHandle, cursor_coord);
-    // SetConsoleTextAttribute(consoleHandle, ConsoleColor_Red);
-    // for (int i = 1; i <= unitsData[heroIndex].health / 20; i++)
-    // {
-    //     printf("%c", 219);
-    //     if (i % 5 == 0)
-    //         printf("%c", 179);
-    // }
-}
 void ConsoleGraphics::draw_in_window (Coord x, string symb_code, int color, int bg_color)
 {
     print_symbol (Coord(x.x + shift + 1, x.y + 2), symb_code, color, bg_color);
-}
-void ConsoleGraphics::set_cursor_in_win_center ()
-{
-    cout << "\033[" << width / 2 + shift + 1 << ";" <<  height / 2 + 1 << "#H";
 }
 
 void ConsoleGraphics::refresh ()
@@ -149,8 +90,9 @@ void ConsoleGraphics::refresh ()
     }
     draw_hero();
     draw_wall();
-    draw_hero_stats();
-    set_cursor_in_win_center();
+    info.draw_hero_stats();
+
+    //set_cursor_in_win_center();
 }
 void ConsoleGraphics::move_hero_right ()
 {
