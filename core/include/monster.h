@@ -17,7 +17,7 @@ public:
     Monster(const AIPtr _ai, MonsterStatsPtr _stats);
     void act();
     void react(ActionPtr action);
-    MonsterStats* get_stats() { return MonsterStats::to_MonsterStatsPtr(stats)->get(); }   
+    MonsterStats* get_stats() { return MonsterStats::to_MonsterStatsPtr(stats).get(); }   
     DECLARE_COMMON_METHODS(Monster)
 protected:
     AIPtr ai;

@@ -5,7 +5,7 @@ TEST = test
 BINDIR = bin
 SRCDIR = src
 TESTDIR = tests
-OBJECTS = $(BINDIR)/core.o $(BINDIR)/basic.o $(BINDIR)/tile.o $(BINDIR)/visitor.o
+OBJECTS = $(BINDIR)/core.o $(BINDIR)/basic.o $(BINDIR)/tile.o $(BINDIR)/visitor.o $(BINDIR)/monster.o
 TEST_OBJ = $(BINDIR)/test_tiles.o
 
 all: $(BINDIR) $(OBJECTS)

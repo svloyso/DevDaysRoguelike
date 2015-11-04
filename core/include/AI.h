@@ -1,6 +1,7 @@
 #pragma once
 #include "basic.h"
 #include "monster_fwd.h"
+#include "AI_fwd.h"
 
 class AI : public Object {
 public:
@@ -8,4 +9,5 @@ public:
     void act(MonsterPtr monster) {}
     void react(MonsterPtr monster, ActionPtr action) {}
     DECLARE_COMMON_METHODS(AI)
-}
+};
+
