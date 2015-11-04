@@ -48,7 +48,7 @@ void Generate()
     int to = (size_y - 3) * size_x + size_x - 3; 
 
     grid[from / size_x][from % size_x] = TILE_EXIT;
-    grid[to / size_x][to % size_x] = TILE_EXIT;
+    //grid[to / size_x][to % size_x] = TILE_EXIT;
 
     for (int i = 0; i < numDoor; i++)
     {
@@ -131,7 +131,7 @@ void Generate()
 }
 
 
-bool GenerateMobs(int from, int to, bool* visited)
+/*bool GenerateMobs(int from, int to, bool* visited)
 {
     bool isGoodPath = false;
 
@@ -184,7 +184,7 @@ bool GenerateMobs(int from, int to, bool* visited)
     }
 
     return isGoodPath;
-}
+}*/
 
 /*void GenerateStuff(int *rowStuff, int *columnStuff)
 {
@@ -660,7 +660,12 @@ void getMap()
     initmap();
 
     vector< vector< TilePtr > > tiles;
-
+    MapInfo info;
+    info.size = Coord(size_y, size_x);
+    info.hero_init = Coord(0, 0);
+    //int from = 2*size_x + 2;
+    //info.hero_init = Coord(from / size_x, from % size_x);
+    
     for (int i = 0; i < size_y; ++i)
     {
         vector< TilePtr > row;
@@ -677,6 +682,8 @@ void getMap()
                     imms.push_back(std::make_shared<Door>());
                     tile = std::make_shared<FloorTile>(UnitPtr(), std::vector<ItemPtr>(), imms);
                     break;
+                case TILE_EXIT:
+                    info.hero_init = Coord(i, j);
                 default:
                     tile = std::make_shared<FloorTile>();
                     break;
@@ -685,8 +692,6 @@ void getMap()
         }
         tiles.push_back(row);
     }
-    MapInfo info;
-    info.size = Coord(size_y, size_x);
     init_core(info, tiles);
 }
 
@@ -716,7 +721,7 @@ void getMap()
 
 
 
-bool fractPower(Fraction i, Fraction j)
+/*bool fractPower(Fraction i, Fraction j)
 { 
     return ( i.health + i.strength < j.health + j.strength);
 }
@@ -768,7 +773,7 @@ void genItems()
     int num = 5 + rand() % 15;
     for (int i = 0; i < num; ++i)
     {
-        Item it;
+        SimpleItem it;
         it.type = weapon;
         it.stat = strength;
         it.effect = 1 + rand() % 40;
@@ -778,7 +783,7 @@ void genItems()
     num = 5 + rand() % 15;
     for (int i = 0; i < num; ++i)
     {
-        Item it;
+        SimpleItem it;
         it.type = head;
         it.stat = health;
         it.effect = 1 + rand() % 40;
@@ -788,7 +793,7 @@ void genItems()
     num = 5 + rand() % 15;
     for (int i = 0; i < num; ++i)
     {
-        Item it;
+        SimpleItem it;
         it.type = body;
         it.stat = health;
         it.effect = 1 + rand() % 40;
@@ -798,7 +803,7 @@ void genItems()
     num = 5 + rand() % 15;
     for (int i = 0; i < num; ++i)
     {
-        Item it;
+        SimpleItem it;
         it.type = arms;
         it.stat = health;
         it.effect = 1 + rand() % 40;
@@ -808,22 +813,13 @@ void genItems()
     num = 5 + rand() % 15;
     for (int i = 0; i < num; ++i)
     {
-        Item it;
+        SimpleItem it;
         it.type = legs;
         it.stat = health;
         it.effect = 1 + rand() % 40;
         stuff.push_back(it);
     }
-
-
-    /*for (int i = 0; i < stuff.size(); ++i)
-    {
-        cout << "\tItem type: " << stuff[i].type << endl;
-        cout << "\tItem stat: " << stuff[i].stat << endl;
-        cout << "\tItem effect: +" << stuff[i].effect << endl;
-        cout << endl;
-    }*/
-}
+}*/
  
 /*int main(int argc, char **argv)
 {

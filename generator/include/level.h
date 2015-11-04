@@ -10,9 +10,9 @@
 
 #include "levelParams.h"
 
-//#include "core.h"
-//#include "tile.h"
-//#include "door.h"
+#include "core.h"
+#include "tile.h"
+#include "door.h"
  
  #define TILE_FLOOR 0
  #define TILE_WALL 1
@@ -43,7 +43,7 @@ string GetRenderCellSymbolWall(int r, int c);
 void printmap(void);
 
 
-enum itemType
+/*enum SimpleItemType
 {
 	weapon,
 	head,
@@ -58,9 +58,9 @@ enum statType
 	strength
 };
 
-struct Item
+struct SimpleItem
 {
-	itemType type;
+	SimpleItemType type;
 	statType stat;
 	int effect;
 };
@@ -78,16 +78,16 @@ struct Mob
 	int fraction;
 	int health;
 	int strength;	
-	vector< Item > inventory;
+	vector< SimpleItem > inventory;
 	int x;
 	int y;
 };
 
 vector<Mob> mobs;
 vector<Fraction> fraction(numFractions);
-vector<Item> stuff;
+vector<SimpleItem> stuff;
 
 bool fractPower(Fraction i, Fraction j);
 void genFraction();
 Mob genMob(Fraction fract);
-void genItems();
+void genSimpleItems();*/
