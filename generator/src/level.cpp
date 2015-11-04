@@ -628,6 +628,8 @@ void getMap()
 	}
     MapInfo info;
     info.size = Coord(size_y, size_x);
+    int from = 2*size_x + 2;
+    info.hero_init = Coord(from / size_x, from % size_x);
     init_core(info, tiles);
 }
 
