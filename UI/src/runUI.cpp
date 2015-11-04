@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <ncurses.h>
 #include <cstdlib>
+#include "UI.h"
 
 #include "gameprocess.h"
 using namespace std;
@@ -12,7 +13,7 @@ using namespace std;
 // 				repaint();
 // 	}
 // }
-int main()
+int runUI()
 {
     GameProcess game;
     system("stty raw");

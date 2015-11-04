@@ -1,8 +1,7 @@
 #include "console_graphic.h"
 
 ConsoleGraphics::ConsoleGraphics ()
-    : core_mock ("map.txt")
-    , hero_pos (0,0)
+    : hero_pos (0,0)
 {
     initscr();
     getmaxyx (stdscr, console_size_y, console_size_x);
@@ -15,7 +14,7 @@ ConsoleGraphics::ConsoleGraphics ()
 }
 void ConsoleGraphics::init()
 {
-    core_mock.set_hero (Coord (0, 0));
+    core->set_hero (Coord (0, 0));
     initscr();
     getmaxyx (stdscr, console_size_y, console_size_x);
     endwin();
@@ -63,7 +62,7 @@ void ConsoleGraphics::draw_in_window (Coord x, string symb_code, int color, int 
 
 void ConsoleGraphics::refresh ()
 {
-    hero_pos = core_mock.get_hero();
+    hero_pos = core->get_hero();
     int x_left  = hero_pos.x - width / 2;
     int x_right = hero_pos.x + width / 2;
     int y_left  = hero_pos.y - height / 2;
@@ -73,7 +72,20 @@ void ConsoleGraphics::refresh ()
     {
         for (int i = y_left; i < y_right; ++i)
         {
-            char obj_pos = core_mock.get_tile (Coord (j, i));
+            TilePtr tile = core->get_tile (Coord (j, i));
+			std::string str;
+			if( tile->get_type() == TileType::Wall ) {
+                str = "#";
+            } 
+            if ( tile->get_type() == TileType::Floor ) {
+                if (tile->get_immovables().size()) {
+                    str = "D";
+                } else {
+                    str = ".";
+                }
+            }
+			draw_in_window (Coord (j - x_left, i - y_left), str, 15);
+/*
             switch(obj_pos)
             {
             case '#':
@@ -86,6 +98,7 @@ void ConsoleGraphics::refresh ()
 //                print_symbol (Coord (j - x_left , i - y_left), "x", 15);
 //                break;
             }
+*/
         }
     }
     draw_hero();
@@ -96,22 +109,22 @@ void ConsoleGraphics::refresh ()
 }
 void ConsoleGraphics::move_hero_right ()
 {
-    core_mock.set_hero (Coord (hero_pos.x, hero_pos.y + 1));
+    core->set_hero (Coord (hero_pos.x, hero_pos.y + 1));
     refresh();
 }
 void ConsoleGraphics::move_hero_left ()
 {
-    core_mock.set_hero (Coord (hero_pos.x, hero_pos.y - 1));
+    core->set_hero (Coord (hero_pos.x, hero_pos.y - 1));
     refresh();
 }
 void ConsoleGraphics::move_hero_up ()
 {
-    core_mock.set_hero (Coord (hero_pos.x - 1, hero_pos.y));
+    core->set_hero (Coord (hero_pos.x - 1, hero_pos.y));
     refresh();
 }
 void ConsoleGraphics::move_hero_down ()
 {
-    core_mock.set_hero (Coord (hero_pos.x + 1, hero_pos.y));
+    core->set_hero (Coord (hero_pos.x + 1, hero_pos.y));
     refresh();
 }
 ConsoleGraphics::~ConsoleGraphics ()

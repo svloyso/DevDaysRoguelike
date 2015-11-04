@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <string>
 #include <ncurses.h>
-#include "core_mock.h"
+#include "core.h"
 #include "coord.h"
 #include "math.h"
 #include "consoleprint.h"
@@ -20,7 +20,6 @@ class ConsoleGraphics
     int width;
     int shift;
     Coord hero_pos;
-    CoreMock core_mock;
     DrawInfo info;
 
 public:
