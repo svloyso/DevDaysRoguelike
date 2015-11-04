@@ -13,7 +13,7 @@ public:
     void act() {}
     void react(ActionPtr action) {}
     
-    HeroStats* get_stats() { return HeroStats::to_HeroStatsPtr(stats).get(); }
+    HeroStats* get_stats() { return HeroStats::to_Ptr(stats).get(); }
 
     DECLARE_COMMON_METHODS(Hero)
     DECLARE_VISIT(Hero)

@@ -14,9 +14,24 @@ Core::Core(MapInfo info, const std::vector< std::vector< TilePtr > >& _map) :
     map_info(info)
 {
     init_tables();
-    hero = Hero::make_HeroPtr(HeroStats::make_HeroStatsPtr());
+    hero = Hero::make_Ptr(HeroStats::make_Ptr());
     objects[hero->get_id()] = hero;
-    get_tile(map_info.hero_init)->unit = hero;
+    //find_hero_pos();
+    TilePtr hero_tile = get_tile(map_info.hero_init);
+    hero_tile->unit = hero;
+    hero->set_pos(hero_tile);
+    map_updater = [](Coord c) {};
+    action_updater = [](ActionPtr a) {};
+}
+
+void Core::find_hero_pos() {
+    for(int x = 1; x < map_info.size.x; ++x) {
+        TilePtr tile(get_tile(Coord(x, x)));
+        if (tile->get_type() != TileType::Wall) {
+            tile->unit = hero;
+            return;
+        }
+    }
 }
 
 void Core::init_tables() {
@@ -51,7 +66,7 @@ HeroPtr Core::get_hero() {
 Result Core::move_hero(Direction dir) {
     TilePtr tile_from = hero->get_pos();
     TilePtr tile_to   = get_tile(get_coord(tile_from).move(dir));
-    ActionPtr action = Move::make_MovePtr(hero, tile_to);
+    ActionPtr action = Move::make_Ptr(hero, tile_to);
     return do_action(action);
 }
 
@@ -74,8 +89,8 @@ void Core::subscribe_action(std::function<void(ActionPtr)> f) {
 }
 
 Result Core::do_move(MovePtr action) {
-    UnitPtr actor = Unit::to_UnitPtr(action->get_actor());
-    TilePtr tile_to = Tile::to_TilePtr(action->get_reactor());
+    UnitPtr actor = Unit::to_Ptr(action->get_actor());
+    TilePtr tile_to = Tile::to_Ptr(action->get_reactor());
     TilePtr tile_from = actor->get_pos();
 
     if (!tile_to->free()) {
@@ -90,16 +105,16 @@ Result Core::do_move(MovePtr action) {
 }
 
 Result Core::do_atack(AtackPtr action) {
-    ActableObjPtr actor = ActableObject::to_ActableObjPtr(action->get_actor());
-    ActableObjPtr reactor = ActableObject::to_ActableObjPtr(action->get_reactor());
+    ActableObjPtr actor = ActableObject::to_Ptr(action->get_actor());
+    ActableObjPtr reactor = ActableObject::to_Ptr(action->get_reactor());
 
     reactor->react(action);
     return Result::Success;
 }
 
 Result Core::do_interact(InteractPtr action) {
-    UnitPtr actor = Unit::to_UnitPtr(action->get_actor());
-    ActableObjPtr reactor = ActableObject::to_ActableObjPtr(action->get_reactor());
+    UnitPtr actor = Unit::to_Ptr(action->get_actor());
+    ActableObjPtr reactor = ActableObject::to_Ptr(action->get_reactor());
     
     reactor->react(action);
     return Result::Success;
@@ -111,8 +126,8 @@ Result Core::do_pick(PickPtr action) {
 }
 
 Result Core::do_destroy(DestroyedPtr action) {
-    ActableObjPtr actor = ActableObject::to_ActableObjPtr(action->get_actor());
-    ActableObjPtr reactor = ActableObject::to_ActableObjPtr(action->get_reactor());
+    ActableObjPtr actor = ActableObject::to_Ptr(action->get_actor());
+    ActableObjPtr reactor = ActableObject::to_Ptr(action->get_reactor());
 
     reactor->react(action);
     TilePtr place_of_death = actor->get_pos();
@@ -130,19 +145,19 @@ Result Core::do_destroy(DestroyedPtr action) {
 Result Core::do_action(ActionPtr action) {
     switch(action->get_type()) {
         case ActionType::Move:
-            return do_move(Move::to_MovePtr(action));
+            return do_move(Move::to_Ptr(action));
             break;
         case ActionType::Atack:
-            return do_atack(Atack::to_AtackPtr(action));
+            return do_atack(Atack::to_Ptr(action));
             break;
         case ActionType::Pick:
-            return do_pick(Pick::to_PickPtr(action));
+            return do_pick(Pick::to_Ptr(action));
             break;
         case ActionType::Interact:
-            return do_interact(Interact::to_InteractPtr(action));
+            return do_interact(Interact::to_Ptr(action));
             break;
         case ActionType::Destroyed:
-            return do_destroy(Destroyed::to_DestroyedPtr(action));
+            return do_destroy(Destroyed::to_Ptr(action));
             break;
     }
     return Result::Failure;

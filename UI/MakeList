@@ -1,2 +1,2 @@
-UIOBJ = $(BINDIR)/console_graphic.o $(BINDIR)/consoleprint.o $(BINDIR)/drawinfo.o $(BINDIR)/gameprocess.o $(BINDIR)/runUI.o
+UIOBJ = $(BINDIR)/console_graphic.o $(BINDIR)/consoleprint.o $(BINDIR)/drawinfo.o $(BINDIR)/gameprocess.o $(BINDIR)/runUI.o $(BINDIR)/cuttingwindow.o
 
