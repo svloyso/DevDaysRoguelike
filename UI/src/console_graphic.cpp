@@ -69,7 +69,6 @@ string ConsoleGraphics::get_render_cell_symbol_wall (int r, int c)
     	code += "1";
     else
     	code += "0";
-
 	return codes[code];
 }
 void ConsoleGraphics::draw_wall (Coord c, int h, int w)
@@ -114,18 +113,27 @@ void ConsoleGraphics::draw_coin (Coord x)
 {
     print_symbol (x, "\u26C0", 14, 30);
 }
+// void ConsoleGraphics::draw_hero ()
+// {
+//     Coord hero_pos_in_window (width / 2,  height / 2 );
+//     draw_in_window (hero_pos_in_window, "\uC720", 31);
+// }
 void ConsoleGraphics::draw_hero ()
 {
     Coord hero_pos_in_window (width / 2,  height / 2 );
-    draw_in_window (hero_pos_in_window, "\uC720", 31);
+    game_play.print (hero_pos_in_window, "\u2654", 31);
 }
-void ConsoleGraphics::draw_in_window  (Coord x, string symb_code, int color)
-{
-    print_symbol (Coord (x.x + shift + 1, x.y + 2), symb_code, color);
-}
+// void ConsoleGraphics::draw_in_window  (Coord x, string symb_code, int color)
+// {
+//     print_symbol (Coord (x.x + shift + 1, x.y + 2), symb_code, color);
+// }
+// void ConsoleGraphics::draw_door (Coord x)
+// {
+// 	draw_in_window (x, "\u2592", 14);
+// }
 void ConsoleGraphics::draw_door (Coord x)
 {
-	draw_in_window (x, "\u2592", 14);
+    game_play.print (x, "\u2592", 14);
 }
 void ConsoleGraphics::refresh ()
 {
@@ -147,7 +155,8 @@ void ConsoleGraphics::refresh ()
 			if (tile->get_type() == TileType::Wall) 
 			{
                 str = get_render_cell_symbol_wall (j, i);
-                draw_in_window (Coord (j - x_left, i - y_left), str, 15);
+                //draw_in_window (Coord (j - x_left, i - y_left), str, 15);
+                
                 continue;
             } 
 			else if ( tile->get_type() == TileType::Floor ) 
@@ -185,7 +194,6 @@ void ConsoleGraphics::refresh ()
     draw_hero();
     draw_wall();
     info.draw_hero_stats();
-
     //set_cursor_in_win_center();
 }
 void ConsoleGraphics::move_hero_right ()
