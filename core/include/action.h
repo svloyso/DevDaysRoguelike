@@ -24,7 +24,7 @@ public:
     virtual ObjectPtr get_reactor() { return reactor; }
     virtual ActionType get_type() = 0;
     
-    DECLARE_TO_PTR(Action)
+    DECLARE_COMMON_METHODS(Action)
 
 private:
     ObjectPtr actor;
@@ -36,8 +36,8 @@ public:
     Move(UnitPtr who, TilePtr where) : Action(who, where) {};
     ActionType get_type() { return ActionType::Move; }
     
-    void visit(Visitor* v) { v->visitMove(this); }
-    DECLARE_TO_PTR(Move);
+    DECLARE_COMMON_METHODS(Move);
+    DECLARE_VISIT(Move)
 };
 
 class Atack : public Action {
@@ -47,8 +47,8 @@ public:
     ActionType get_type() { return ActionType::Atack; }
     Damage get_damage() { return damage; }
     
-    void visit(Visitor* v) { v->visitAtack(this); }
-    DECLARE_TO_PTR(Atack)
+    DECLARE_COMMON_METHODS(Atack)
+    DECLARE_VISIT(Atack)
 private:
     Damage damage;
 };
@@ -58,8 +58,8 @@ public:
     Pick(UnitPtr _who, ItemPtr _what) : Action(_who, _what) {}
     ActionType get_type() { return ActionType::Pick; }
     
-    void visit(Visitor* v) { v->visitPick(this); }
-    DECLARE_TO_PTR(Pick)
+    DECLARE_COMMON_METHODS(Pick)
+    DECLARE_VISIT(Pick)
 };
 
 class Interact : public Action {
@@ -68,8 +68,8 @@ public:
     ActionType get_type() { return ActionType::Interact; }
     virtual ItemPtr get_interactor() { return interactor; }
     
-    void visit(Visitor* v) { v->visitInteract(this); }
-    DECLARE_TO_PTR(Interact)
+    DECLARE_COMMON_METHODS(Interact)
+    DECLARE_VISIT(Interact)
 private:
     ItemPtr interactor;
 };
@@ -79,10 +79,8 @@ public:
     Destroyed(ActableObjPtr who, ActableObjPtr whom) : Action(who, whom) {}
     ActionType get_type() { return ActionType::Destroyed; }
 
-    
-    void visit(Visitor* v) { v->visitDestroyed(this); }
-
-    DECLARE_TO_PTR(Destroyed)
+    DECLARE_COMMON_METHODS(Destroyed)
+    DECLARE_VISIT(Destroyed)
 };
 
 

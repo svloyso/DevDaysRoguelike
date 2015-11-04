@@ -4,22 +4,16 @@
 #include <functional>
 #include <unordered_map>
 
+#include "basic_fwd.h"
 #include "core_fwd.h"
 #include "tile_fwd.h"
-#include "action.h"
-#include "coord.h"
-#include "hero.h"
-#include "door.h"
+#include "action_fwd.h"
+#include "hero_fwd.h"
+#include "door_fwd.h"
+#include "utils.h"
 
 struct MapInfo {
     Coord size;
-};
-
-enum class Direction {
-    Left,
-    Right,
-    Up,
-    Down
 };
 
 class Core {
@@ -32,9 +26,11 @@ public:
 
     Result move_hero(Direction dir);
 
-    void do_action(ActionPtr action);
+    Result do_action(ActionPtr action);
     ObjectPtr get_object(int id);
     MapInfo get_mapinfo();
+
+    Coord get_coord(TilePtr tile);
 
     void run_game();
 private:

@@ -6,6 +6,7 @@
 #include "core.h"
 #include "tile.h"
 #include "visitor.h"
+#include "door.h"
 
 class MyVisistor : public Visitor {
 public:

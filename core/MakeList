@@ -1,2 +1,2 @@
-COREOBJ = $(BINDIR)/core.o $(BINDIR)/basic.o $(BINDIR)/tile.o 
+COREOBJ = $(BINDIR)/core.o $(BINDIR)/basic.o $(BINDIR)/tile.o $(BINDIR)/monster.o $(BINDIR)/visitor.o
 

@@ -1,4 +1,5 @@
 #include "core.h"
+#include "hero.h"
 #include <stdexcept>
 #include <memory>
 
@@ -13,6 +14,9 @@ Core::Core(MapInfo info, const std::vector< std::vector< TilePtr > >& _map) :
     map_info(info)
 {
     init_tables();
+    hero = Hero::make_HeroPtr(HeroStats::make_HeroStatsPtr());
+    objects[hero->get_id()] = hero;
+    map[0][0]->unit = hero;
 }
 
 void Core::init_tables() {
@@ -40,12 +44,19 @@ void Core::init_tables() {
     }
 }
 
-Coord Core::get_hero() {
+HeroPtr Core::get_hero() {
     return hero;
 }
 
-void Core::set_hero(Coord c) {
-    hero = c;
+Result Core::move_hero(Direction dir) {
+    TilePtr tile_from = hero->get_pos();
+    TilePtr tile_to   = get_tile(get_coord(tile_from).move(dir));
+    ActionPtr action = Move::make_MovePtr(hero, tile_to);
+    return do_action(action);
+}
+
+Coord Core::get_coord(TilePtr tile) {
+    return tiles[tile];
 }
 
 TilePtr Core::get_tile(Coord c) {
@@ -116,26 +127,25 @@ Result Core::do_destroy(DestroyedPtr action) {
     return Result::Success;
 }
 
-void Core::do_action(ActionPtr action) {
+Result Core::do_action(ActionPtr action) {
     switch(action->get_type()) {
         case ActionType::Move:
-            do_move(Move::to_MovePtr(action));
+            return do_move(Move::to_MovePtr(action));
             break;
         case ActionType::Atack:
-            do_atack(Atack::to_AtackPtr(action));
+            return do_atack(Atack::to_AtackPtr(action));
             break;
         case ActionType::Pick:
-            do_pick(Pick::to_PickPtr(action));
+            return do_pick(Pick::to_PickPtr(action));
             break;
         case ActionType::Interact:
-            do_interact(Interact::to_InteractPtr(action));
+            return do_interact(Interact::to_InteractPtr(action));
             break;
         case ActionType::Destroyed:
-            do_destroy(Destroyed::to_DestroyedPtr(action));
+            return do_destroy(Destroyed::to_DestroyedPtr(action));
             break;
-        default:
-            throw std::runtime_error("Invalid action type");
     }
+    return Result::Failure;
 }
 
 ObjectPtr Core::get_object(int id) {
