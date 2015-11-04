@@ -1,4 +1,5 @@
 #include "level.h"
+#include "getLevel.h"
 
 bool exploreMatr(int from, int to, bool* visited)
 {
@@ -508,17 +509,27 @@ void genRooms()
  
 void initmap(void)
  {
-	int xi, yi;
-
-	grid  = (int**)malloc(sizeof(int*) * (size_y+3));
- 
-	for(yi=0; yi<size_y; yi++)
-		grid[yi] = (int*)malloc(sizeof(int) * (size_x+3));
-
+	grid = vector< vector<int> >(size_y+3, vector<int>(size_x+3));
 	
 	ClearField();	
 	genRooms();
 	Generate();
+
+	// Поправил стенки, могли испортиться
+	for (int i = 1; i < size_x; i++)
+	{
+		grid[0][i] = TILE_FLOOR;
+		grid[1][i] = TILE_WALL;
+		grid[size_y - 2][i] = TILE_WALL;
+		grid[size_y - 1][i] = TILE_FLOOR;
+	}
+	for (int i = 1; i < size_y - 1; i++)
+	{
+		grid[i][0] = TILE_FLOOR;
+		grid[i][1] = TILE_WALL;
+		grid[i][size_x - 2] = TILE_WALL;
+		grid[i][size_x - 1] = TILE_FLOOR;
+	}
 }
  
 string GetRenderCellSymbolWall(int r, int c)
@@ -580,32 +591,83 @@ void printmap(void)
  		putchar('\n');
  	}
  }
- 
-int main(int argc, char **argv)
- {
- 	int ii, jj;
 
+void getMap()
+{
+	size_x     = 100;
+ 	size_y     = 30;
+ 
+ 	srand(time(NULL));
+ 	initmap();
+
+	vector< vector< TilePtr > > tiles;
+
+	for (int i = 0; i < size_y; ++i)
+	{
+		vector< TilePtr > row;
+		for (int j = 0; j < size_x; ++j)
+		{
+			TilePtr tile;
+            std::vector< ImmovablePtr > imms;
+			switch(grid[i][j]) 
+			{
+                case TILE_WALL:
+                    tile = std::make_shared<WallTile>();
+                    break;
+                case TILE_DOOR:
+                    imms.push_back(std::make_shared<Door>());
+                    tile = std::make_shared<FloorTile>(UnitPtr(), std::vector<ItemPtr>(), imms);
+                    break;
+                default:
+                    tile = std::make_shared<FloorTile>();
+                    break;
+            }
+            row.push_back(tile);
+		}
+		tiles.push_back(row);
+	}
+    MapInfo info;
+    info.size = Coord(size_y, size_x);
+    init_core(info, tiles);
+}
+
+/*void print_map() {
+    MapInfo info = main_core->get_mapinfo();
+    int width = info.size.x;
+    int height = info.size.y;
+
+    for(int x = 0; x < width; ++x) {
+        for(int y = 0; y < height; ++y) {
+            TilePtr tile = main_core->get_tile(Coord(x, y));
+            if( tile->get_type() == TileType::Wall ) {
+                std::cout << '#';
+            } 
+            if ( tile->get_type() == TileType::Floor ) {
+                if (tile->get_immovables().size()) {
+                    std::cout << 'D';
+                } else {
+                    std::cout << '.';
+                }
+            }
+        }
+        std::cout << std::endl;
+    }
+}
+
+int main() 
+{
+    getMap();
+    print_map();
+}*/
+ 
+/*int main(int argc, char **argv)
+{
  	size_x     = 100;
  	size_y     = 30;
  
  	srand(time(NULL));
  	initmap();
- 	
- 	for (int i = 1; i < size_x; i++)
-	{
-		grid[0][i] = TILE_FLOOR;
-		grid[1][i] = TILE_WALL;
-		grid[size_y - 2][i] = TILE_WALL;
-		grid[size_y - 1][i] = TILE_FLOOR;
-	}
-	for (int i = 1; i < size_y - 1; i++)
-	{
-		grid[i][0] = TILE_FLOOR;
-		grid[i][1] = TILE_WALL;
-		grid[i][size_x - 2] = TILE_WALL;
-		grid[i][size_x - 1] = TILE_FLOOR;
-	}
 
  	printmap();
  	return 0;
-}
+}*/
