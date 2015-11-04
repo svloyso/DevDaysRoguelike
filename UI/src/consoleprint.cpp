@@ -1,4 +1,6 @@
 #include "consoleprint.h"
+#include <iostream>
+
 void clear_screen ()
 {
     std::cout << "\033[2J";

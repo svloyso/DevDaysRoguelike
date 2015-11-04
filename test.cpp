@@ -29,8 +29,6 @@ void print_map() {
 
 
 int main() {
-    MapInfo info;
-    info.size = Coord();
     getMap();
     runUI();
 }

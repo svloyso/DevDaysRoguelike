@@ -29,7 +29,7 @@ void GameProcess::update (char input_char)
 //        isGameActive = false;
 //        break;
     default:
-        cout << "\033[" << 50 << ";" << 80 << "#H";
+        cout << "\033[" << 50 << ";" << 80 << "#H" << "\033[30m" << "033[0m";
     }
 
 //    if (unitsData[heroIndex].health <= 0)

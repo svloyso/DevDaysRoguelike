@@ -1,4 +1,5 @@
 #include "console_graphic.h"
+#include "core.h"
 
 ConsoleGraphics::ConsoleGraphics ()
     : hero_pos (0,0)
@@ -8,22 +9,67 @@ ConsoleGraphics::ConsoleGraphics ()
     endwin();
 
     shift = 8;
-    width = 10;
+    width = 16;
     height = 70;  // смещение по у
     refresh();
+
+	codes["1111"] = "\u253C";
+	codes["1110"] = "\u2534";
+	codes["1101"] ="\u2524";
+	codes["0111"] ="\u251C";
+	codes["1011"] = "\u252C";
+	codes["0101"] ="\u2502";
+	codes["1010"] ="\u2500";
+	codes["1100"]= "\u2518";
+	codes["0110"] ="\u2514";
+	codes["0011"] ="\u250C";
+	codes["1001"] ="\u2510";
+	codes["0100"] ="\u2575";
+	codes["0010"] ="\u2576";
+	codes["0001"] ="\u2577";
+	codes["1000"] ="\u2574";
+	codes["0000"] =" ";
 }
 void ConsoleGraphics::init()
 {
-    core->set_hero (Coord (0, 0));
+    main_core->set_hero (Coord (0, 0));
     initscr();
     getmaxyx (stdscr, console_size_y, console_size_x);
     endwin();
 
-    shift = 6;
-    width = 10;
+    shift = 8;
+    width = 16;
     height = 70;  // смещение по у
     refresh();
 }
+
+string ConsoleGraphics::GetRenderCellSymbolWall(int r, int c)
+{
+    string code = "";
+
+    if ((main_core->get_tile (Coord (r, c-1)))->get_type() == TileType::Wall)
+    	code += "1";
+    else
+    	code += "0";
+
+    if ((main_core->get_tile (Coord (r-1, c)))->get_type() == TileType::Wall)
+    	code += "1";
+    else
+    	code += "0";
+
+    if ((main_core->get_tile (Coord (r, c+1)))->get_type() == TileType::Wall)
+    	code += "1";
+    else
+    	code += "0";
+
+    if ((main_core->get_tile (Coord (r+1, c)))->get_type() == TileType::Wall)
+    	code += "1";
+    else
+    	code += "0";
+
+	return codes[code];
+}
+ 
 void ConsoleGraphics::draw_wall ()
 {
     //cout << "\033[2J";
@@ -62,7 +108,8 @@ void ConsoleGraphics::draw_in_window (Coord x, string symb_code, int color, int 
 
 void ConsoleGraphics::refresh ()
 {
-    hero_pos = core->get_hero();
+	cout << "\033[2J";
+    hero_pos = main_core->get_hero();
     int x_left  = hero_pos.x - width / 2;
     int x_right = hero_pos.x + width / 2;
     int y_left  = hero_pos.y - height / 2;
@@ -72,18 +119,28 @@ void ConsoleGraphics::refresh ()
     {
         for (int i = y_left; i < y_right; ++i)
         {
-            TilePtr tile = core->get_tile (Coord (j, i));
+            TilePtr tile = main_core->get_tile (Coord (j, i));
 			std::string str;
-			if( tile->get_type() == TileType::Wall ) {
-                str = "#";
+			if( tile->get_type() == TileType::Wall ) 
+			{
+                str = GetRenderCellSymbolWall(j, i);
+                draw_in_window (Coord (j - x_left, i - y_left), str, 15);
+                continue;
             } 
-            if ( tile->get_type() == TileType::Floor ) {
-                if (tile->get_immovables().size()) {
+			else if ( tile->get_type() == TileType::Floor ) 
+			{
+                if (tile->get_immovables().size()) 
+				{
                     str = "D";
-                } else {
-                    str = ".";
+                } 
+				else 
+				{
+                    str = " ";
                 }
-            }
+            } 
+			else {
+				str = 'x';
+			}
 			draw_in_window (Coord (j - x_left, i - y_left), str, 15);
 /*
             switch(obj_pos)
@@ -109,22 +166,22 @@ void ConsoleGraphics::refresh ()
 }
 void ConsoleGraphics::move_hero_right ()
 {
-    core->set_hero (Coord (hero_pos.x, hero_pos.y + 1));
+    main_core->set_hero (Coord (hero_pos.x, hero_pos.y + 1));
     refresh();
 }
 void ConsoleGraphics::move_hero_left ()
 {
-    core->set_hero (Coord (hero_pos.x, hero_pos.y - 1));
+    main_core->set_hero (Coord (hero_pos.x, hero_pos.y - 1));
     refresh();
 }
 void ConsoleGraphics::move_hero_up ()
 {
-    core->set_hero (Coord (hero_pos.x - 1, hero_pos.y));
+    main_core->set_hero (Coord (hero_pos.x - 1, hero_pos.y));
     refresh();
 }
 void ConsoleGraphics::move_hero_down ()
 {
-    core->set_hero (Coord (hero_pos.x + 1, hero_pos.y));
+    main_core->set_hero (Coord (hero_pos.x + 1, hero_pos.y));
     refresh();
 }
 ConsoleGraphics::~ConsoleGraphics ()

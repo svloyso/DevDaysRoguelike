@@ -1,4 +1,7 @@
 #include "drawinfo.h"
+#include <iostream>
+
+using namespace std;
 
 DrawInfo::DrawInfo(int _hero_max_hp, int _hero_cur_hp)
     : hero_max_hp (_hero_max_hp)
@@ -120,4 +123,5 @@ int DrawInfo::compute_diff ()
     one_part_hp = hero_max_hp / 5;
     full_parts_count = hero_cur_hp / one_part_hp;
     fractions_count = (hero_cur_hp - full_parts_count * one_part_hp ) % 5;
+	return 0;
 }
