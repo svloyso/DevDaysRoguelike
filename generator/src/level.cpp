@@ -125,13 +125,13 @@ void Generate()
     
     for (int i = 0; i < num; i++)
         visited[i] = false;
-    //GenerateMobs(from, to, visited);
+    GenerateMobs(from, to, visited);
 
     return;
 }
 
 
-/*bool GenerateMobs(int from, int to, bool* visited)
+bool GenerateMobs(int from, int to, bool* visited)
 {
     bool isGoodPath = false;
 
@@ -165,10 +165,10 @@ void Generate()
         {
             if (rand() % 1000 < fraction[i].probability)
             {
-                Mob tempmob = genMob(fraction[i]);
+                MyMob tempmob = genMob(fraction[i]);
                 mobs.push_back(tempmob);
                 grid[r][c] = TILE_ORC;                
-                cout << "Fract: " << tempmob.fraction << endl;
+                /*cout << "Fract: " << tempmob.fraction << endl;
                 cout << "Health: " << tempmob.health << endl;
                 cout << "Strength: " << tempmob.strength << endl;
                 for (int j = 0; j < tempmob.inventory.size(); ++j)
@@ -178,13 +178,13 @@ void Generate()
                     cout << "\tItem effect: +" << tempmob.inventory[j].effect << endl;
                     cout << endl;
                 }
-                cout << endl;
+                cout << endl;*/
             }
         }
     }
 
     return isGoodPath;
-}*/
+}
 
 /*void GenerateStuff(int *rowStuff, int *columnStuff)
 {
@@ -663,8 +663,6 @@ void getMap()
     MapInfo info;
     info.size = Coord(size_y, size_x);
     info.hero_init = Coord(0, 0);
-    //int from = 2*size_x + 2;
-    //info.hero_init = Coord(from / size_x, from % size_x);
     
     for (int i = 0; i < size_y; ++i)
     {
@@ -695,33 +693,7 @@ void getMap()
     init_core(info, tiles);
 }
 
-/*void print_map() {
-    MapInfo info = main_core->get_mapinfo();
-    int width = info.size.x;
-    int height = info.size.y;
-
-    for(int x = 0; x < width; ++x) {
-        for(int y = 0; y < height; ++y) {
-            TilePtr tile = main_core->get_tile(Coord(x, y));
-            if( tile->get_type() == TileType::Wall ) {
-                std::cout << '#';
-            } 
-            if ( tile->get_type() == TileType::Floor ) {
-                if (tile->get_immovables().size()) {
-                    std::cout << 'D';
-                } else {
-                    std::cout << '.';
-                }
-            }
-        }
-        std::cout << std::endl;
-    }
-}
-*/
-
-
-
-/*bool fractPower(Fraction i, Fraction j)
+bool fractPower(MyFraction i, MyFraction j)
 { 
     return ( i.health + i.strength < j.health + j.strength);
 }
@@ -742,7 +714,7 @@ void genFraction()
     {
         fraction[i].probability = 1 + rand() % ((numFractions - i) * maxProbability / numFractions);
     }
-
+/*
     for (int i = 0; i < numFractions; ++i)
     {
         cout << "Fract: " << fraction[i].name << endl;
@@ -750,13 +722,13 @@ void genFraction()
         cout << "Strength: " << fraction[i].strength << endl;
         cout << "Prob: " << fraction[i].probability << endl;
         cout << endl;
-    }
+    }*/
 
 }
 
-Mob genMob(Fraction fract)
+MyMob genMob(MyFraction fract)
 {
-    Mob mob;
+    MyMob mob;
     mob.fraction = fract.name;
     mob.health = fract.health;
     mob.strength = fract.strength;
@@ -773,7 +745,7 @@ void genItems()
     int num = 5 + rand() % 15;
     for (int i = 0; i < num; ++i)
     {
-        SimpleItem it;
+        MyItem it;
         it.type = weapon;
         it.stat = strength;
         it.effect = 1 + rand() % 40;
@@ -783,7 +755,7 @@ void genItems()
     num = 5 + rand() % 15;
     for (int i = 0; i < num; ++i)
     {
-        SimpleItem it;
+        MyItem it;
         it.type = head;
         it.stat = health;
         it.effect = 1 + rand() % 40;
@@ -793,7 +765,7 @@ void genItems()
     num = 5 + rand() % 15;
     for (int i = 0; i < num; ++i)
     {
-        SimpleItem it;
+        MyItem it;
         it.type = body;
         it.stat = health;
         it.effect = 1 + rand() % 40;
@@ -803,7 +775,7 @@ void genItems()
     num = 5 + rand() % 15;
     for (int i = 0; i < num; ++i)
     {
-        SimpleItem it;
+        MyItem it;
         it.type = arms;
         it.stat = health;
         it.effect = 1 + rand() % 40;
@@ -813,13 +785,13 @@ void genItems()
     num = 5 + rand() % 15;
     for (int i = 0; i < num; ++i)
     {
-        SimpleItem it;
+        MyItem it;
         it.type = legs;
         it.stat = health;
         it.effect = 1 + rand() % 40;
         stuff.push_back(it);
     }
-}*/
+}
  
 /*int main(int argc, char **argv)
 {

@@ -43,7 +43,7 @@ string GetRenderCellSymbolWall(int r, int c);
 void printmap(void);
 
 
-/*enum SimpleItemType
+enum MyItemType
 {
 	weapon,
 	head,
@@ -52,20 +52,20 @@ void printmap(void);
 	legs
 };
 
-enum statType
+enum MystatType
 {
 	health,
 	strength
 };
 
-struct SimpleItem
+struct MyItem
 {
-	SimpleItemType type;
-	statType stat;
+	MyItemType type;
+	MystatType stat;
 	int effect;
 };
 
-struct Fraction
+struct MyFraction
 {
 	int name;
 	int health;
@@ -73,21 +73,21 @@ struct Fraction
 	int probability;
 };
 
-struct Mob
+struct MyMob
 {
 	int fraction;
 	int health;
 	int strength;	
-	vector< SimpleItem > inventory;
+	vector< MyItem > inventory;
 	int x;
 	int y;
 };
 
-vector<Mob> mobs;
-vector<Fraction> fraction(numFractions);
-vector<SimpleItem> stuff;
+vector<MyMob> mobs;
+vector<MyFraction> fraction(numFractions);
+vector<MyItem> stuff;
 
-bool fractPower(Fraction i, Fraction j);
+bool fractPower(MyFraction i, MyFraction j);
 void genFraction();
-Mob genMob(Fraction fract);
-void genSimpleItems();*/
+MyMob genMob(MyFraction fract);
+void genSimpleItems();
