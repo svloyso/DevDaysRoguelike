@@ -3,11 +3,19 @@
 
 #include "basic.h"
 #include "action_fwd.h"
+#include "stats.h"
 
-class Unit : public VisibleObject {
+class Unit;
+typedef std::shared_ptr<Unit> UnitPtr;
+
+class Unit : public ActableObject {
 public:
-    Unit();
+    Unit(UnitStats _stats) : stats(_stats) {};
+    static UnitPtr to_UnitPtr(ObjectPtr obj) {
+        return std::dynamic_pointer_cast<Unit>(obj)
+    }
+private:
+    UnitStats stats;
 };
 
-typedef std::shared_ptr<Unit> UnitPtr;
 

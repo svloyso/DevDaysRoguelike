@@ -17,22 +17,21 @@ class Core {
 public:
     Core(MapInfo info, std::vector< std::vector< TilePtr > > _map);
     TilePtr get_tile(Coord c);
-    void set_tile(Coord c, TilePtr t);
     void subscribe_map(std::function<void(Coord, TilePtr)> f);
     void subscribe_action(std::function<void(ActionPtr)> f);
     HeroPtr get_hero();
 
     void do_action(ActionPtr action);
     ObjectPtr get_object(int id);
-    Coord get_object_coord(int id);
     MapInfo get_mapinfo();
 
     void run_game();
 private:
-    void Move(MovePtr action);
-    void Atack(AtackPtr action);
-    void Interact(InteractPtr action);
-    void Pick(PickPtr action);
+    Result do_move(MovePtr action);
+    Result do_atack(AtackPtr action);
+    Result do_destroy(DestroyedPtr action);
+    Result do_interact(InteractPtr action);
+    Result do_pick(PickPtr action);
 
     void init_tables();
 private:
@@ -40,8 +39,8 @@ private:
     std::function<void(Coord, TilePtr)> map_updater;
     std::function<void(ActionPtr)> action_updater;
     MapInfo map_info;
-    std::unordered_map<int, VisibleObjPtr> objects;
-    std::unordered_map<int, TilePtr>   places;
+    std::unordered_map<int, ObjectPtr>  objects;
+    std::unordered_map<TilePtr, Coord> tiles;
     HeroPtr hero;
 };
 
