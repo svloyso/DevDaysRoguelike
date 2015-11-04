@@ -2,7 +2,7 @@
 #include <memory>
 
 #include "basic.h"
-#include "inflection.h"
+#include "influence.h"
 
 class Item : public Object {
 public:

@@ -4,7 +4,7 @@
 CorePtr main_core;
 
 void init_core(MapInfo info) {
-    main_core = std::make_shared(info);
+    main_core = std::make_shared<Core>(info, std::vector< std::vector< TilePtr > >());
 }
 
 Core::Core(MapInfo info, std::vector< std::vector< TilePtr > > _map) :
@@ -15,9 +15,9 @@ Core::Core(MapInfo info, std::vector< std::vector< TilePtr > > _map) :
 }
 
 void Core::init_tables() {
-    for (int i = 0; i < map.size(); ++i) {
+    for (size_t i = 0; i < map.size(); ++i) {
         auto& r = map[i];
-        for (int j = 0; j < r->size(); ++j) {
+        for (size_t j = 0; j < r.size(); ++j) {
             auto t = r[j];
             objects[t->get_id()] = t;
             tiles[t] = Coord(i, j);
@@ -26,18 +26,18 @@ void Core::init_tables() {
             unit->set_pos(t);
             auto immovables = t->get_immovables();
             auto items = t->get_items();
-            for (imm : immovables) {
+            for (auto imm : immovables) {
                 objects[imm->get_id()] = imm;
                 imm->set_pos(t);
             }
-            for (it : items) {
+            for (auto it : items) {
                 objects[it->get_id()] = it;
             }
         }
     }
 }
 
-HeroPtr get_hero() {
+HeroPtr Core::get_hero() {
     return hero;
 }
 
@@ -45,11 +45,11 @@ TilePtr Core::get_tile(Coord c) {
     return map[c.x][c.y];
 }
 
-Result Core::subscribe_map(std::function<void(Coord, TilePtr)> f) {
+void Core::subscribe_map(std::function<void(Coord)> f) {
     map_updater = f;
 }
 
-Result Core::subscribe_action(std::function<void(ActionPtr)> f) {
+void Core::subscribe_action(std::function<void(ActionPtr)> f) {
     action_updater = f;
 }
 
@@ -64,8 +64,8 @@ Result Core::do_move(MovePtr action) {
     tile_from->move_from();
     tile_to->move_to(actor);
     
-    map_updater(actor_coord);
-    map_updater(tile);
+    map_updater(tiles[tile_from]);
+    map_updater(tiles[tile_to]);
     return Result::Success;
 }
 
@@ -103,7 +103,7 @@ Result Core::do_destroy(DestroyedPtr action) {
     }
 
     objects.erase(actor->get_id());
-    map_updater(place_of_death);
+    map_updater(tiles[place_of_death]);
     return Result::Success;
 }
 
@@ -119,10 +119,10 @@ void Core::do_action(ActionPtr action) {
             do_pick(Pick::to_PickPtr(action));
             break;
         case ActionType::Interact:
-            do_interract(Interact::to_Interact(action));
+            do_interact(Interact::to_InteractPtr(action));
             break;
         case ActionType::Destroyed:
-            do_destroy(Destroy::to_Destroy(action));
+            do_destroy(Destroyed::to_DestroyedPtr(action));
             break;
         default:
             throw std::runtime_error("Invalid action type");

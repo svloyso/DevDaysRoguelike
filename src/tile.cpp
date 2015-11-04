@@ -1,5 +1,5 @@
 #include "tile.h"
-#include "core_fwd.h"
+#include "core.h"
 
 bool Tile::free() {
     if (unit) return false;
@@ -14,7 +14,7 @@ std::vector<ItemPtr> Tile::get_items() {
     return items; 
 }
 
-std::vector<UnitPtr> Tile::get_immovables() { 
+std::vector<ImmovablePtr> Tile::get_immovables() { 
     return immovables;
 }
 
@@ -24,8 +24,8 @@ Result Tile::add_immovable(ImmovablePtr imm) {
 }
 
 Result Tile::del_immovable(int imm_id) {
-    for(int i = 0; i < immovables.size(); ++i) {
-        if (immovables[i] == imm_id) {
+    for(size_t i = 0; i < immovables.size(); ++i) {
+        if (immovables[i]->get_id() == imm_id) {
             immovables.erase(immovables.begin() + i);
             return Result::Success;
         }
@@ -41,13 +41,13 @@ Result Tile::put_item(ItemPtr item) {
 Result Tile::move_to(UnitPtr _unit) { 
     if (unit) { return Result::Failure; }
     unit = _unit;
-    unit.set_pos(Tile::to_TilePtr(main_core.get_object(this->get_id())));
+    unit->set_pos(Tile::to_TilePtr(main_core->get_object(this->get_id())));
     return Result::Success;
 }
 
 Result Tile::take_item(int item_id) {
-    for(int i = 0; i < items.size(); ++i) {
-        if (items[i].get_id() == item_id) {
+    for(size_t i = 0; i < items.size(); ++i) {
+        if (items[i]->get_id() == item_id) {
             items.erase(items.begin() + i);
             return Result::Success;
         }

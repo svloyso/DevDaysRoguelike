@@ -10,9 +10,9 @@ typedef std::shared_ptr<Unit> UnitPtr;
 
 class Unit : public ActableObject {
 public:
-    Unit(UnitStats _stats) : stats(_stats) {};
+    Unit(UnitStats _stats) : stats(_stats) {}
     static UnitPtr to_UnitPtr(ObjectPtr obj) {
-        return std::dynamic_pointer_cast<Unit>(obj)
+        return std::dynamic_pointer_cast<Unit>(obj);
     }
 private:
     UnitStats stats;

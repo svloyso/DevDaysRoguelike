@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 
+#include "basic_fwd.h"
 #include "coord.h"
 #include "action_fwd.h"
 #include "tile_fwd.h"
@@ -20,33 +21,26 @@ private:
     static int next_id;
 };
 
-class ActableObject;
-
-typedef std::shared_ptr<Object> ObjectPtr;
-typedef std::shared_ptr<ActableObject> ActableObjPtr;
-
 class ActableObject : public Object {
 public:
     ActableObject();
     virtual void act();
     virtual void react(ActionPtr action);
     virtual TilePtr get_pos() { return tile; }
-    virtual void set_pos(TilePtr t); { tile = t; }
+    virtual void set_pos(TilePtr t) { tile = t; }
 
-    static ActableObjectPtr to_ActableObjPtr(ObjectPtr obj) {
+    static ActableObjPtr to_ActableObjPtr(ObjectPtr obj) {
         return std::dynamic_pointer_cast<ActableObject>(obj);
     }
 private:
     TilePtr tile;
 };
 
-class Immovable;
-typedef std::shared_ptr<Immovable> ImmovablePtr;
-
 class Immovable : public ActableObject {
 public:    
     Immovable();
     static ImmovablePtr to_ImmovablePtr(ObjectPtr obj) {
-        return std::dynamic_pointer_cast<ImmovablePtr>(obj);
+        return std::dynamic_pointer_cast<Immovable>(obj);
     }
-}
+};
+

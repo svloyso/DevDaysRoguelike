@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <vector>
 
 #include "basic.h"
 #include "unit.h"
@@ -9,8 +10,15 @@
 
 class Tile : public Object {
 public:
-    Tile(UnitPtr _unit = UnitPtr(), const std::vector<ItemPtr>& _items, const std::vector<ImmovablePtr>& _immovables) : items(_items), immovabless(_immovables), unit(_unit) {}
-    TileType getType() = 0;
+    Tile(
+        UnitPtr _unit, 
+        const std::vector<ItemPtr>& _items, 
+        const std::vector<ImmovablePtr>& _immovables
+    ) : items(_items), 
+        immovables(_immovables), 
+        unit(_unit) 
+    {}
+    virtual TileType getType() = 0;
     virtual std::vector<ItemPtr> get_items();
     virtual std::vector<ImmovablePtr> get_immovables();
     virtual UnitPtr get_unit();
@@ -23,7 +31,7 @@ public:
     virtual bool free();
 
     static TilePtr to_TilePtr(ObjectPtr obj);
-private:
+protected:
     std::vector<ItemPtr> items;
     std::vector<ImmovablePtr> immovables;
     UnitPtr unit;
@@ -31,7 +39,11 @@ private:
 
 class WallTile : public Tile {
 public:
-    WallTile(UnitPtr _unit = UnitPtr(), const std::vector<ItemPtr>& items = std::vector<ItemPtr>(), const std::vector<ImmovablePtr>& immovables = std::vector<ImmovablePtr>()) : Tile(unit, items, immovables) {}
+    WallTile(UnitPtr _unit = UnitPtr(), 
+             const std::vector<ItemPtr>& items = std::vector<ItemPtr>(), 
+             const std::vector<ImmovablePtr>& immovables = std::vector<ImmovablePtr>()) 
+        : Tile(_unit, items, immovables) 
+    {}
     TileType getType() { return TileType::Wall; }
     bool free() { return false; }
     virtual Result put_item(ItemPtr item) { return Result::Failure; }
@@ -39,7 +51,7 @@ public:
     virtual Result move_to(UnitPtr unit)  { return Result::Failure; }
     virtual Result move_from() { return Result::Failure; }
     virtual Result add_immovable(ImmovablePtr imm) { return Result::Failure; }
-    virtual Result del_immovable(int imm_id) { return Result::False; }
+    virtual Result del_immovable(int imm_id) { return Result::Failure; }
 };
 
 class FloorTile: public Tile {

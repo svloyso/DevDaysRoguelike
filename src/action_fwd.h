@@ -2,11 +2,11 @@
 #include <memory>
 
 class Action;
-class Move : public Action;
-class Atack : public Action;
-class Pick : public Action;
-class Interact : public Action;
-class Destroyed : public Action;
+class Move;
+class Atack;
+class Pick;
+class Interact;
+class Destroyed;
 
 typedef std::shared_ptr<Action> ActionPtr;
 typedef std::shared_ptr<Move> MovePtr;
