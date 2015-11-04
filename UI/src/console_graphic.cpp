@@ -139,3 +139,4 @@ void ConsoleGraphics::move_hero_rigth ()
 
 ConsoleGraphics::~ConsoleGraphics ()
 {}
+
