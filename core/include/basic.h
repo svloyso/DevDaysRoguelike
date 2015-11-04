@@ -38,7 +38,7 @@ private:
 
 class Immovable : public ActableObject {
 public:    
-    Immovable();
+    Immovable() {}
     static ImmovablePtr to_ImmovablePtr(ObjectPtr obj) {
         return std::dynamic_pointer_cast<Immovable>(obj);
     }

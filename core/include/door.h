@@ -14,6 +14,8 @@ class Door : public Immovable {
 
 public:
     Door() : state(DoorState::Closed) {}
+    virtual void act() {}
+    virtual void react(ActionPtr action) {}
     //template <class T>
     //T visit(Visitor* v) { return v->visitDoor(); }
 private:

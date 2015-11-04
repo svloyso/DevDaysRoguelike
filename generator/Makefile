@@ -5,7 +5,7 @@ BINDIR = bin
 SRCDIR = src
 OBJECTS = $(BINDIR)/level.o
 
-all: $(BINDIR) $(OBJECTS)
+all: $(BINDIR) $(OBJECTS) $(TEST)
 
 $(BINDIR)/%.o: $(SRCDIR)/%.cpp
 	$(CC) $(CXXFLAGS) -c -o $@ $<
