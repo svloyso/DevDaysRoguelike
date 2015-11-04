@@ -1,36 +1,4 @@
-#include <stdio.h>
- #include <stdlib.h>
- #include <time.h>
-#include <algorithm>
-#include <iostream>
- 
- #define TILE_FLOOR 0
- #define TILE_WALL 1
- #define TILE_POINT 2
- #define TILE_DOOR 3
- 
- typedef struct {
- 	int r1_cutoff, r2_cutoff;
- 	int reps;
- } generation_params; 
- 
- int **grid;
- int **grid2; 
- 
- int fillprob = 40;
- int r1_cutoff = 5, r2_cutoff = 2;
- int size_x = 64, size_y = 20;
- generation_params *params;  
- 
- generation_params *params_set;
- int generations;
-
-using namespace std;
-
-const int numDoor = 7;
-int *rowDoor = new int[numDoor];
-int *columnDoor = new int[numDoor];	
-void GenerateStuff(int *rowStuff, int *columnStuff);
+#include "level.h"
 
 bool exploreMatr(int from, int to, bool* visited)
 {
@@ -200,7 +168,7 @@ void Generate()
  		return TILE_FLOOR;
  }*/
 
- void ClearField()
+void ClearField()
 {
 	for (int i = 0; i < size_y; i++)
 		for (int j = 0; j < size_x; j++)
@@ -538,79 +506,61 @@ void genRooms()
 	return;
 }
  
- void initmap(void)
+void initmap(void)
  {
 	int xi, yi;
 
 	grid  = (int**)malloc(sizeof(int*) * (size_y+3));
-	grid2 = (int**)malloc(sizeof(int*) * (size_y+3));
  
 	for(yi=0; yi<size_y; yi++)
-	{
 		grid[yi] = (int*)malloc(sizeof(int) * (size_x+3));
-		grid2[yi] = (int*)malloc(sizeof(int) * (size_x+3));
-	}
 
 	
 	ClearField();	
 	genRooms();
 	Generate();
+}
+ 
+string GetRenderCellSymbolWall(int r, int c)
+{
+	if ((r > 0) && (r < size_y) && (c > 0) && (c < size_x))
+	{
+		if ((grid[r + 1][c] == TILE_WALL) && (grid[r - 1][c] == TILE_WALL) && (grid[r][c + 1] == TILE_WALL) && (grid[r][c - 1] == TILE_WALL))
+			return "\u253C";
+		else if ((grid[r + 1][c] != TILE_WALL) && (grid[r - 1][c] == TILE_WALL) && (grid[r][c + 1] == TILE_WALL) && (grid[r][c - 1] == TILE_WALL))
+			return "\u2534";
+		else if ((grid[r + 1][c] == TILE_WALL) && (grid[r - 1][c] == TILE_WALL) && (grid[r][c + 1] != TILE_WALL) && (grid[r][c - 1] == TILE_WALL))
+			return "\u2524";
+		else if ((grid[r + 1][c] == TILE_WALL) && (grid[r - 1][c] == TILE_WALL) && (grid[r][c + 1] == TILE_WALL) && (grid[r][c - 1] != TILE_WALL))
+			return "\u251C";
+		else if ((grid[r + 1][c] == TILE_WALL) && (grid[r - 1][c] != TILE_WALL) && (grid[r][c + 1] == TILE_WALL) && (grid[r][c - 1] == TILE_WALL))
+			return "\u252C";
+		else if ((grid[r + 1][c] == TILE_WALL) && (grid[r - 1][c] == TILE_WALL) && (grid[r][c + 1] != TILE_WALL) && (grid[r][c - 1] != TILE_WALL))
+			return "\u2502";
+		else if ((grid[r + 1][c] != TILE_WALL) && (grid[r - 1][c] != TILE_WALL) && (grid[r][c + 1] == TILE_WALL) && (grid[r][c - 1] == TILE_WALL))
+			return "\u2500";
+		else if ((grid[r + 1][c] != TILE_WALL) && (grid[r - 1][c] == TILE_WALL) && (grid[r][c + 1] != TILE_WALL) && (grid[r][c - 1] == TILE_WALL))
+			return "\u2518";
+		else if ((grid[r + 1][c] != TILE_WALL) && (grid[r - 1][c] == TILE_WALL) && (grid[r][c + 1] == TILE_WALL) && (grid[r][c - 1] != TILE_WALL))
+			return "\u2514";
+		else if ((grid[r + 1][c] == TILE_WALL) && (grid[r - 1][c] != TILE_WALL) && (grid[r][c + 1] == TILE_WALL) && (grid[r][c - 1] != TILE_WALL))
+			return "\u250C";
+		else if ((grid[r + 1][c] == TILE_WALL) && (grid[r - 1][c] != TILE_WALL) && (grid[r][c + 1] != TILE_WALL) && (grid[r][c - 1] == TILE_WALL))
+			return "\u2510";
+		else if ((grid[r + 1][c] != TILE_WALL) && (grid[r - 1][c] == TILE_WALL) && (grid[r][c + 1] != TILE_WALL) && (grid[r][c - 1] != TILE_WALL))
+			return "\u2575";
+		else if ((grid[r + 1][c] != TILE_WALL) && (grid[r - 1][c] != TILE_WALL) && (grid[r][c + 1] == TILE_WALL) && (grid[r][c - 1] != TILE_WALL))
+			return "\u2576";
+		else if ((grid[r + 1][c] == TILE_WALL) && (grid[r - 1][c] != TILE_WALL) && (grid[r][c + 1] != TILE_WALL) && (grid[r][c - 1] != TILE_WALL))
+			return "\u2577";
+		else if ((grid[r + 1][c] != TILE_WALL) && (grid[r - 1][c] != TILE_WALL) && (grid[r][c + 1] != TILE_WALL) && (grid[r][c - 1] == TILE_WALL))
+			return "\u2574";
+	}
 
+	return " ";
+}
  
-	for(yi=0; yi<size_y; yi++)
-	for(xi=0; xi<size_x; xi++)
-		grid2[yi][xi] = TILE_WALL;
- }
- 
- void generation(void)
- {
-	int xi, yi, ii, jj;
-
-	int from = (size_y - 2) * size_x + 2;
-	int to = size_x + size_x - 3; 
-	int num = size_y * size_x;
-	bool *visited = new bool[num];
- 
-	for(yi=1; yi<size_y-1; yi++)
-	for(xi=1; xi<size_x-1; xi++)
- 	{
- 		int adjcount_r1 = 0,
- 		    adjcount_r2 = 0;
- 
- 		for(ii=-1; ii<=1; ii++)
-		for(jj=-1; jj<=1; jj++)
- 		{
- 			if(grid[yi+ii][xi+jj] != TILE_FLOOR)
- 				adjcount_r1++;
- 		}
- 		for(ii=yi-2; ii<=yi+2; ii++)
- 		for(jj=xi-2; jj<=xi+2; jj++)
- 		{
- 			if(abs(ii-yi)==2 && abs(jj-xi)==2)
- 				continue;
- 			if(ii<0 || jj<0 || ii>=size_y || jj>=size_x)
- 				continue;
- 			if(grid[ii][jj] != TILE_FLOOR)
- 				adjcount_r2++;
- 		}
- 		if(adjcount_r1 >= params->r1_cutoff || adjcount_r2 <= params->r2_cutoff)
- 		{
- 			grid2[yi][xi] = TILE_WALL;
-
- 			/*for (int i = 0; i < num; i++)
-					visited[i] = false;
-				if (!exploreMatr(from, to, visited))
-					grid[yi][xi] = TILE_FLOOR;*/
- 		}
- 		else
- 			grid2[yi][xi] = TILE_FLOOR;
- 	}
- 	for(yi=1; yi<size_y-1; yi++)
- 	for(xi=1; xi<size_x-1; xi++)
- 		grid[yi][xi] = grid2[yi][xi];
- } 
- 
- void printmap(void)
+void printmap(void)
  {
  	int xi, yi;
  
@@ -620,7 +570,8 @@ void genRooms()
  		{
  			switch(grid[yi][xi]) 
  			{
- 				case TILE_WALL:  putchar('#'); break;
+ 				case TILE_WALL: cout << GetRenderCellSymbolWall(yi, xi); break;
+ 				//case TILE_WALL:  putchar('#'); break;
  				case TILE_FLOOR: putchar(' '); break;
  				case TILE_POINT: putchar(' '); break;
  				case TILE_DOOR: putchar('D'); break;
@@ -630,29 +581,16 @@ void genRooms()
  	}
  }
  
- int main(int argc, char **argv)
+int main(int argc, char **argv)
  {
  	int ii, jj;
 
  	size_x     = 100;
  	size_y     = 30;
- 	fillprob   = 50;
- 
- 	generations = 2;
- 	params = (generation_params*)malloc( sizeof(generation_params) * generations );
- 
-
- 	params->r1_cutoff  = 5;
- 	params->r2_cutoff  = 2;
- 	params->reps = 15;
-
  
  	srand(time(NULL));
  	initmap();
  	
-	/*for( jj = 0; jj < params->reps; jj++)
- 		generation();*/
-
  	for (int i = 1; i < size_x; i++)
 	{
 		grid[0][i] = TILE_FLOOR;
@@ -670,4 +608,4 @@ void genRooms()
 
  	printmap();
  	return 0;
- }
+}
