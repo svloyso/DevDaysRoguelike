@@ -14,6 +14,7 @@
 
 struct MapInfo {
     Coord size;
+    Coord hero_init;
 };
 
 class Core {
