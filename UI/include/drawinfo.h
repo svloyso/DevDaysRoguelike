@@ -1,6 +1,6 @@
 #ifndef DRAWINFO_H
 #define DRAWINFO_H
-#include "coord.h"
+#include "utils.h"
 #include "consoleprint.h"
 using namespace  std;
 class DrawInfo

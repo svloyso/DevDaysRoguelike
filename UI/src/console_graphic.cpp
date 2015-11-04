@@ -1,8 +1,9 @@
 #include "console_graphic.h"
 #include "core.h"
+#include "hero.h"
+#include "utils.h"
 
 ConsoleGraphics::ConsoleGraphics ()
-    : hero_pos (0,0)
 {
     initscr();
     getmaxyx (stdscr, console_size_y, console_size_x);
@@ -28,7 +29,7 @@ ConsoleGraphics::ConsoleGraphics ()
 	codes["0010"] ="\u2576";
 	codes["0001"] ="\u2577";
 	codes["1000"] ="\u2574";
-	codes["0000"] =" ";
+	codes["0000"] ="a";
 }
 void ConsoleGraphics::init()
 {
@@ -112,7 +113,9 @@ void ConsoleGraphics::draw_door (Coord x)
 void ConsoleGraphics::refresh ()
 {
 	cout << "\033[2J";
-    hero_pos = main_core->get_hero();
+	Coord hero_pos;
+    HeroPtr hero = main_core->get_hero();
+    hero_pos = main_core->get_coord(hero->get_pos());
     int x_left  = hero_pos.x - width / 2;
     int x_right = hero_pos.x + width / 2;
     int y_left  = hero_pos.y - height / 2;
@@ -124,7 +127,7 @@ void ConsoleGraphics::refresh ()
         {
             TilePtr tile = main_core->get_tile (Coord (j, i));
 			std::string str;
-			if( tile->get_type() == TileType::Wall ) 
+			if (tile->get_type() == TileType::Wall) 
 			{
                 str = GetRenderCellSymbolWall(j, i);
                 draw_in_window (Coord (j - x_left, i - y_left), str, 15);
@@ -134,7 +137,7 @@ void ConsoleGraphics::refresh ()
 			{
                 if (tile->get_immovables().size()) 
 				{
-                   str = "D";
+                   	draw_door (Coord (j - x_left, i - y_left));
                     continue;
                 } 
 				else 
@@ -170,22 +173,22 @@ void ConsoleGraphics::refresh ()
 }
 void ConsoleGraphics::move_hero_right ()
 {
-    main_core->set_hero (Coord (hero_pos.x, hero_pos.y + 1));
+    main_core->move_hero(Direction::Right);
     refresh();
 }
 void ConsoleGraphics::move_hero_left ()
 {
-    main_core->set_hero (Coord (hero_pos.x, hero_pos.y - 1));
+    main_core->move_hero(Direction::Left);
     refresh();
 }
 void ConsoleGraphics::move_hero_up ()
 {
-    main_core->set_hero (Coord (hero_pos.x - 1, hero_pos.y));
+    main_core->move_hero(Direction::Up);
     refresh();
 }
 void ConsoleGraphics::move_hero_down ()
 {
-    main_core->set_hero (Coord (hero_pos.x + 1, hero_pos.y));
+    main_core->move_hero(Direction::Down);
     refresh();
 }
 ConsoleGraphics::~ConsoleGraphics ()

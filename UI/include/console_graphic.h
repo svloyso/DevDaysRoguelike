@@ -5,7 +5,7 @@
 #include <string>
 #include <ncurses.h>
 #include "core.h"
-#include "coord.h"
+#include "utils.h"
 #include "math.h"
 #include "consoleprint.h"
 #include "drawinfo.h"
@@ -20,7 +20,6 @@ class ConsoleGraphics
     int height;
     int width;
     int shift;
-    Coord hero_pos;
     DrawInfo info;
     map <string, string> codes;
 

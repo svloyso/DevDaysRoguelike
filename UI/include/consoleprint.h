@@ -4,7 +4,7 @@
 #include <string>
 #include <ncurses.h>
 #include "core.h"
-#include "coord.h"
+#include "utils.h"
 
 void clear_screen ();
 void print_symbol (Coord x, std::string symb_code, int color, int bg_color = 30);

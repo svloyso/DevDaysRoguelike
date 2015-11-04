@@ -21,9 +21,10 @@ int runUI()
     char input_char;
     while (1)
     {
+        cout << "\033[0;0H"
 		cout << "\033[30m" << "\033[0m" ;
         input_char = getchar();
-        //cout << "\033[2D" << "\033[30m" << " ";
+        cout << "\033[1D" << "\033[30m" << " ";
         if (input_char == 'q')
         {
             system ("stty cooked");
