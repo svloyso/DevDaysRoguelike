@@ -33,7 +33,6 @@ ConsoleGraphics::ConsoleGraphics ()
 }
 void ConsoleGraphics::init()
 {
-    main_core->set_hero (Coord (0, 0));
     initscr();
     getmaxyx (stdscr, console_size_y, console_size_x);
     endwin();
