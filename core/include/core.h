@@ -11,6 +11,7 @@
 #include "hero_fwd.h"
 #include "door_fwd.h"
 #include "utils.h"
+#include "unit.h"
 
 struct MapInfo {
     Coord size;
