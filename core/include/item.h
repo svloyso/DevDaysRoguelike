@@ -20,7 +20,7 @@ public:
     Item(StatsPtr _stats = StatsPtr()) : stats(_stats) {}
     virtual Stats* get_stats() { return stats.get(); }
     
-    ItemType get_type()=0;
+    virtual ItemType get_type()=0;
 
     DECLARE_COMMON_METHODS(Item)
 protected:
