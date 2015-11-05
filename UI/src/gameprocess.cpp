@@ -2,35 +2,40 @@
 
 GameProcess::GameProcess()
 {}
-void GameProcess::update (char input_char)
+void GameProcess::update (std::string s)
 {
-    switch (input_char)
+    if (s == "l" || s ==  "\033[1C" || s ==  "d" )
     {
-    case 'd':
         cons.move_hero_down();
         cout << "\033[" << "0"  << ";" << "0" << "H"<< "\033[30m" << "\033[0m";
-        break;
-    case 's':
+            return;
+    }
+    if (s == "s" || s ==  "j"  )
+     {
         cons.move_hero_left();
         cout << "\033["<< "0"  << ";" << "0" << "H" << "\033[30m" << "\033[0m";
-        break;
-    case 'a':
+        return;
+     }
+    if (s == "a" || s==  "h" )
+    {
         cons.move_hero_up();
         cout << "\033[" << "0"  << ";" << "0" << "H" << "\033[30m" << "\033[0m";
-        break;
-    case 'w':
+        return;
+    }
+    if (s== "w" || s==  "k" || s ==  "\033[1A" )
+    {
         cons.move_hero_right();
         cout << "\033[" << "0"  << ";" << "0" << "H" << "\033[30m" << "\033[0m";
-        break;
-    case 'r':
-        cons.init();
-        break;
-//    case 'e':
-//        isGameActive = false;
-//        break;
-    default:
-        cout << "\033[0;0H" << "\033[30m" << "\033[0m";
+        return;
     }
+    if (s == "r")
+    {
+        cons.init();
+        cout << "\033[" << "0"  << ";" << "0" << "H" << "\033[30m" << "\033[0m";
+        return;
+    }
+        cout << "\033[0;0H" << "\033[30m" << "\033[0m";
+
 
 //    if (unitsData[heroIndex].health <= 0)
 //        isGameActive = false;
@@ -39,7 +44,7 @@ void GameProcess::update (char input_char)
 }
 GameProcess::~GameProcess()
 {
-    cout << "\033[00m" << "Код 00\n"<< "\033[00m";
+    cout << "\033[00m" <<  "\033[00m";
 }
 bool GameProcess::is_alive()
 {
@@ -47,7 +52,7 @@ bool GameProcess::is_alive()
     {
         return true;
     }
-    system ("clear");
-    cout << "GAME OVER!";
+    //system ("clear");
+    //cout << "GAME OVER!";
     return false;
 }
