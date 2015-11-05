@@ -58,11 +58,11 @@ public:
              //val = "B";
              break;
             case WallType::filled:
-              val= "\u2591";
+              val= " "; //"\u2591";
               //val = "C";
              break;
             case WallType::single:
-             val= "\u2591";
+             val= "X"; // "\u2591";
              //val = "D";
              break;
         }
@@ -80,7 +80,7 @@ public:
             visit(imm[0]);
             return;
         }
-        val = " ";
+        val = ".";
     }
     void visitHero(Hero* h) {
         val = "\u2654";

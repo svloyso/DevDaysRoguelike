@@ -77,7 +77,9 @@ void Core::init_tables() {
 }
 
 WallType get_walltype(const bool* code) {
-    if (code[0] && code[1] && code[2] && code[3] && code[4] && code[5] && code[6] && code[7]) return WallType::filled;
+    if (code[0] && code[1] && code[2] && code[3] && code[4] && code[5] && code[6] && code[7]) {
+        return WallType::filled;
+    }
     if (code[0] && code[2] && code[4] && code[6]) {
         if (code[1] && code[3] && code[5]) return WallType::ru_corner;
         if (code[3] && code[5] && code[7]) return WallType::rb_corner;
@@ -90,10 +92,10 @@ WallType get_walltype(const bool* code) {
         if (code[7] && code[1]) return WallType::t_right;
         return WallType::cross;
     }
-    if (code[0] && code[2] && code[4]) return WallType::t_up;
-    if (code[2] && code[4] && code[6]) return WallType::t_right;
-    if (code[4] && code[6] && code[0]) return WallType::t_down;
-    if (code[6] && code[0] && code[2]) return WallType::t_left;
+    if (code[0] && code[2] && code[4] && (!code[1] || !code[3])) return WallType::t_up;
+    if (code[2] && code[4] && code[6] && (!code[3] || !code[5])) return WallType::t_right;
+    if (code[4] && code[6] && code[0] && (!code[5] || !code[7])) return WallType::t_down;
+    if (code[6] && code[0] && code[2] && (!code[7] || !code[1])) return WallType::t_left;
     if (code[0] && code[4]) return WallType::horizontal;
     if (code[2] && code[6]) return WallType::vertical;
     if (code[0] && code[2]) return WallType::rb_corner;
@@ -114,19 +116,19 @@ void Core::init_tiles() {
             if (tile->get_type() == TileType::Wall) {
                 auto wall_tile = WallTile::to_Ptr(tile);
                 bool code[8];
-                int x = j;
-                int y = i;
-                int dx = -1;
+                int x = i;
+                int y = j;
+                int dx = 1;
                 int dy = 1;
                 TilePtr around_tiles[8] = {
-                    get_tile(Coord(x - dx, y)),
-                    get_tile(Coord(x - dx, y - dy)),
                     get_tile(Coord(x, y - dy)),
-                    get_tile(Coord(x + dx, y - dy)),
-                    get_tile(Coord(x + dx, y)),
-                    get_tile(Coord(x + dx, y + dy)),
+                    get_tile(Coord(x - dx, y - dy)),
+                    get_tile(Coord(x - dx, y)),
+                    get_tile(Coord(x - dx, y + dy)),
                     get_tile(Coord(x, y + dy)),
-                    get_tile(Coord(x - dx, y + dy))
+                    get_tile(Coord(x + dx, y + dy)),
+                    get_tile(Coord(x + dx, y)),
+                    get_tile(Coord(x + dx, y - dy))
                 };
                 for (int k = 0; k < 8; ++k) {
                     code[k] = (around_tiles[k]->get_type() == TileType::Wall);
