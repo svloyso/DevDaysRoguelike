@@ -3,7 +3,7 @@
 
 ConsoleGraphics::ConsoleGraphics()
     : game_play_point (Coord (9, 1))
-    , game_play (CuttingWindow (game_play_point, Coord (30, 50)))
+    , game_play (CuttingWindow (game_play_point, Coord (20, 50)))
     , stats_point (Coord (1,1))
     , stats_window (CuttingWindow (stats_point, Coord (5, 80)))
     , info (stats_window)
@@ -70,7 +70,7 @@ void ConsoleGraphics::refresh ()
     HeroStats * hero_stats = hero->get_stats();
     int hero_hp = hero_stats->hit_points;
     int hero_maxhp = hero_stats->max_hit_points;
-    draw_hero ();
+    
     info.hero_draw_stats (hero_hp, hero_maxhp);
     draw_wall (Coord (stats_point.x , stats_point.y ),
         stats_height + 2, stats_width + 2);
@@ -107,6 +107,7 @@ void ConsoleGraphics::refresh ()
             }
     draw_wall( Coord (game_play_point.x - 1, game_play_point.y - 1), 
         game_play_height + 2, game_play_width + 2);
+    draw_hero ();
 }
 void ConsoleGraphics::move_hero_right ()
 {
