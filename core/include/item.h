@@ -54,7 +54,6 @@ public:
     virtual void use(UnitPtr unit)=0;
     ItemType get_type() { return ItemType::Usable; }
     UsableStats* get_stats() { return UsableStats::to_Ptr(stats).get(); }
-    DECLARE_VISIT(Usable)
     DECLARE_COMMON_METHODS(Usable)
 };
 
@@ -63,7 +62,6 @@ public:
     Misc() : Item(MiscStatsPtr()) {}
     ItemType get_type() { return ItemType::Misc; }
     MiscStats* get_stats() { return MiscStats::to_Ptr(stats).get(); }
-    DECLARE_VISIT(Misc)
     DECLARE_COMMON_METHODS(Misc)
 };
 

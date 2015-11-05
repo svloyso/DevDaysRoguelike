@@ -182,6 +182,7 @@ Result Core::move_hero(Direction dir) {
             std::vector<ItemPtr> items = hero->get_items();
             for(auto it : items) {
                 if (door->Open(it->get_id()) == Result::Success) {
+                    hero->drop_item(it->get_id());
                     make_turn();
                     return Result::Success;
                 }
