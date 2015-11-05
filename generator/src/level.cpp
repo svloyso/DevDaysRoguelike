@@ -168,7 +168,7 @@ bool GenerateMobs(int from, int to, bool* visited)
                 //MyMob tempmob = genMob(fraction[i]);
                 //mobs.push_back(tempmob);
                 grid[r][c] = TILE_ORC;
-                gridMob[r][c] = genMob(fraction[0]);
+                gridMob[r][c] = genMob(fraction[i]);
                 /*cout << "Fract: " << tempmob.fraction << endl;
                 cout << "Health: " << tempmob.health << endl;
                 cout << "Strength: " << tempmob.strength << endl;
@@ -711,10 +711,11 @@ void getMap()
                     m->hit_points = tempmob.health;
                     m->max_hit_points = tempmob.health;
                     m->area_of_sight = 5;
-                    if (tempmob.fraction)
+                    m->fraction = tempmob.fraction;
+                    /*if (tempmob.fraction)
                         m->fraction = Fraction::Undead;
                     else
-                        m->fraction = Fraction::Orc;
+                        m->fraction = Fraction::Orc;*/
 
                     skelAI = SkeletonAI::make_Ptr();
 
