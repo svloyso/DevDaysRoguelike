@@ -116,7 +116,7 @@ void Core::init_tiles() {
                 bool code[8];
                 int x = j;
                 int y = i;
-                int dx = 1;
+                int dx = -1;
                 int dy = 1;
                 TilePtr around_tiles[8] = {
                     get_tile(Coord(x - dx, y)),

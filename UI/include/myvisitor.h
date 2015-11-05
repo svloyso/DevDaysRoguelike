@@ -15,55 +15,55 @@ public:
         switch (type)   {
             case WallType::lu_corner:
              val= "\u250C";
-             val = "1";
+             //val = "1";
              break;
             case WallType::ru_corner:
              val= "\u2510";
-             val = "2";
+             //val = "2";
              break;
             case WallType::lb_corner:
              val= "\u2514";
-             val = "3";
+             //val = "3";
              break;
             case WallType::rb_corner:
              val= "\u2518";
-             val = "4";
+             //val = "4";
              break;
             case WallType::horizontal:
              val= "\u2500";
-             val = "5";
+             //val = "5";
              break;
             case WallType::vertical:
              val= "\u2502";
-             val = "6";
+             //val = "6";
              break;
             case WallType::cross:
              val= "\u253C";
-             val = "7";
+             //val = "7";
              break;
             case WallType::t_down:
              val= "\u252C";
-             val = "8";
+             //val = "8";
              break;
             case WallType::t_up:
              val= "\u2534";
-             val = "9";
+             //val = "9";
              break;
             case WallType::t_right:
              val= "\u251C";
-             val = "A";
+             //val = "A";
              break;
             case WallType::t_left:
              val= "\u2524";
-             val = "B";
+             //val = "B";
              break;
             case WallType::filled:
               val= "\u2591";
-              val = "C";
+              //val = "C";
              break;
             case WallType::single:
              val= "\u2591";
-             val = "D";
+             //val = "D";
              break;
         }
         color = 15;
