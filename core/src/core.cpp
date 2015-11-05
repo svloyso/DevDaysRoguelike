@@ -131,7 +131,7 @@ void Core::init_tiles() {
                     get_tile(Coord(x + dx, y - dy))
                 };
                 for (int k = 0; k < 8; ++k) {
-                    code[k] = (around_tiles[k]->get_type() == TileType::Wall);
+                    code[k] = around_tiles[k]->get_type() == TileType::Wall || around_tiles[k]->get_immovables().size();
                 }
                 wall_tile->set_walltype(get_walltype(code));
             }

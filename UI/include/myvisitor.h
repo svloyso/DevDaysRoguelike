@@ -81,6 +81,7 @@ public:
             return;
         }
         val = ".";
+        color = 15;
     }
     void visitHero(Hero* h) {
         val = "\u2654";
@@ -93,7 +94,7 @@ public:
     }
 
     void visitDoor (Door* d) {
-        val = "\u2592";
+        val = "X"; // "\u2592";
         color = 14;
     }
     void defaultVisit() {
