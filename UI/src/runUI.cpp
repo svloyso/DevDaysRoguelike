@@ -25,7 +25,7 @@ int runUI()
 		cout << "\033[30m" << "\033[0m" ;
         input_char = getchar();
         cout << "\033[1D" << "\033[30m" << " ";
-        if (input_char == 'q')
+        if (input_char == 'q' || !game.is_alive())
         {
             system ("stty cooked");
             break;

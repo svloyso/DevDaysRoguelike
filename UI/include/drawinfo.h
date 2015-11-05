@@ -26,6 +26,7 @@ public:
     void draw_full_hp_line ();
     void draw_full_hp_line_enemy ();
     void draw_empty_hp_line_enemy ();
+    void clear_enemy_info();
 };
 
 #endif // DRAWINFO_H

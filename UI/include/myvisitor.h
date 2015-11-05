@@ -84,8 +84,8 @@ public:
         color = 15;
     }
     void visitHero(Hero* h) {
-        val = "\u2654";
-        color = 31;
+        val = "\u2689";
+        color = 3;
     }
 
     void visitMonster(Monster* m) {
