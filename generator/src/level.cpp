@@ -614,9 +614,6 @@ void erasemap()
  
 void getMap()
 {
-    size_x     = 100;
-    size_y     = 30;
- 
     srand(time(NULL));
     initmap();
 
@@ -632,11 +629,13 @@ void getMap()
         {
             TilePtr tile;
             std::vector< ImmovablePtr > imms;
+            std::vector<ItemPtr> items;
 
             MyMob tempmob;
             MonsterStatsPtr m;
             SkeletonAIPtr skelAI;
             MonsterPtr mob;
+            KeyPtr key;
 
             switch(grid[i][j]) 
             {
@@ -663,6 +662,10 @@ void getMap()
                     mob = Monster::make_Ptr(skelAI, m);
                     tile = std::make_shared<FloorTile>(mob);
 
+                    break;
+                case TILE_KEY:
+                    items.push_back(std::make_shared<Key>(key));
+                    tile = std::make_shared<FloorTile>(UnitPtr(), items, std::vector< ImmovablePtr >());
                     break;
                 case TILE_EXIT:
                     info.hero_init = Coord(i-1, j-1);
@@ -697,6 +700,7 @@ void genFraction()
 
     sort(fraction.begin(), fraction.end(), fractPower);
 
+    // более сильные мобы появляются реже
     for (int i = 0; i < numFractions; ++i)
     {
         fraction[i].probability = 1 + rand() % ((numFractions - i) * maxProbability / numFractions);
@@ -710,6 +714,7 @@ MyMob genMob(MyFraction fract)
     mob.fraction = fract.name;
     mob.health = fract.health;
     mob.strength = fract.strength;
+
     for (int i = 0; i < 3; ++i)
     {
         int randnum = rand() % stuff.size();
