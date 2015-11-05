@@ -45,9 +45,8 @@ void Generate();
 void ClearField();
 void genRoom(int row, int column, int door);
 void genRooms();
-void initmap(void);
-string GetRenderCellSymbolWall(int r, int c);
-void printmap(void);
+void initmap();
+void erasemap();
 
 
 enum MyItemType

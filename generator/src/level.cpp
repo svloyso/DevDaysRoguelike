@@ -574,7 +574,7 @@ void genRooms()
     }
 }
  
-void initmap(void)
+void initmap()
  {
     genFraction();
     genItems();
