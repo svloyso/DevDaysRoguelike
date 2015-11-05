@@ -83,4 +83,3 @@ public:
     DECLARE_VISIT(Destroyed)
 };
 
-

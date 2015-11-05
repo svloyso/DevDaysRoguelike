@@ -91,8 +91,24 @@ public:
     }    
 
     void visitMonster(Monster* m) {
-        val = "\u2D65";
-        color = 30 + m->get_id() % 6;
+        
+        color = 31 + m->get_id() % 6;
+
+        MonsterStats* stats = m->get_stats();
+        int fraction = stats->fraction;
+
+        switch(fraction) {
+            case (0):
+                val = "\u03E8";
+                break;
+            case(1):
+                val = "\u0186";
+                break;
+            default: //case(2):
+                val = "\u2D65";
+                break;
+        };
+
         /*std::map<int,int>::iterator it;
         it = mobsColors.find(m->get_id());
         if (it == mobsColors.end())

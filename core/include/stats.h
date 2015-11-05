@@ -26,7 +26,6 @@ struct ClothesStats : public ItemStats {
 
 struct UsableStats : public ItemStats {
     DECLARE_COMMON_METHODS(UsableStats)
-    // EMPTY
 };
 
 struct MiscStats : public ItemStats {
