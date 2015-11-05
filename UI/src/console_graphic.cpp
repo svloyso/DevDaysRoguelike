@@ -3,17 +3,19 @@
 
 ConsoleGraphics::ConsoleGraphics()
     : game_play_point (Coord (9, 1))
-    , game_play (CuttingWindow (game_play_point, Coord (30, 50)))
+    , game_play (CuttingWindow (game_play_point, Coord (20, 48)))
     , stats_point (Coord (1,1))
     , stats_window (CuttingWindow (stats_point, Coord (5, 80)))
     , info (stats_window)
+    , invent_point (Coord (9, 52))
+    , invent_window (CuttingWindow (invent_point, Coord (20, 80)))
 {
-    init();
     stats_window.get_size (stats_width, stats_height);
     game_play.get_size (game_play_width, game_play_height);
-    refresh ();
-}
+    invent_window.get_size (invent_width, invent_height);
+    init();
 
+}
 
 void ConsoleGraphics::init()
 {
@@ -70,7 +72,7 @@ void ConsoleGraphics::refresh ()
     HeroStats * hero_stats = hero->get_stats();
     int hero_hp = hero_stats->hit_points;
     int hero_maxhp = hero_stats->max_hit_points;
-    draw_hero ();
+    
     info.hero_draw_stats (hero_hp, hero_maxhp);
     draw_wall (Coord (stats_point.x , stats_point.y ),
         stats_height + 2, stats_width + 2);
@@ -107,6 +109,13 @@ void ConsoleGraphics::refresh ()
             }
     draw_wall( Coord (game_play_point.x - 1, game_play_point.y - 1), 
         game_play_height + 2, game_play_width + 2);
+    draw_wall( Coord (invent_point.x - 1, invent_point.y - 1), 
+        invent_height + 2, invent_width + 2);
+    draw_hero ();
+    invent_window.print (Coord (1,1), "Голова: ", 15);
+    invent_window.print (Coord (3,1), "Туловище: ", 15);
+     invent_window.print (Coord (5,1), "Руки: ", 15);
+    invent_window.print (Coord (7,1), "Ноги: ", 15);
 }
 void ConsoleGraphics::move_hero_right ()
 {

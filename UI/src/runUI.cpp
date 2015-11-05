@@ -3,7 +3,7 @@
 #include <ncurses.h>
 #include <cstdlib>
 #include "runUI.h"
-
+#include <string>
 #include "gameprocess.h"
 using namespace std;
 // void recv_action(ActionPtr action) {
@@ -19,19 +19,27 @@ int runUI()
 	
     GameProcess game;
     system ("stty raw");
-    char input_char;
+    std::string str;
     while (1)
     {
+        if (!game.is_alive())
+        {
+            str = getchar();
+            if (str == "r")
+            {
+                game.update (str);
+            }
+        }
         cout << "\033[0;0H";
 		cout << "\033[30m" << "\033[0m" ;
-        input_char = getchar();
+        str = getchar();
         cout << "\033[1D" << "\033[30m" << " ";
-        if (input_char == 'q' || !game.is_alive())
+        if (str == "q")
         {
             system ("stty cooked");
             break;
         }
-        game.update (input_char);
+        game.update (str);
         
         system("stty raw");
 

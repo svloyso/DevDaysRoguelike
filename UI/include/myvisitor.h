@@ -6,7 +6,7 @@
 #include "visitor.h"
 #include "door.h"
 #include "monster.h"
-
+#include "concrete_items.h"
 class MyVisitor : public Visitor {
 public:
 
@@ -115,7 +115,11 @@ public:
             mobsColors[m->get_id()] = 30 + rand() % 77;
         color = mobsColors[m->get_id()];*/
     }
-
+	void visitKey (KeyPtr * k)
+{
+val = "\u26B7";
+color = 93;
+}
     void visitDoor (Door* d) {
         val = "X"; // "\u2592";
         color = 14;
