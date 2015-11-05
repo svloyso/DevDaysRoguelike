@@ -39,7 +39,7 @@ void Core::find_hero_pos() {
 void Core::create_hero() {
     HeroStatsPtr stats = HeroStats::make_Ptr();
 
-    stats->strength = 10;
+    stats->strength = 50;
     stats->hit_points = 400;
     stats->max_hit_points = 400;
     stats->fraction = Fraction::Hero;
