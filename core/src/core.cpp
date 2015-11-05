@@ -134,7 +134,16 @@ HeroPtr Core::get_hero() {
 Result Core::move_hero(Direction dir) {
     TilePtr tile_from = hero->get_pos();
     TilePtr tile_to   = get_tile(get_coord(tile_from).move(dir));
-    ActionPtr action = Move::make_Ptr(hero, tile_to);
+    ActionPtr action;
+    
+    Damage damage;
+    damage.cutting = 10;
+    if (tile_to->get_unit()) {
+        action = Atack::make_Ptr(hero, tile_to->get_unit(), damage);
+    } else {
+        action = Move::make_Ptr(hero, tile_to);
+    }
+
     Result res = do_action(action);
     if (res == Result::Success) {
         make_turn();
