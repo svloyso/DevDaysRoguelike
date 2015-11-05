@@ -706,9 +706,10 @@ void getMap()
                     //for (int i = 0; i < numFractions; ++i)
                     //    if (rand() % 1000 < fraction[i].probability)
 
-                    m = MonsterStats::make_Ptr(tempmob.health);
+                    m = MonsterStats::make_Ptr();
                     m->strength = tempmob.strength;
-                    //m->hit_points = tempmob.health;
+                    m->hit_points = tempmob.health;
+                    m->max_hit_points = tempmob.health;
                     m->area_of_sight = 5;
                     if (tempmob.fraction)
                         m->fraction = Fraction::Undead;
