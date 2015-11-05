@@ -1,5 +1,6 @@
 #include "level.h"
 #include "getLevel.h"
+#include "names.h"
 
 bool exploreMatr(int from, int to, bool* visited)
 {
@@ -573,7 +574,7 @@ void genRooms()
     }
 }
  
-void initmap(void)
+void initmap()
  {
     genFraction();
     genItems();
@@ -599,6 +600,16 @@ void initmap(void)
         grid[i][size_x - 2] = TILE_WALL;
         grid[i][size_x - 1] = TILE_FLOOR;
     }
+}
+
+void erasemap()
+{
+    grid.clear();
+    mobs.clear();
+    fraction.clear();
+    stuff.clear();
+    gridMob.clear();
+    gridItem.clear();
 }
  
 void getMap()
@@ -665,6 +676,7 @@ void getMap()
         }
         tiles.push_back(row);
     }
+    erasemap();
     init_core(info, tiles);
 }
 
@@ -693,6 +705,7 @@ void genFraction()
 
 MyMob genMob(MyFraction fract)
 {
+    //cout << prex[rand() % prex.size()] + " " + sux[rand() % sux.size()] << endl; // Случаное имя для монстра
     MyMob mob;
     mob.fraction = fract.name;
     mob.health = fract.health;

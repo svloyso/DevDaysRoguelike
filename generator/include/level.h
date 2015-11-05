@@ -16,7 +16,7 @@
 #include "monster.h"
 #include "stats.h"
 #include "AI.h"
- 
+
  #define TILE_FLOOR 0
  #define TILE_WALL 1
  #define TILE_POINT 2
@@ -45,9 +45,8 @@ void Generate();
 void ClearField();
 void genRoom(int row, int column, int door);
 void genRooms();
-void initmap(void);
-string GetRenderCellSymbolWall(int r, int c);
-void printmap(void);
+void initmap();
+void erasemap();
 
 
 enum MyItemType
@@ -86,8 +85,6 @@ struct MyMob
 	int health;
 	int strength;	
 	vector< MyItem > inventory;
-	int x;
-	int y;
 };
 
 vector<MyMob> mobs;
