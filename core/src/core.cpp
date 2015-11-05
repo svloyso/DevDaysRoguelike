@@ -143,7 +143,7 @@ void Core::wait() {
     make_turn();
 }
 
-void Core::get_enemy() {
+UnitPtr Core::get_enemy() {
     return near_enemy;
 }
 
