@@ -601,6 +601,16 @@ void initmap(void)
         grid[i][size_x - 1] = TILE_FLOOR;
     }
 }
+
+void erasemap()
+{
+    grid.clear();
+    mobs.clear();
+    fraction.clear();
+    stuff.clear();
+    gridMob.clear();
+    gridItem.clear();
+}
  
 void getMap()
 {
@@ -666,6 +676,7 @@ void getMap()
         }
         tiles.push_back(row);
     }
+    erasemap();
     init_core(info, tiles);
 }
 
