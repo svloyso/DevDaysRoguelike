@@ -709,6 +709,7 @@ void getMap()
                     m = MonsterStats::make_Ptr();
                     m->strength = tempmob.strength;
                     m->hit_points = tempmob.health;
+                    m->max_hit_points = tempmob.health;
                     m->area_of_sight = 5;
                     if (tempmob.fraction)
                         m->fraction = Fraction::Undead;
