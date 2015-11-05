@@ -1,5 +1,6 @@
 #include "level.h"
 #include "getLevel.h"
+#include "names.h"
 
 bool exploreMatr(int from, int to, bool* visited)
 {
@@ -38,11 +39,7 @@ void Generate()
     int num = size_y * size_x;
     bool *visited = new bool[num];
 
-    //int *rowStuff = new int[numStuff];
-    //int *columnStuff = new int[numStuff]; 
-
     //GenerateStuff(rowStuff, columnStuff);
-    
 
     int from = 2*size_x + 2;
     int to = (size_y - 3) * size_x + size_x - 3; 
@@ -102,6 +99,7 @@ void Generate()
         }
     }*/
     
+    // Убираем некрасивые выступы
     for (int r = 2; r < size_y - 2; r++)
     {
         for (int c = 2; c < size_x - 2; c++)
@@ -126,6 +124,10 @@ void Generate()
     for (int i = 0; i < num; i++)
         visited[i] = false;
     GenerateMobs(from, to, visited);
+
+    for (int i = 0; i < num; i++)
+        visited[i] = false;
+    GenerateKeys(from, to, visited);
 
     return;
 }
@@ -165,81 +167,72 @@ bool GenerateMobs(int from, int to, bool* visited)
         {
             if (rand() % 1000 < fraction[i].probability)
             {
-                //MyMob tempmob = genMob(fraction[i]);
-                //mobs.push_back(tempmob);
                 grid[r][c] = TILE_ORC;
                 gridMob[r][c] = genMob(fraction[i]);
-                /*cout << "Fract: " << tempmob.fraction << endl;
-                cout << "Health: " << tempmob.health << endl;
-                cout << "Strength: " << tempmob.strength << endl;
-                for (int j = 0; j < tempmob.inventory.size(); ++j)
-                {
-                    cout << "\tItem type: " << tempmob.inventory[j].type << endl;
-                    cout << "\tItem stat: " << tempmob.inventory[j].stat << endl;
-                    cout << "\tItem effect: +" << tempmob.inventory[j].effect << endl;
-                    cout << endl;
-                }
-                cout << endl;*/
             }
         }
     }
+    return isGoodPath;
+}
+
+int currNumKey = 0;
+
+bool GenerateKeysInDFS(int from, int to, bool* visited)
+{
+    bool isGoodPath = false;
+
+    visited[from] = true;
+
+    if (from == to)
+        return true;
+
+    int r = from / size_x;
+    int c = from % size_x;
+
+    if ((r + 1 > 0) && (r + 1 < size_y))
+        if ((grid[r + 1][c] != TILE_WALL) && (!visited[(r + 1) * size_x + c]))
+            isGoodPath |= GenerateKeysInDFS((r + 1) * size_x + c, to, visited);
+
+    if ((r - 1 > 0) && (r - 1 < size_y))
+        if ((grid[r - 1][c] != TILE_WALL) && (!visited[(r - 1) * size_x + c]))
+            isGoodPath |= GenerateKeysInDFS((r - 1) * size_x + c, to, visited);
+
+    if ((c + 1 > 0) && (c + 1 < size_x))
+        if ((grid[r][c + 1] != TILE_WALL) && (!visited[r * size_x + c + 1]))
+            isGoodPath |= GenerateKeysInDFS(r * size_x + c + 1, to, visited);
+
+    if ((c - 1 > 0) && (c - 1 < size_x))
+        if ((grid[r][c - 1] != TILE_WALL) && (!visited[r * size_x + c - 1]))
+            isGoodPath |= GenerateKeysInDFS(r * size_x + c - 1, to, visited);
+
+	if ((from != (size_y - 1) * size_x + 1) && (grid[r][c] == TILE_FLOOR))
+	    if ((currNumKey < numDoor) && (rand() % 1000 < 10))
+	    {
+            grid[r][c] = TILE_KEY;
+            currNumKey++;
+	    }
 
     return isGoodPath;
 }
 
-/*void GenerateStuff(int *rowStuff, int *columnStuff)
+void GenerateKeys(int from, int to, bool* visited)
 {
-    unsigned char stuff[numStuff] = { '9', '9', '9', '9', '9', '9', '9' }; // Òèïà âåùè
+	// Генерим ключи на пути героя до конечной точки	
+    GenerateKeysInDFS(from, to, visited);
 
-    for (int i = 0; i < numStuff; i++)
-        std::swap(stuff[i], stuff[rand() % 7]); // ïåðåìåøèâàåì
+    // Если сгенерили не все - догенерим в случайных местах
+    while(currNumKey < numDoor)
+    {
+    	int r = 3 + rand() % (size_y - 3);
+    	int c = 3 + rand() % (size_x - 3);
 
-    // Ðàñêèäûâàåì âåùè; Äà, ýòî ãîâíîêîä
-    rowStuff[0] = 2 + rand() % (size_y / 3);
-    columnStuff[0] = 2 + (rand() % (size_x / 4));
-    if (grid[rowStuff[0]][columnStuff[0]] == TILE_FLOOR)
-        grid[rowStuff[0]][columnStuff[0]] = stuff[0];
-
-    rowStuff[1] = 2 + rand() % (size_y / 3);
-    columnStuff[1] = (size_x / 4) + (rand() % (size_x / 4));
-    if (grid[rowStuff[1]][columnStuff[1]] == TILE_FLOOR)
-        grid[rowStuff[1]][columnStuff[1]] = stuff[1];
-
-    rowStuff[2] = 2 + rand() % (size_y / 3);
-    columnStuff[2] = (size_x / 2) + (rand() % (size_x / 4));
-    if (grid[rowStuff[2]][columnStuff[2]] == TILE_FLOOR)
-        grid[rowStuff[2]][columnStuff[2]] = stuff[2];
-
-    rowStuff[3] = (size_y / 2) + (rand() % ((size_y / 2) - 2));
-    columnStuff[3] = 2 + (rand() % (size_x / 4));
-    if (grid[rowStuff[3]][columnStuff[3]] == TILE_FLOOR)
-        grid[rowStuff[3]][columnStuff[3]] = stuff[3];
-
-    rowStuff[4] = (size_y / 2) + (rand() % ((size_y / 2) - 2));
-    columnStuff[4] = (size_x / 4) + (rand() % (size_x / 4));
-    if (grid[rowStuff[4]][columnStuff[4]] == TILE_FLOOR)
-        grid[rowStuff[4]][columnStuff[4]] = stuff[4];
-
-    rowStuff[5] = (size_y / 2) + (rand() % ((size_y / 2) - 2));
-    columnStuff[5] = (size_x / 2) + (rand() % (size_x / 4));
-    if (grid[rowStuff[5]][columnStuff[5]] == TILE_FLOOR)
-        grid[rowStuff[5]][columnStuff[5]] = stuff[5];
-
-    rowStuff[6] = (size_y / 2) + (rand() % ((size_y / 2) - 2));
-    columnStuff[6] = (3 * size_x / 4) + ((rand() % (size_x / 4) - 2));
-    if (grid[rowStuff[6]][columnStuff[6]] == TILE_FLOOR)
-        grid[rowStuff[6]][columnStuff[6]] = stuff[6];
-
-    return;
-}*/
- 
- /*int randpick(void)
- {
-    if(rand()%100 < fillprob)
-        return TILE_WALL;
-    else
-        return TILE_FLOOR;
- }*/
+    	if (grid[r][c] == TILE_FLOOR)
+    	{
+    		grid[r][c] = TILE_KEY;
+            currNumKey++;
+    	}
+    }
+}
 
 void ClearField()
 {
@@ -543,15 +536,22 @@ void genRoom(int row, int column, int door)
         }
     }
 
+    // Пихаем в комнату предмет и трейку охранников
     x = size_room_x / 2;
     y = size_room_y / 2;
+
+    grid[y][x] = TILE_ITEM;
+    gridItem[y][x] = stuff[ rand() % stuff.size() ];
 
     for (int i = 0; i < 3; ++i)
     {
         if (room[y][x] == TILE_FLOOR)
         {
-            grid[y + (rand() % 4) + row][x + (rand() % 4) + column] = TILE_ORC;
-            gridMob[y + (rand() % 4) + row][x + (rand() % 4) + column] = genMob(fraction[0]);
+        	for (int i = 0; i < numFractions; ++i)
+	        {
+	            grid[y + (rand() % 4) + row][x + (rand() % 4) + column] = TILE_ORC;
+	            gridMob[y + (rand() % 4) + row][x + (rand() % 4) + column] = genMob(fraction[i]);
+	        }
         }
     }
 }
@@ -574,7 +574,7 @@ void genRooms()
     }
 }
  
-void initmap(void)
+void initmap()
  {
     genFraction();
     genItems();
@@ -601,70 +601,17 @@ void initmap(void)
         grid[i][size_x - 1] = TILE_FLOOR;
     }
 }
- 
-string GetRenderCellSymbolWall(int r, int c)
-{
-    if ((r > 0) && (r < size_y) && (c > 0) && (c < size_x))
-    {
-        if ((grid[r + 1][c] == TILE_WALL) && (grid[r - 1][c] == TILE_WALL) && (grid[r][c + 1] == TILE_WALL) && (grid[r][c - 1] == TILE_WALL))
-            return "\u253C";
-        else if ((grid[r + 1][c] != TILE_WALL) && (grid[r - 1][c] == TILE_WALL) && (grid[r][c + 1] == TILE_WALL) && (grid[r][c - 1] == TILE_WALL))
-            return "\u2534";
-        else if ((grid[r + 1][c] == TILE_WALL) && (grid[r - 1][c] == TILE_WALL) && (grid[r][c + 1] != TILE_WALL) && (grid[r][c - 1] == TILE_WALL))
-            return "\u2524";
-        else if ((grid[r + 1][c] == TILE_WALL) && (grid[r - 1][c] == TILE_WALL) && (grid[r][c + 1] == TILE_WALL) && (grid[r][c - 1] != TILE_WALL))
-            return "\u251C";
-        else if ((grid[r + 1][c] == TILE_WALL) && (grid[r - 1][c] != TILE_WALL) && (grid[r][c + 1] == TILE_WALL) && (grid[r][c - 1] == TILE_WALL))
-            return "\u252C";
-        else if ((grid[r + 1][c] == TILE_WALL) && (grid[r - 1][c] == TILE_WALL) && (grid[r][c + 1] != TILE_WALL) && (grid[r][c - 1] != TILE_WALL))
-            return "\u2502";
-        else if ((grid[r + 1][c] != TILE_WALL) && (grid[r - 1][c] != TILE_WALL) && (grid[r][c + 1] == TILE_WALL) && (grid[r][c - 1] == TILE_WALL))
-            return "\u2500";
-        else if ((grid[r + 1][c] != TILE_WALL) && (grid[r - 1][c] == TILE_WALL) && (grid[r][c + 1] != TILE_WALL) && (grid[r][c - 1] == TILE_WALL))
-            return "\u2518";
-        else if ((grid[r + 1][c] != TILE_WALL) && (grid[r - 1][c] == TILE_WALL) && (grid[r][c + 1] == TILE_WALL) && (grid[r][c - 1] != TILE_WALL))
-            return "\u2514";
-        else if ((grid[r + 1][c] == TILE_WALL) && (grid[r - 1][c] != TILE_WALL) && (grid[r][c + 1] == TILE_WALL) && (grid[r][c - 1] != TILE_WALL))
-            return "\u250C";
-        else if ((grid[r + 1][c] == TILE_WALL) && (grid[r - 1][c] != TILE_WALL) && (grid[r][c + 1] != TILE_WALL) && (grid[r][c - 1] == TILE_WALL))
-            return "\u2510";
-        else if ((grid[r + 1][c] != TILE_WALL) && (grid[r - 1][c] == TILE_WALL) && (grid[r][c + 1] != TILE_WALL) && (grid[r][c - 1] != TILE_WALL))
-            return "\u2575";
-        else if ((grid[r + 1][c] != TILE_WALL) && (grid[r - 1][c] != TILE_WALL) && (grid[r][c + 1] == TILE_WALL) && (grid[r][c - 1] != TILE_WALL))
-            return "\u2576";
-        else if ((grid[r + 1][c] == TILE_WALL) && (grid[r - 1][c] != TILE_WALL) && (grid[r][c + 1] != TILE_WALL) && (grid[r][c - 1] != TILE_WALL))
-            return "\u2577";
-        else if ((grid[r + 1][c] != TILE_WALL) && (grid[r - 1][c] != TILE_WALL) && (grid[r][c + 1] != TILE_WALL) && (grid[r][c - 1] == TILE_WALL))
-            return "\u2574";
-    }
 
-    return " ";
+void erasemap()
+{
+    grid.clear();
+    mobs.clear();
+    fraction.clear();
+    stuff.clear();
+    gridMob.clear();
+    gridItem.clear();
 }
  
-void printmap(void)
- {
-    int xi, yi;
- 
-    for(yi=0; yi<size_y; yi++)
-    {
-        for(xi=0; xi<size_x; xi++)
-        {
-            switch(grid[yi][xi]) 
-            {
-                case TILE_WALL: cout << GetRenderCellSymbolWall(yi, xi); break;
-                //case TILE_WALL:  putchar('#'); break;
-                case TILE_FLOOR: putchar(' '); break;
-                case TILE_POINT: putchar(' '); break;
-                case TILE_DOOR: cout << "\u2593"; break;
-                case TILE_EXIT: cout << "\u2588"; break;
-                case TILE_ORC: cout << "\u2646"; break;
-                case TILE_SKELETON: cout << "\u2645"; break;
-            }
-        }
-        putchar('\n');
-    }
- }
-
 void getMap()
 {
     size_x     = 100;
@@ -702,9 +649,7 @@ void getMap()
                     break;
                 case TILE_ORC:
 
-                    tempmob = gridMob[i][j];//genMob(fraction[0]);
-                    //for (int i = 0; i < numFractions; ++i)
-                    //    if (rand() % 1000 < fraction[i].probability)
+                    tempmob = gridMob[i][j];
 
                     m = MonsterStats::make_Ptr();
                     m->strength = tempmob.strength;
@@ -712,10 +657,6 @@ void getMap()
                     m->max_hit_points = tempmob.health;
                     m->area_of_sight = 5;
                     m->fraction = tempmob.fraction;
-                    /*if (tempmob.fraction)
-                        m->fraction = Fraction::Undead;
-                    else
-                        m->fraction = Fraction::Orc;*/
 
                     skelAI = SkeletonAI::make_Ptr();
 
@@ -735,6 +676,7 @@ void getMap()
         }
         tiles.push_back(row);
     }
+    erasemap();
     init_core(info, tiles);
 }
 
@@ -748,8 +690,8 @@ void genFraction()
     for (int i = 0; i < numFractions; ++i)
     {
         fraction[i].name = i;
-        fraction[i].health = 40 + rand() % 60;
-        fraction[i].strength = 2 + rand() % 40;
+        fraction[i].health = 20 + rand() % 30;
+        fraction[i].strength = 2 + rand() % 5;
         fraction[i].probability = 1 + rand() % 30;
     }
 
@@ -759,20 +701,11 @@ void genFraction()
     {
         fraction[i].probability = 1 + rand() % ((numFractions - i) * maxProbability / numFractions);
     }
-/*
-    for (int i = 0; i < numFractions; ++i)
-    {
-        cout << "Fract: " << fraction[i].name << endl;
-        cout << "Health: " << fraction[i].health << endl;
-        cout << "Strength: " << fraction[i].strength << endl;
-        cout << "Prob: " << fraction[i].probability << endl;
-        cout << endl;
-    }*/
-
 }
 
 MyMob genMob(MyFraction fract)
 {
+    //cout << prex[rand() % prex.size()] + " " + sux[rand() % sux.size()] << endl; // Случаное имя для монстра
     MyMob mob;
     mob.fraction = fract.name;
     mob.health = fract.health;
@@ -798,7 +731,7 @@ void genItems()
         MyItem it;
         it.type = weapon;
         it.stat = strength;
-        it.effect = 1 + rand() % 40;
+        it.effect = 1 + rand() % 10;
         stuff.push_back(it);
     }
 
@@ -808,7 +741,7 @@ void genItems()
         MyItem it;
         it.type = head;
         it.stat = health;
-        it.effect = 1 + rand() % 40;
+        it.effect = 1 + rand() % 10;
         stuff.push_back(it);
     }
 
@@ -818,7 +751,7 @@ void genItems()
         MyItem it;
         it.type = body;
         it.stat = health;
-        it.effect = 1 + rand() % 40;
+        it.effect = 1 + rand() % 10;
         stuff.push_back(it);
     }
 
@@ -828,7 +761,7 @@ void genItems()
         MyItem it;
         it.type = arms;
         it.stat = health;
-        it.effect = 1 + rand() % 40;
+        it.effect = 1 + rand() % 10;
         stuff.push_back(it);
     }
 
@@ -838,23 +771,10 @@ void genItems()
         MyItem it;
         it.type = legs;
         it.stat = health;
-        it.effect = 1 + rand() % 40;
+        it.effect = 1 + rand() % 10;
         stuff.push_back(it);
     }
 }
-
-/*getMobs()
-{
-    for (int i = 0; i < mobs.size(); ++i)
-    {
-        MonsterStatsPtr m = MonsterStats::make_Ptr();
-        m->strength = mobs[i].strength;
-        m->health = mobs[i].health;
-        m->area_of_sight = 5;
-    }
-    
-}*/
-
 
 /*int main(int argc, char **argv)
 {
