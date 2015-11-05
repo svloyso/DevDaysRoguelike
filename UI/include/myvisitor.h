@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
 #include <map>
-
 #include "core.h"
 #include "tile.h"
 #include "visitor.h"
@@ -9,34 +8,51 @@
 
 class MyVisitor : public Visitor {
 public:
-    MyVisitor() { init_map(); }
 
     void visitWallTile (WallTile* w) {
-        Coord pos = w->get_coord();
-        int r = pos.y;
-        int c = pos.x;
+        WallType type = w->get_walltype();
 
-        std::string code = "";
-        if ((main_core->get_tile (Coord (r, c-1)))->get_type() == TileType::Wall)
-            code += "1";
-        else
-            code += "0";
-
-        if ((main_core->get_tile (Coord (r-1, c)))->get_type() == TileType::Wall)
-            code += "1";
-        else
-            code += "0";
-
-        if ((main_core->get_tile (Coord (r, c+1)))->get_type() == TileType::Wall)
-            code += "1";
-        else
-            code += "0";
-
-        if ((main_core->get_tile (Coord (r+1, c)))->get_type() == TileType::Wall)
-            code += "1";
-        else
-            code += "0";
-        val = codes[code];
+        switch (type)   {
+            case WallType::lu_corner:
+             val= "\u250C";
+             break;
+            case WallType::ru_corner:
+             val= "\u2510";
+             break;
+            case WallType::lb_corner:
+             val= "\u2514";
+             break;
+            case WallType::rb_corner:
+             val= "\u2518";
+             break;
+            case WallType::horizontal:
+             val= "\u2500";
+             break;
+            case WallType::vertical:
+             val= "\u2502";
+             break;
+            case WallType::cross:
+             val= "\u253C";
+             break;
+            case WallType::t_down:
+             val= "\u252C";
+             break;
+            case WallType::t_up:
+             val= "\u2534";
+             break;
+            case WallType::t_right:
+             val= "\u251C";
+             break;
+            case WallType::t_left:
+             val= "\u2524";
+             break;
+            case WallType::filled:
+              val= "\u2591";
+             break;
+            case WallType::single:
+             val= "\u2591";
+             break;
+        }
         color = 15;
     }
 
@@ -74,8 +90,6 @@ public:
     std::string get_val() { return val; }
     int get_color() { return color; }
 private:
-    std::map <std::string, std::string> codes;
-    void init_map();
     std::string val;
     int color;
 };
