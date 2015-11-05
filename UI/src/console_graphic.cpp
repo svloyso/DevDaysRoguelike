@@ -2,11 +2,11 @@
 #include "myvisitor.h"
 
 ConsoleGraphics::ConsoleGraphics()
-    : game_play_point (Coord (12, 1))
+    : game_play_point (Coord (9, 1))
     , game_play (CuttingWindow (game_play_point, Coord (30, 50)))
     , stats_point (Coord (1,1))
-    , stats_window (CuttingWindow (stats_point, Coord (8, 80)))
-    , info (380)
+    , stats_window (CuttingWindow (stats_point, Coord (5, 80)))
+    , info (stats_window)
 {
     init();
     stats_window.get_size (stats_width, stats_height);
@@ -40,6 +40,7 @@ void ConsoleGraphics::init()
     endwin ();
     init_map ();
     refresh ();
+
 }
 
 string ConsoleGraphics::get_render_cell_symbol_wall (int r, int c)
@@ -90,15 +91,19 @@ void ConsoleGraphics::draw_coin (Coord x)
 {
     print_symbol (x, "\u26C0", 14, 30);
 }
-
+void ConsoleGraphics::draw_hero ( )
+{
+    game_play.print(Coord (game_play_width / 2, game_play_height / 2), "\u2689", 33);
+}
 void ConsoleGraphics::refresh ()
 {
+
 	cout << "\033[2J";
 	Coord hero_pos;
     HeroPtr hero = main_core->get_hero();
     hero_pos = main_core->get_coord(hero->get_pos());
     MyVisitor visitor;
-    int x_left  = hero_pos.x -game_play_width / 2;
+    int x_left  = hero_pos.x - game_play_width / 2;
     int x_right = hero_pos.x + game_play_width / 2;
     int y_left  = hero_pos.y - game_play_height / 2;
     int y_right = hero_pos.y + game_play_height / 2;
@@ -112,11 +117,12 @@ void ConsoleGraphics::refresh ()
             game_play.print (Coord (j - x_left, i - y_left), visitor.get_val(), visitor.get_color());
         }
     }
-    draw_wall (Coord (stats_point.x , stats_point.y ),
-       stats_height + 2, stats_width + 2);
+    draw_hero ();
+     draw_wall (Coord (stats_point.x , stats_point.y ),
+        stats_height + 2, stats_width + 2);
+    info.draw_hp (200, 400, 100, 150);
     draw_wall( Coord (game_play_point.x - 1, game_play_point.y - 1), 
         game_play_height + 2, game_play_width + 2);
-    //info.draw_hero_stats();
 }
 void ConsoleGraphics::move_hero_right ()
 {
