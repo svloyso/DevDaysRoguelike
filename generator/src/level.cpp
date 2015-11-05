@@ -678,7 +678,7 @@ void getMap()
     info.size = Coord(size_y-2, size_x-2);
     info.hero_init = Coord(0, 0);
     
-    for (int i = 1; i <= size_y-1; ++i)
+    for (int i = 1; i <= size_y-2; ++i)
     {
         vector< TilePtr > row;
         for (int j = 1; j < size_x-1; ++j)
