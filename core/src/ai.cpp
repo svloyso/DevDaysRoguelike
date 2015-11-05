@@ -228,4 +228,5 @@ void SkeletonAI::act(MonsterPtr monster)
 }
 
 
+void SkeletonAI::react(MonsterPtr m, ActionPtr a) {}
 
