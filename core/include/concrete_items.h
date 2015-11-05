@@ -2,7 +2,7 @@
 #include "visitor.h"
 #include "concrete_items_fwd.h"
 
-#include <utils>
+#include <utility>
 
 class Potion : public Usable {
 public:
