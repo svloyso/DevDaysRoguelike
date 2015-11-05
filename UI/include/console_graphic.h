@@ -22,18 +22,22 @@ class ConsoleGraphics
     int height;
     int width;
     int shift;
-    DrawInfo info;
     map <string, string> codes;
     Coord game_play_point;
     CuttingWindow game_play;
     int game_play_width;
     int game_play_height;
 
+    Coord stats_point;
+    CuttingWindow stats_window;
+    int stats_width;
+    int stats_height;
+    DrawInfo info;
+
     //"\u2D65" монстр  "\u2E19" - дерево 9879  9608
 public:
     ConsoleGraphics ();
     void init ();
-    //void draw_wall ();
     void draw_wall (Coord c, int h, int w);
     string get_render_cell_symbol_wall (int r, int c);
     void draw_hero_stats ();
