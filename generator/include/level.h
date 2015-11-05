@@ -26,6 +26,9 @@
  #define TILE_ORC 5
  #define TILE_SKELETON 6
 
+#define TILE_KEY 7
+#define TILE_ITEM 8
+
 using namespace std;
 
 vector< vector<int> > grid;
@@ -33,8 +36,9 @@ vector< vector<int> > grid;
 int numDoor = (size_x / size_room_x) * (size_y / size_room_y) - 1;
 int *rowDoor = new int[numDoor];
 int *columnDoor = new int[numDoor];	
-void GenerateStuff(int *rowStuff, int *columnStuff);
 bool GenerateMobs(int from, int to, bool* visited);
+bool GenerateKeysInDFS(int from, int to, bool* visited);
+void GenerateKeys(int from, int to, bool* visited);
 
 bool exploreMatr(int from, int to, bool* visited);
 void Generate();
@@ -91,6 +95,7 @@ vector<MyFraction> fraction(numFractions);
 vector<MyItem> stuff;
 
 vector< vector<MyMob> > gridMob(size_y+10, vector<MyMob>(size_x+10));
+vector< vector<MyItem> > gridItem(size_y+10, vector<MyItem>(size_x+10));
 
 bool fractPower(MyFraction i, MyFraction j);
 void genFraction();
