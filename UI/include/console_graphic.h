@@ -23,7 +23,6 @@ class ConsoleGraphics
     int height;
     int width;
     int shift;
-    map <string, string> codes;
     Coord game_play_point;
     CuttingWindow game_play;
     int game_play_width;
@@ -34,6 +33,12 @@ class ConsoleGraphics
     int stats_width;
     int stats_height;
     DrawInfo info;
+
+    Coord invent_point;
+    CuttingWindow invent_window;
+    int invent_width;
+    int invent_height;
+
 
     //"\u2D65" монстр  "\u2E19" - дерево 9879  9608 
 public:
