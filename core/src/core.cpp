@@ -6,6 +6,7 @@
 #include "tile.h"
 #include "core.h"
 #include "hero.h"
+#include "action.h"
 
 CorePtr main_core;
 
@@ -18,12 +19,9 @@ Core::Core(MapInfo info, const std::vector< std::vector< TilePtr > >& _map) :
     map_info(info)
 {
     init_tables();
-    hero = Hero::make_Ptr(HeroStats::make_Ptr());
-    objects[hero->get_id()] = hero;
+    init_tiles();
+    create_hero();
     //find_hero_pos();
-    TilePtr hero_tile = get_tile(map_info.hero_init);
-    hero_tile->unit = hero;
-    hero->set_pos(hero_tile);
     map_updater = [](Coord c) {};
     action_updater = [](ActionPtr a) {};
 }
@@ -36,6 +34,20 @@ void Core::find_hero_pos() {
             return;
         }
     }
+}
+
+void Core::create_hero() {
+    HeroStatsPtr stats = HeroStats::make_Ptr();
+
+    stats->strength = 10;
+    stats->hit_points = 400;
+    stats->fraction = Fraction::Hero;
+
+    hero = Hero::make_Ptr(stats);
+    objects[hero->get_id()] = hero;
+    TilePtr hero_tile = get_tile(map_info.hero_init);
+    hero_tile->unit = hero;
+    hero->set_pos(hero_tile);
 }
 
 void Core::init_tables() {
@@ -102,18 +114,22 @@ void Core::init_tiles() {
             if (tile->get_type() == TileType::Wall) {
                 auto wall_tile = WallTile::to_Ptr(tile);
                 bool code[8];
+                int x = j;
+                int y = i;
+                int dx = 1;
+                int dy = 1;
                 TilePtr around_tiles[8] = {
-                    get_tile(Coord(i - 1, j)),
-                    get_tile(Coord(i - 1, j - 1)),
-                    get_tile(Coord(i, j - 1)),
-                    get_tile(Coord(i + 1, j - 1)),
-                    get_tile(Coord(i + 1, j)),
-                    get_tile(Coord(i + 1, j + 1)),
-                    get_tile(Coord(i, j + 1)),
-                    get_tile(Coord(i - 1, j + 1))
+                    get_tile(Coord(x - dx, y)),
+                    get_tile(Coord(x - dx, y - dy)),
+                    get_tile(Coord(x, y - dy)),
+                    get_tile(Coord(x + dx, y - dy)),
+                    get_tile(Coord(x + dx, y)),
+                    get_tile(Coord(x + dx, y + dy)),
+                    get_tile(Coord(x, y + dy)),
+                    get_tile(Coord(x - dx, y + dy))
                 };
                 for (int k = 0; k < 8; ++k) {
-                    code[i] = around_tiles[k]->get_type() == TileType::Wall;
+                    code[k] = (around_tiles[k]->get_type() == TileType::Wall);
                 }
                 wall_tile->set_walltype(get_walltype(code));
             }
@@ -137,7 +153,7 @@ Result Core::move_hero(Direction dir) {
     ActionPtr action;
     
     Damage damage;
-    damage.cutting = 10;
+    damage.cutting = hero->get_stats()->strength;
     if (tile_to->get_unit()) {
         action = Atack::make_Ptr(hero, tile_to->get_unit(), damage);
     } else {

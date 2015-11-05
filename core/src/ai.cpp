@@ -205,9 +205,23 @@ Coord get_nearest_unit(Coord pos, vector<UnitPtr> units) {
     return min_coord;
 }
 
+HeroPtr SkeletonAI::find_hero(MonsterPtr monster) {
+    auto stats = monster->get_stats();
+    int sight = stats->area_of_sight;
+
+    TilePtr my_pos = monster->get_pos();
+    Coord my_coord = my_pos->get_coord();
+
+    for (int x = my_coord.x - sight; x < my_coord.x + sight; ++x) {
+        for (int y = my_coord.y - sight; y < my_coord.y + sight; ++y) {
+            //TODO!!!!
+        }
+    }
+    return HeroPtr();
+}
+
 void SkeletonAI::act(MonsterPtr monster)
 {
-
     TilePtr my_pos = monster->get_pos();
     Coord my_coord = my_pos->get_coord();
     int tries = 5;

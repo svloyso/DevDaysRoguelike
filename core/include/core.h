@@ -43,6 +43,7 @@ private:
     void init_tables();
 
     void find_hero_pos();
+    void create_hero();
     void make_turn();
     void init_tiles();
 private:

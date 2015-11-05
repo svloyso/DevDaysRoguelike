@@ -45,6 +45,8 @@ public:
     void act(MonsterPtr monster);
     void react(MonsterPtr monster, ActionPtr action);
     DECLARE_COMMON_METHODS(SkeletonAI)
+private:
+    HeroPtr find_hero(MonsterPtr);
 };
 
 class OrcAI : public AI {
