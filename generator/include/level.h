@@ -90,6 +90,8 @@ vector<MyMob> mobs;
 vector<MyFraction> fraction(numFractions);
 vector<MyItem> stuff;
 
+vector< vector<MyMob> > gridMob(size_y+3, vector<MyMob>(size_x+3));
+
 bool fractPower(MyFraction i, MyFraction j);
 void genFraction();
 MyMob genMob(MyFraction fract);
