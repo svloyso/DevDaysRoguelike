@@ -24,8 +24,10 @@ public:
     void subscribe_map(std::function<void(Coord)> f);
     void subscribe_action(std::function<void(ActionPtr)> f);
     HeroPtr get_hero();
+    UnitPtr get_enemy();
 
     Result move_hero(Direction dir);
+    void wait();
 
     Result do_action(ActionPtr action);
     ObjectPtr get_object(int id);
@@ -55,6 +57,7 @@ private:
     std::unordered_map<int, ActableObjPtr> actable;
     std::unordered_map<TilePtr, Coord> tiles;
     HeroPtr hero;
+    UnitPtr near_enemy;
 };
 
 

@@ -139,6 +139,14 @@ void Core::init_tiles() {
     }
 }
 
+void Core::wait() {
+    make_turn();
+}
+
+void Core::get_enemy() {
+    return near_enemy;
+}
+
 void Core::make_turn() {
     for(auto a : actable) {
         a.second->act();
