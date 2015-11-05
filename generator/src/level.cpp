@@ -678,8 +678,8 @@ void genFraction()
     for (int i = 0; i < numFractions; ++i)
     {
         fraction[i].name = i;
-        fraction[i].health = 40 + rand() % 60;
-        fraction[i].strength = 2 + rand() % 40;
+        fraction[i].health = 20 + rand() % 30;
+        fraction[i].strength = 2 + rand() % 5;
         fraction[i].probability = 1 + rand() % 30;
     }
 
@@ -718,7 +718,7 @@ void genItems()
         MyItem it;
         it.type = weapon;
         it.stat = strength;
-        it.effect = 1 + rand() % 40;
+        it.effect = 1 + rand() % 10;
         stuff.push_back(it);
     }
 
@@ -728,7 +728,7 @@ void genItems()
         MyItem it;
         it.type = head;
         it.stat = health;
-        it.effect = 1 + rand() % 40;
+        it.effect = 1 + rand() % 10;
         stuff.push_back(it);
     }
 
@@ -738,7 +738,7 @@ void genItems()
         MyItem it;
         it.type = body;
         it.stat = health;
-        it.effect = 1 + rand() % 40;
+        it.effect = 1 + rand() % 10;
         stuff.push_back(it);
     }
 
@@ -748,7 +748,7 @@ void genItems()
         MyItem it;
         it.type = arms;
         it.stat = health;
-        it.effect = 1 + rand() % 40;
+        it.effect = 1 + rand() % 10;
         stuff.push_back(it);
     }
 
@@ -758,7 +758,7 @@ void genItems()
         MyItem it;
         it.type = legs;
         it.stat = health;
-        it.effect = 1 + rand() % 40;
+        it.effect = 1 + rand() % 10;
         stuff.push_back(it);
     }
 }
