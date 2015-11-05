@@ -19,6 +19,7 @@ public:
     void react(ActionPtr action);
     MonsterStats* get_stats() { return MonsterStats::to_Ptr(stats).get(); }   
     DECLARE_COMMON_METHODS(Monster)
+    DECLARE_VISIT(Monster)
 protected:
     AIPtr ai;
 };

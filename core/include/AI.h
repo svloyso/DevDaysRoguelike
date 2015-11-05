@@ -19,13 +19,13 @@ enum class StateType {
 class AI : public Object {
 public:
     AI() {}
-    void act(MonsterPtr monster) {}
-    void react(MonsterPtr monster, ActionPtr action) {}
+    virtual void act(MonsterPtr monster) {}
+    virtual void react(MonsterPtr monster, ActionPtr action) {}
     DECLARE_COMMON_METHODS(AI)
 
-    protected:
-    bool **get_field_of_view(MonsterPtr monster);
-    void cast_light(bool** matrix, int start_pos_x, int start_pos_y,
+protected:
+    virtual bool **get_field_of_view(MonsterPtr monster);
+    virtual void cast_light(bool** matrix, int start_pos_x, int start_pos_y,
                         int radius, int row, float start_slope,
                             float end_slope, int xx, int xy, int yx, int yy, int x, int y);
 
