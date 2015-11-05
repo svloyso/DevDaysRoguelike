@@ -16,7 +16,7 @@
 #include "monster.h"
 #include "stats.h"
 #include "AI.h"
- 
+
  #define TILE_FLOOR 0
  #define TILE_WALL 1
  #define TILE_POINT 2
@@ -86,8 +86,6 @@ struct MyMob
 	int health;
 	int strength;	
 	vector< MyItem > inventory;
-	int x;
-	int y;
 };
 
 vector<MyMob> mobs;

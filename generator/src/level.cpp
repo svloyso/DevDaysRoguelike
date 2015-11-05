@@ -1,5 +1,6 @@
 #include "level.h"
 #include "getLevel.h"
+#include "names.h"
 
 bool exploreMatr(int from, int to, bool* visited)
 {
@@ -693,6 +694,7 @@ void genFraction()
 
 MyMob genMob(MyFraction fract)
 {
+    //cout << prex[rand() % prex.size()] + " " + sux[rand() % sux.size()] << endl; // Случаное имя для монстра
     MyMob mob;
     mob.fraction = fract.name;
     mob.health = fract.health;
