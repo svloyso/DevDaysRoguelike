@@ -38,7 +38,7 @@ struct MiscStats : public ItemStats {
 struct ActableStats : public Stats {
     ActableStats(double hp = 0, double def = 0) : hit_points(hp), defence(def)
     {
-        const max_hit_points = hit_points;
+        max_hit_points = hit_points;
     }
     double hit_points;
     double max_hit_points;
