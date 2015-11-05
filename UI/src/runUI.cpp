@@ -15,6 +15,7 @@ using namespace std;
 // }
 int runUI()
 {
+    system("setterm -cursor off");
 	
     GameProcess game;
     system ("stty raw");
@@ -35,6 +36,8 @@ int runUI()
         system("stty raw");
 
     }
+    
+    system("setterm -cursor on");
     system ("clear");
     return 0;
 
