@@ -1,4 +1,5 @@
 #include "monster.h"
+#include "unitvisitor.h"
 
 Monster::Monster(const AIPtr _ai, MonsterStatsPtr _stats) : Unit(_stats), ai(_ai) { }
 
@@ -8,6 +9,8 @@ void Monster::act() {
 
 void Monster::react(ActionPtr action) {
     ai->react(get_my_ptr(), action);
-    // TODO: implement hp reduction
+    
+    UnitReactVisitor vis;
+    vis.visit(action);
 }
 

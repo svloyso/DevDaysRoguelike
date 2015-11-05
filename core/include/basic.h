@@ -23,6 +23,7 @@
     
 #define DECLARE_VISIT(name) void visit(Visitor* v) { v->visit##name(this); }
 
+
 class Object{
     friend class Core;
 public:

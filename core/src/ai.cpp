@@ -4,6 +4,7 @@
 #include <vector>
 #include "monster.h"
 #include <limits.h>
+#include <cstdlib>
 
 using namespace std;
 
@@ -204,8 +205,43 @@ Coord get_nearest_unit(Coord pos, vector<UnitPtr> units) {
     return min_coord;
 }
 
+HeroPtr SkeletonAI::find_hero(MonsterPtr monster) {
+    auto stats = monster->get_stats();
+    int sight = stats->area_of_sight;
+
+    TilePtr my_pos = monster->get_pos();
+    Coord my_coord = my_pos->get_coord();
+
+    for (int x = my_coord.x - sight; x < my_coord.x + sight; ++x) {
+        for (int y = my_coord.y - sight; y < my_coord.y + sight; ++y) {
+            //TODO!!!!
+        }
+    }
+    return HeroPtr();
+}
+
 void SkeletonAI::act(MonsterPtr monster)
 {
+    TilePtr my_pos = monster->get_pos();
+    Coord my_coord = my_pos->get_coord();
+    int tries = 5;
+    while(tries--) {
+        int x_diff = (rand() % 3) - 1;
+        int y_diff = (rand() % 3) - 1;
+
+        Coord coord_to = my_coord;
+        coord_to.x += x_diff;
+        coord_to.y += y_diff;
+        TilePtr tile_to = main_core->get_tile(coord_to);
+        MovePtr move = Move::make_Ptr(monster, tile_to);
+        Result res = main_core->do_action(move);
+        if(res == Result::Success) {
+            break;
+        }
+    }
+
+    return;
+    
     bool** fov = get_field_of_view(monster);
     RelationType** unit_map = get_unit_map(monster, fov);
 

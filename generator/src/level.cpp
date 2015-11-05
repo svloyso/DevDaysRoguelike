@@ -530,8 +530,6 @@ void genRoom(int row, int column, int door)
             if (isSetDoor)
                 break;
     }
-    //
-
 
 // Пишем комнату в лабиринт
     for (int i = top; i < bottom; ++i)
@@ -542,6 +540,18 @@ void genRoom(int row, int column, int door)
                 grid[i + row][j + column] = TILE_POINT;
             else
                 grid[i + row][j + column] = room[i][j];
+        }
+    }
+
+    x = size_room_x / 2;
+    y = size_room_y / 2;
+
+    for (int i = 0; i < 3; ++i)
+    {
+        if (room[y][x] == TILE_FLOOR)
+        {
+            grid[y + (rand() % 4) + row][x + (rand() % 4) + column] = TILE_ORC;
+            gridMob[y + (rand() % 4) + row][x + (rand() % 4) + column] = genMob(fraction[0]);
         }
     }
 }
@@ -665,13 +675,13 @@ void getMap()
 
     vector< vector< TilePtr > > tiles;
     MapInfo info;
-    info.size = Coord(size_y, size_x);
+    info.size = Coord(size_y-2, size_x-2);
     info.hero_init = Coord(0, 0);
     
-    for (int i = 0; i < size_y; ++i)
+    for (int i = 1; i <= size_y-1; ++i)
     {
         vector< TilePtr > row;
-        for (int j = 0; j < size_x; ++j)
+        for (int j = 1; j < size_x-1; ++j)
         {
             TilePtr tile;
             std::vector< ImmovablePtr > imms;
@@ -692,7 +702,7 @@ void getMap()
                     break;
                 case TILE_ORC:
 
-                    tempmob = gridMob[i][j];
+                    tempmob = gridMob[i][j];//genMob(fraction[0]);
                     //for (int i = 0; i < numFractions; ++i)
                     //    if (rand() % 1000 < fraction[i].probability)
 
@@ -712,7 +722,7 @@ void getMap()
 
                     break;
                 case TILE_EXIT:
-                    info.hero_init = Coord(i, j);
+                    info.hero_init = Coord(i-1, j-1);
                     tile = std::make_shared<FloorTile>();
                     break;
                 default:
