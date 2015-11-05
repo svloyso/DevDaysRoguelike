@@ -28,6 +28,13 @@ struct Coord {
             return Coord(x, y - 1);
         default:
             return *this;
+        }
     }
+    bool operator==(Coord cc) const {
+        return x == cc.x && y == cc.y;
+    }
+
+    bool operator<(Coord cc) const {
+        return x == cc.x ? y < cc.y : x < cc.x;
     }
 };
