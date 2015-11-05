@@ -6,7 +6,7 @@
 #include "visitor.h"
 #include "door.h"
 #include "monster.h"
-#include "concrete_items.h"
+#include "item.h"
 class MyVisitor : public Visitor {
 public:
 

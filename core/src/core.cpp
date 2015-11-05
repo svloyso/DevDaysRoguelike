@@ -22,7 +22,6 @@ Core::Core(MapInfo info, const std::vector< std::vector< TilePtr > >& _map) :
     init_tables();
     init_tiles();
     create_hero();
-    //find_hero_pos();
     map_updater = [](Coord c) {};
     action_updater = [](ActionPtr a) {};
 }
@@ -52,6 +51,8 @@ void Core::create_hero() {
 }
 
 void Core::init_tables() {
+    std::vector<DoorPtr> doors;
+    std::vector<KeyPtr>  keys;
     for (size_t i = 0; i < map.size(); ++i) {
         auto& r = map[i];
         for (size_t j = 0; j < r.size(); ++j) {
@@ -69,12 +70,18 @@ void Core::init_tables() {
             for (auto imm : immovables) {
                 objects[imm->get_id()] = imm;
                 imm->set_pos(t);
+                doors.push_back(Door::to_Ptr(imm));
             }
             for (auto it : items) {
                 objects[it->get_id()] = it;
+                if (it->get_type() == ItemType::Key) {
+                    keys.push_back(Key::to_Ptr(it));
+                }
             }
         }
     }
+
+    //TODO: keys to doors
 }
 
 WallType get_walltype(const bool* code) {

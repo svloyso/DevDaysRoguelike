@@ -33,6 +33,8 @@ public:
     virtual void visitTile(Tile* t)    { defaultVisit(); }
     virtual void visitWallTile(WallTile* w)    { defaultVisit(); }
     virtual void visitFloorTile(FloorTile* f)  { defaultVisit(); }
+    virtual void visitPotion(Potion* p){ defaultVisit(); }
+    virtual void visitKey(Key* k)        { defaultVisit(); }
     
     virtual void defaultVisit()=0;
 

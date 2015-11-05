@@ -4,6 +4,8 @@
 #include "basic.h"
 #include "influence.h"
 #include "item_fwd.h"
+#include "stats.h"
+#include "unit_fwd.h"
 
 
 enum class ItemType {
@@ -63,5 +65,24 @@ public:
     MiscStats* get_stats() { return MiscStats::to_Ptr(stats).get(); }
     DECLARE_VISIT(Misc)
     DECLARE_COMMON_METHODS(Misc)
+};
+
+class Potion : public Usable {
+public:
+    Potion(int _hp) : hp(_hp) {}
+    void use(UnitPtr unit); 
+    ItemType get_type() { return ItemType::Potion; }
+    DECLARE_COMMON_METHODS(Potion)
+    DECLARE_VISIT(Potion)
+private:
+    int hp;
+};
+
+class Key : public Misc {
+public:
+    Key() {}
+    ItemType get_type() { return ItemType::Key; }
+    DECLARE_COMMON_METHODS(Key)
+    DECLARE_VISIT(Key)
 };
 

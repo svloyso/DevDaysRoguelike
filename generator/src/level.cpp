@@ -664,7 +664,7 @@ void getMap()
 
                     break;
                 case TILE_KEY:
-                    items.push_back(std::make_shared<Key>(key));
+                    items.push_back(std::make_shared<Key>());
                     tile = std::make_shared<FloorTile>(UnitPtr(), items, std::vector< ImmovablePtr >());
                     break;
                 case TILE_EXIT:

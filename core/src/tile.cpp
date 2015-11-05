@@ -1,9 +1,9 @@
 #include "tile.h"
 #include "core.h"
+#include "door.h"
 
 bool Tile::free() {
-    if (unit) return false;
-    return true;
+    return !unit && !(immovables.size() && !Door::to_Ptr(immovables.front())->is_open());
 }
 
 Coord Tile::get_coord(){

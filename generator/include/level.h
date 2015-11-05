@@ -16,7 +16,6 @@
 #include "monster.h"
 #include "stats.h"
 #include "AI.h"
-#include "concrete_items.h"
 
  #define TILE_FLOOR 0
  #define TILE_WALL 1
