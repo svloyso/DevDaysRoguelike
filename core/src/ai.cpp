@@ -114,8 +114,7 @@ void make_move(MonsterPtr monster) {
 
 void atack(MonsterPtr monster, UnitPtr enemy) {
     AtackPtr action;
-    Damage damage;
-    damage.cutting = monster->get_stats()->strength;
+    Damage damage = monster->get_damage();
     action = Atack::make_Ptr(monster, enemy, damage);
     main_core->do_action(action);
 }
