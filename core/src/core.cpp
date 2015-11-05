@@ -42,7 +42,6 @@ void Core::create_hero() {
     stats->strength = 50;
     stats->hit_points = 400;
     stats->max_hit_points = 400;
-    stats->fraction = Fraction::Hero;
 
     hero = Hero::make_Ptr(stats);
     objects[hero->get_id()] = hero;
