@@ -81,6 +81,13 @@ public:
             visit(imm[0]);
             return;
         }
+        auto items = f->get_items();
+        if (items.size()) {
+            for (auto it : items) {
+                visit(it);
+            }
+            return;
+        }
         val = ".";
         color = 15;
     }
@@ -116,17 +123,17 @@ public:
         color = mobsColors[m->get_id()];*/
     }
 	void visitKey (KeyPtr * k)
-{
-val = "\u26B7";
-color = 93;
-}
+    {
+        val = "!"; // "\u26B7";
+        color = 33;
+    }
     void visitDoor (Door* d) {
         val = "X"; // "\u2592";
         color = 14;
     }
     void defaultVisit() {
-        val = "\u26C0";
-        color = 15;
+        val = "?"; // "\u26C0";
+        color = 33;
     }
     std::string get_val() { return val; }
     int get_color() { return color; }
