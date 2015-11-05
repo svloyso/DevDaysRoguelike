@@ -5,13 +5,14 @@ TEST = test
 BINDIR = bin
 SRCDIR = src
 TESTDIR = tests
-OBJECTS = $(BINDIR)/core.o $(BINDIR)/basic.o $(BINDIR)/tile.o $(BINDIR)/visitor.o $(BINDIR)/monster.o $(BINDIR)/ai.o
 TEST_OBJ = $(BINDIR)/test_tiles.o
 
-all: $(BINDIR) $(OBJECTS)
+include MakeList
 
-$(TEST): $(BINDIR) $(OBJECTS) $(TEST_OBJ)
-	$(CC) $(OBJECTS) $(TEST_OBJ) -o $(TEST)
+all: $(BINDIR) $(COREOBJ)
+
+$(TEST): $(BINDIR) $(COREOBJ) $(TEST_OBJ)
+	$(CC) $(COREOBJ) $(TEST_OBJ) -o $(TEST)
 
 $(BINDIR)/%.o: $(TESTDIR)/%.cpp
 	$(CC) $(CXXFLAGS) -c -MMD -o $@ $<

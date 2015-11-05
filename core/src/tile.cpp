@@ -7,7 +7,7 @@ bool Tile::free() {
 }
 
 Coord Tile::get_coord(){
-    return Coord(); //main_core->get_coord(Tile::to_Ptr(main_core->get_object(get_id())));
+    return main_core->get_coord(get_my_ptr());
 }
 UnitPtr Tile::get_unit() {
     return unit;

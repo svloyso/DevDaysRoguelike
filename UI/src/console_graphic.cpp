@@ -2,27 +2,44 @@
 #include "myvisitor.h"
 
 ConsoleGraphics::ConsoleGraphics()
-    : game_play_point (Coord (9, 1))
-    , game_play (CuttingWindow (game_play_point, Coord (20, 60)))
+    : game_play_point (Coord (12, 1))
+    , game_play (CuttingWindow (game_play_point, Coord (30, 50)))
+    , stats_point (Coord (1,1))
+    , stats_window (CuttingWindow (stats_point, Coord (8, 80)))
+    , info (380)
 {
-    initscr ();
-    getmaxyx (stdscr, console_size_y, console_size_x);
-    endwin ();
-
+    init();
+    stats_window.get_size (stats_width, stats_height);
     game_play.get_size (game_play_width, game_play_height);
     refresh ();
 }
 
+void ConsoleGraphics::init_map ()
+{
+    codes["1111"] = "\u253C";
+    codes["1110"] = "\u2534";
+    codes["1101"] = "\u2524";
+    codes["0111"] = "\u251C";
+    codes["1011"] = "\u252C";
+    codes["0101"] = "\u2502";
+    codes["1010"] = "\u2500";
+    codes["1100"] = "\u2518";
+    codes["0110"] = "\u2514";
+    codes["0011"] = "\u250C";
+    codes["1001"] = "\u2510";
+    codes["0100"] = "\u2575";
+    codes["0010"] = "\u2576";
+    codes["0001"] = "\u2577";
+    codes["1000"] = "\u2574";
+    codes["0000"] = " ";
+}
 void ConsoleGraphics::init()
 {
-    initscr();
+    initscr ();
     getmaxyx (stdscr, console_size_y, console_size_x);
-    endwin();
-
-    shift = 8;
-    width = 16;
-    height = 70;  // смещение по у
-    refresh();
+    endwin ();
+    init_map ();
+    refresh ();
 }
 
 string ConsoleGraphics::get_render_cell_symbol_wall (int r, int c)
@@ -95,10 +112,11 @@ void ConsoleGraphics::refresh ()
             game_play.print (Coord (j - x_left, i - y_left), visitor.get_val(), visitor.get_color());
         }
     }
+    draw_wall (Coord (stats_point.x , stats_point.y ),
+       stats_height + 2, stats_width + 2);
     draw_wall( Coord (game_play_point.x - 1, game_play_point.y - 1), 
         game_play_height + 2, game_play_width + 2);
-    info.draw_hero_stats();
-    //set_cursor_in_win_center();
+    //info.draw_hero_stats();
 }
 void ConsoleGraphics::move_hero_right ()
 {

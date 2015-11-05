@@ -42,17 +42,8 @@ void DrawInfo::draw_hero_stats (int _hero_cur_hp)
 //    {
 //        draw_mid_hp();
 //        draw_mid_hp_line();
-//      void DrawInfo::draw_empty_hp_line ()
-    {
-            cout << "\033[6;4H" << "|";
-            cout << "    "<<  "\033[00m" << "|";
-            cout << "    "<<  "\033[00m" << "|";
-            cout << "    "<<  "\033[00m" << "|";
-            cout << "    "<<  "\033[00m" << "|";
-            cout << "    "<<  "\033[00m" << "|";
-
-    }  return;
-//    }
+            return;
+        //}
     // printf("%i / %i", unitsData[heroIndex].health, GetUnitDefaultHealth(UnitType_Hero));
 
     // SetConsoleCursorPosition(consoleHandle, cursor_coord);
