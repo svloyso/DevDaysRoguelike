@@ -26,6 +26,7 @@ public:
     HeroPtr get_hero();
 
     Result move_hero(Direction dir);
+    void wait();
 
     Result do_action(ActionPtr action);
     ObjectPtr get_object(int id);
