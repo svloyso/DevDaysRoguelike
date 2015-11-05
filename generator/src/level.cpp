@@ -768,7 +768,12 @@ MyMob genMob(MyFraction fract)
     for (int i = 0; i < 3; ++i)
     {
         int randnum = rand() % stuff.size();
-        mob.inventory.push_back( stuff[ randnum ] );
+        MyItem item = stuff[ randnum ];
+        if (item.stat == strength)
+            mob.strength += item.effect;
+        else
+            mob.health += item.effect;
+        mob.inventory.push_back( item );
     }
     return mob;
 }
