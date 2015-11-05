@@ -1,4 +1,7 @@
 #include "item.h"
+#include "visitor.h"
+#include "concrete_items_fwd.h"
+
 #include <utils>
 
 class Potion : public Usable {
@@ -10,7 +13,9 @@ public:
         stats->hit_points = std::min(stats->hit_points, stats->max_hit_points);
         unit->drop_item(get_id());
     }
+    ItemType get_type() { return ItemType::Potion; }
     DECLARE_COMMON_METHODS(Potion)
+    DECLARE_VISIT(Potion)
 private:
     int hp;
 };
@@ -18,6 +23,8 @@ private:
 class Key : public Misc {
 public:
     Key() {}
+    ItemType get_type() { return ItemType::Key; }
     DECLARE_COMMON_METHODS(Key)
+    DECLARE_VISIT(Key)
 };
 

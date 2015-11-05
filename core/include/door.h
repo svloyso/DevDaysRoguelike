@@ -25,6 +25,10 @@ public:
         }
         return Result::Failure;
     }
+    void Close(int _key_id) {
+        key_id = _key_id;
+        state = DoorState::Closed;
+    }
 
     int get_key_id() { return key_id; }
     
