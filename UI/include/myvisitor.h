@@ -5,6 +5,7 @@
 #include "tile.h"
 #include "visitor.h"
 #include "door.h"
+#include "monster.h"
 
 class MyVisitor : public Visitor {
 public:
@@ -83,14 +84,20 @@ public:
         val = ".";
         color = 15;
     }
+
     void visitHero(Hero* h) {
         val = "\u2689";
-        color = 3;
-    }
+        color = 33;
+    }    
 
     void visitMonster(Monster* m) {
         val = "\u2D65";
-        color = 15;
+        color = 30 + m->get_id() % 6;
+        /*std::map<int,int>::iterator it;
+        it = mobsColors.find(m->get_id());
+        if (it == mobsColors.end())
+            mobsColors[m->get_id()] = 30 + rand() % 77;
+        color = mobsColors[m->get_id()];*/
     }
 
     void visitDoor (Door* d) {
