@@ -12,6 +12,7 @@
 #include "core.h"
 #include "hero.h"
 #include "utils.h"
+#include "unit.h"
 
 using namespace std;
 
@@ -34,19 +35,16 @@ class ConsoleGraphics
     int stats_height;
     DrawInfo info;
 
-    //"\u2D65" монстр  "\u2E19" - дерево 9879  9608
+    //"\u2D65" монстр  "\u2E19" - дерево 9879  9608 
 public:
     ConsoleGraphics ();
     void init ();
     void draw_wall (Coord c, int h, int w);
-    string get_render_cell_symbol_wall (int r, int c);
     void draw_hero_stats ();
-    void draw_coin (Coord x);
     void draw_door (Coord x);
     void draw_hero ();
     void refresh ();
-    void init_map ();
-    //void draw_in_window (Coord x, string symb_code, int color);
+    bool is_alive ();
     void move_hero_right ();
     void move_hero_up ();
     void move_hero_left ();

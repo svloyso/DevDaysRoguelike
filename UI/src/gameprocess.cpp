@@ -37,4 +37,17 @@ void GameProcess::update (char input_char)
 //    else if (unitsData[heroIndex].health < GetUnitDefaultHealth(UnitType_Hero))
 //        unitsData[heroIndex].health++;
 }
-
+GameProcess::~GameProcess()
+{
+    cout << "\033[00m" << "Код 00\n"<< "\033[00m";
+}
+bool GameProcess::is_alive()
+{
+    if (cons.is_alive())
+    {
+        return true;
+    }
+    system ("clear");
+    cout << "GAME OVER!";
+    return false;
+}

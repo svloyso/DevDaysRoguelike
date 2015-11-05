@@ -14,60 +14,16 @@ ConsoleGraphics::ConsoleGraphics()
     refresh ();
 }
 
-void ConsoleGraphics::init_map ()
-{
-    codes["1111"] = "\u253C";
-    codes["1110"] = "\u2534";
-    codes["1101"] = "\u2524";
-    codes["0111"] = "\u251C";
-    codes["1011"] = "\u252C";
-    codes["0101"] = "\u2502";
-    codes["1010"] = "\u2500";
-    codes["1100"] = "\u2518";
-    codes["0110"] = "\u2514";
-    codes["0011"] = "\u250C";
-    codes["1001"] = "\u2510";
-    codes["0100"] = "\u2575";
-    codes["0010"] = "\u2576";
-    codes["0001"] = "\u2577";
-    codes["1000"] = "\u2574";
-    codes["0000"] = " ";
-}
+
 void ConsoleGraphics::init()
 {
     initscr ();
     getmaxyx (stdscr, console_size_y, console_size_x);
     endwin ();
-    init_map ();
     refresh ();
-
 }
 
-string ConsoleGraphics::get_render_cell_symbol_wall (int r, int c)
-{
-    string code = "";
 
-    if ((main_core->get_tile (Coord (r, c-1)))->get_type() == TileType::Wall)
-    	code += "1";
-    else
-    	code += "0";
-
-    if ((main_core->get_tile (Coord (r-1, c)))->get_type() == TileType::Wall)
-    	code += "1";
-    else
-    	code += "0";
-
-    if ((main_core->get_tile (Coord (r, c+1)))->get_type() == TileType::Wall)
-    	code += "1";
-    else
-    	code += "0";
-
-    if ((main_core->get_tile (Coord (r+1, c)))->get_type() == TileType::Wall)
-    	code += "1";
-    else
-    	code += "0";
-	return codes[code];
-}
 void ConsoleGraphics::draw_wall (Coord c, int h, int w)
 {
     for (int i = c.y; i < c.y + h; ++i)
@@ -87,21 +43,37 @@ void ConsoleGraphics::draw_wall (Coord c, int h, int w)
     print_string (Coord (c.x, h + c.y - 1), "\u2513", 15);  //правый верхний угол
 } 
 
-void ConsoleGraphics::draw_coin (Coord x)
-{
-    print_symbol (x, "\u26C0", 14, 30);
-}
 void ConsoleGraphics::draw_hero ( )
 {
     game_play.print(Coord (game_play_width / 2, game_play_height / 2), "\u2689", 33);
 }
+bool ConsoleGraphics::is_alive()
+{
+    HeroPtr hero = main_core->get_hero();
+    HeroStats * hero_stats = hero->get_stats();
+    int hero_hp = hero_stats->hit_points;
+    if (hero_hp <= 0 )
+    {
+        return false; 
+    }
+    return true;
+}
+
 void ConsoleGraphics::refresh ()
 {
-
 	cout << "\033[2J";
+
 	Coord hero_pos;
     HeroPtr hero = main_core->get_hero();
-    hero_pos = main_core->get_coord(hero->get_pos());
+    hero_pos = main_core->get_coord (hero->get_pos());
+    
+    HeroStats * hero_stats = hero->get_stats();
+    int hero_hp = hero_stats->hit_points;
+    int hero_maxhp = hero_stats->max_hit_points;
+    draw_hero ();
+    info.hero_draw_stats (hero_hp, hero_maxhp);
+    draw_wall (Coord (stats_point.x , stats_point.y ),
+        stats_height + 2, stats_width + 2);
     MyVisitor visitor;
     int x_left  = hero_pos.x - game_play_width / 2;
     int x_right = hero_pos.x + game_play_width / 2;
@@ -115,13 +87,24 @@ void ConsoleGraphics::refresh ()
             TilePtr tile = main_core->get_tile (Coord (j, i));
             visitor.visit(tile);
             game_play.print (Coord (j - x_left, i - y_left), visitor.get_val(), visitor.get_color());
+            
         }
     }
-    draw_hero ();
-    draw_wall (Coord (stats_point.x , stats_point.y ),
-        stats_height + 2, stats_width + 2);
-    info.hero_draw_stats (400, 400);
-    info.enemy_draw_stats (100, 150, "WHO I AM?");
+    UnitPtr unit = main_core->get_enemy();
+            if (unit) 
+            {
+                UnitStats * stats = unit->get_stats();
+                int hp = stats->hit_points;
+                int max_hp = stats->max_hit_points;
+                if (hp > 0) 
+                {
+                    info.enemy_draw_stats (hp, max_hp, "ENEMY");
+                }
+                else 
+                {
+                    info.clear_enemy_info();
+                }
+            }
     draw_wall( Coord (game_play_point.x - 1, game_play_point.y - 1), 
         game_play_height + 2, game_play_width + 2);
 }
