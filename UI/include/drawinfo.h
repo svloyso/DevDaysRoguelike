@@ -3,7 +3,7 @@
 #include "utils.h"
 #include "consoleprint.h"
 #include "cuttingwindow.h"
-
+#include <string>
 using namespace  std;
 class DrawInfo
 {
@@ -16,13 +16,12 @@ class DrawInfo
     CuttingWindow stat_wind;
     int enemy_cur_hp;
      int enemy_max_hp;
+     string name;
 
 public:
-    void draw_hp_line ();
     DrawInfo (CuttingWindow _stat_wind);
-    void hero_draw_stats ();
-    void enemy_draw_stats ();
-    void draw_hp (int _cur_hp, int _hero_max_hp, int enemy_cur_hp, int _enemy_max_hp);
+    void hero_draw_stats (int _cur_hp, int _hero_max_hp);
+    void enemy_draw_stats (int _enemy_cur_hp, int _enemy_max_hp, string _name);
     void draw_empty_hp_line ();
     void draw_full_hp_line ();
     void draw_full_hp_line_enemy ();

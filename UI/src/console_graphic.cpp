@@ -118,9 +118,10 @@ void ConsoleGraphics::refresh ()
         }
     }
     draw_hero ();
-     draw_wall (Coord (stats_point.x , stats_point.y ),
+    draw_wall (Coord (stats_point.x , stats_point.y ),
         stats_height + 2, stats_width + 2);
-    info.draw_hp (200, 400, 100, 150);
+    info.hero_draw_stats (400, 400);
+    info.enemy_draw_stats (100, 150, "WHO I AM?");
     draw_wall( Coord (game_play_point.x - 1, game_play_point.y - 1), 
         game_play_height + 2, game_play_width + 2);
 }
