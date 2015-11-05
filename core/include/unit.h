@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <vector>
+#include <string>
 
 #include "basic.h"
 #include "action_fwd.h"
@@ -25,6 +26,10 @@ public:
             }
         }
         return ItemPtr();
+    }
+
+    virtual std::string get_name() {
+        return "ENEMY";
     }
 
     virtual Damage get_damage() {

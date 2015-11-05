@@ -15,6 +15,8 @@ public:
         UnitReactVisitor vis;
         vis.visit(action);
     }
+
+    std::string get_name() { return "Анатолий Валерианович"; }
     
     HeroStats* get_stats() { return HeroStats::to_Ptr(stats).get(); }
 
