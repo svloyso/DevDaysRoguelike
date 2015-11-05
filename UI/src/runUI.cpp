@@ -6,13 +6,7 @@
 #include <string>
 #include "gameprocess.h"
 using namespace std;
-// void recv_action(ActionPtr action) {
-// 	switch(action->get_type()) {
-// 		case ActionType::Move:
-// 			if (action->get_action()->get_id() == hero_id)
-// 				repaint();
-// 	}
-// }
+
 int runUI()
 {
     system("setterm -cursor off");
@@ -42,13 +36,10 @@ int runUI()
         game.update (str);
         
         system("stty raw");
-
     }
-    
     system("setterm -cursor on");
     system ("clear");
     return 0;
-
 }
 
 

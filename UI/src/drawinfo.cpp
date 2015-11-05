@@ -88,18 +88,17 @@ void DrawInfo::hero_draw_stats (int _hero_cur_hp, int _hero_max_hp)
  
 void DrawInfo::draw_empty_hp_line ()
 {
-        cout << "\033[5;3H" << "|" <<  "\033[00m";
+        cout << "\033[5;3H" << "|" <<  "\033[100m";
         cout << "   "<<  "\033[100m" << "|";
         cout << "   "<<  "\033[100m" << "|";
         cout << "   "<<  "\033[100m" << "|";
         cout << "   "<<  "\033[100m" << "|";
         cout << "   "<<  "\033[100m" << "|";
-
 }
 void DrawInfo::clear_enemy_info()
 {
     Coord x (1, 35);
-     stat_wind.print (x, "               ", 35);
+    stat_wind.print (x, "               ", 35);
     x = Coord (2, 35);
     stat_wind.print (x, "               ", 35);
     draw_empty_hp_line_enemy ();

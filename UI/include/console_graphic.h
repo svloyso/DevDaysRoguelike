@@ -39,8 +39,6 @@ class ConsoleGraphics
     int invent_width;
     int invent_height;
 
-
-    //"\u2D65" монстр  "\u2E19" - дерево 9879  9608 
 public:
     ConsoleGraphics ();
     void init ();

@@ -92,6 +92,7 @@ void ConsoleGraphics::refresh ()
             
         }
     }
+
     UnitPtr unit = main_core->get_enemy();
             if (unit) 
             {
@@ -112,10 +113,11 @@ void ConsoleGraphics::refresh ()
     draw_wall( Coord (invent_point.x - 1, invent_point.y - 1), 
         invent_height + 2, invent_width + 2);
     draw_hero ();
-    invent_window.print (Coord (1,1), "Голова: ", 15);
-    invent_window.print (Coord (3,1), "Туловище: ", 15);
-     invent_window.print (Coord (5,1), "Руки: ", 15);
-    invent_window.print (Coord (7,1), "Ноги: ", 15);
+    invent_window.print (Coord (1,1), "Up:    w | k", 15);
+    invent_window.print (Coord (3,1), "Down:  s | j", 15);
+    invent_window.print (Coord (5,1), "Right: d | l", 15);
+    invent_window.print (Coord (7,1), "Left:  a | h", 15);
+    invent_window.print (Coord (9,1), "Quit:  q ", 15);
 }
 void ConsoleGraphics::move_hero_right ()
 {
