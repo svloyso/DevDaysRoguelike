@@ -33,8 +33,9 @@ int runUI()
         game.update (input_char);
         
         system("stty raw");
-    }
 
+    }
+    system ("clear");
     return 0;
 
 }
