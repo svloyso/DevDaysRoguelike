@@ -215,6 +215,11 @@ Result Core::do_atack(AtackPtr action) {
     ActableObjPtr actor = ActableObject::to_Ptr(action->get_actor());
     ActableObjPtr reactor = ActableObject::to_Ptr(action->get_reactor());
 
+    if (actor->get_id() == hero->get_id()) {
+        near_enemy = Unit::to_Ptr(reactor);
+    } else {
+        near_enemy = Unit::to_Ptr(actor);
+    }
     reactor->react(action);
     return Result::Success;
 }
