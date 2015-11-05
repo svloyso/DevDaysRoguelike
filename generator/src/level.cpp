@@ -167,7 +167,8 @@ bool GenerateMobs(int from, int to, bool* visited)
             {
                 //MyMob tempmob = genMob(fraction[i]);
                 //mobs.push_back(tempmob);
-                grid[r][c] = TILE_ORC;                
+                grid[r][c] = TILE_ORC;
+                gridMob[r][c] = genMob(fraction[0]);
                 /*cout << "Fract: " << tempmob.fraction << endl;
                 cout << "Health: " << tempmob.health << endl;
                 cout << "Strength: " << tempmob.strength << endl;
@@ -691,7 +692,7 @@ void getMap()
                     break;
                 case TILE_ORC:
 
-                    tempmob = genMob(fraction[0]);
+                    tempmob = gridMob[i][j];
                     //for (int i = 0; i < numFractions; ++i)
                     //    if (rand() % 1000 < fraction[i].probability)
 
@@ -767,7 +768,12 @@ MyMob genMob(MyFraction fract)
     for (int i = 0; i < 3; ++i)
     {
         int randnum = rand() % stuff.size();
-        mob.inventory.push_back( stuff[ randnum ] );
+        MyItem item = stuff[ randnum ];
+        if (item.stat == strength)
+            mob.strength += item.effect;
+        else
+            mob.health += item.effect;
+        mob.inventory.push_back( item );
     }
     return mob;
 }
