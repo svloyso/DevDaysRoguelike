@@ -530,8 +530,6 @@ void genRoom(int row, int column, int door)
             if (isSetDoor)
                 break;
     }
-    //
-
 
 // Пишем комнату в лабиринт
     for (int i = top; i < bottom; ++i)
@@ -542,6 +540,31 @@ void genRoom(int row, int column, int door)
                 grid[i + row][j + column] = TILE_POINT;
             else
                 grid[i + row][j + column] = room[i][j];
+
+            /*// пихаем моба в комнату
+            if (grid[i + row][j + column] == TILE_POINT)
+                for (int i = 0; i < numFractions; ++i)
+                {
+                    if (rand() % 100 < fraction[i].probability)
+                    {
+                        //MyMob tempmob = genMob(fraction[i]);
+                        //mobs.push_back(tempmob);
+                        grid[i + row][j + column] = TILE_ORC;
+                        gridMob[i + row][j + column] = genMob(fraction[0]);
+                    }
+                }*/
+        }
+    }
+
+    x = size_room_x / 2;
+    y = size_room_y / 2;
+
+    for (int i = 0; i < 3; ++i)
+    {
+        if (room[y][x] == TILE_FLOOR)
+        {
+            grid[y + (rand() % 4) + row][x + (rand() % 4) + column] = TILE_ORC;
+            gridMob[y + (rand() % 4) + row][x + (rand() % 4) + column] = genMob(fraction[0]);
         }
     }
 }
@@ -692,7 +715,7 @@ void getMap()
                     break;
                 case TILE_ORC:
 
-                    tempmob = gridMob[i][j];
+                    tempmob = gridMob[i][j];//genMob(fraction[0]);
                     //for (int i = 0; i < numFractions; ++i)
                     //    if (rand() % 1000 < fraction[i].probability)
 
