@@ -14,7 +14,6 @@
 #include "tile.h"
 #include "door.h"
 #include "monster.h"
-#include "stats.h"
 #include "AI.h"
 
  #define TILE_FLOOR 0

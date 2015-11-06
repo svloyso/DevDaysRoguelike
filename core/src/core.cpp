@@ -37,13 +37,18 @@ void Core::find_hero_pos() {
 }
 
 void Core::create_hero() {
-    HeroStatsPtr stats = HeroStats::make_Ptr();
+    UnitStats stats(400, 50, 30); 
+    WeaponPtr sword = Weapon::New(10, Damage(20, 5), "Обычный меч");
+    ClothesPtr hat = Clothes::New(2, Defense(5, 5, 5, 5, 5), "Шапка-ушанка");
+    ClothesPtr shirt = Clothes::New(3, Defense(7, 7, 7, 7, 7), "Потрепанная куртка");
+    ClothesPtr pants = Clothes::New(3, Defense(6, 6, 6, 6, 6), "Джинсы");
+    
+    hero = Hero::New(stats);
+    hero->dress_head(hat);
+    hero->dress_body(shirt);
+    hero->dress_legs(pants);
+    hero->dress_weapon(sword);
 
-    stats->strength = 20;
-    stats->hit_points = 400;
-    stats->max_hit_points = 400;
-
-    hero = Hero::make_Ptr(stats);
     objects[hero->get_id()] = hero;
     TilePtr hero_tile = get_tile(map_info.hero_init);
     hero_tile->unit = hero;
@@ -70,12 +75,12 @@ void Core::init_tables() {
             for (auto imm : immovables) {
                 objects[imm->get_id()] = imm;
                 imm->set_pos(t);
-                doors.push_back(Door::to_Ptr(imm));
+                doors.push_back(Door::cast(imm));
             }
             for (auto it : items) {
                 objects[it->get_id()] = it;
                 if (it->get_type() == ItemType::Key) {
-                    keys.push_back(Key::to_Ptr(it));
+                    keys.push_back(Key::cast(it));
                 }
             }
         }
@@ -122,7 +127,7 @@ void Core::init_tiles() {
         for(int j = 0; j < h; ++j) {
             TilePtr tile = get_tile(Coord(i, j));
             if (tile->get_type() == TileType::Wall) {
-                auto wall_tile = WallTile::to_Ptr(tile);
+                auto wall_tile = WallTile::cast(tile);
                 bool code[8];
                 int x = i;
                 int y = j;
@@ -174,10 +179,10 @@ Result Core::move_hero(Direction dir) {
     UnitPtr unit = tile_to->get_unit();
     std::vector<ItemPtr> tile_items = tile_to->get_items();
     if (unit) {
-        Damage damage = hero->get_damage();
-        action = Atack::make_Ptr(hero, unit, damage);
+        Impact impact = hero->get_impact();
+        action = Atack::New(hero, unit, impact);
     } else if (imms.size()) {
-        DoorPtr door = Door::to_Ptr(imms[0]);
+        DoorPtr door = Door::cast(imms[0]);
         if (!door->is_open()) {
             std::vector<ItemPtr> items = hero->get_items();
             for(auto it : items) {
@@ -189,14 +194,14 @@ Result Core::move_hero(Direction dir) {
             }
             return Result::Failure;
         } else {
-            action = Move::make_Ptr(hero, tile_to);
+            action = Move::New(hero, tile_to);
         }
     } else if (tile_items.size()) {
         ItemPtr item = tile_items.back();
-        action = Pick::make_Ptr(hero, item);
+        action = Pick::New(hero, item);
         tile_to->take_item(item->get_id());
     } else {
-        action = Move::make_Ptr(hero, tile_to);
+        action = Move::New(hero, tile_to);
     }
 
     Result res = do_action(action);
@@ -225,8 +230,8 @@ void Core::subscribe_action(std::function<void(ActionPtr)> f) {
 }
 
 Result Core::do_move(MovePtr action) {
-    UnitPtr actor = Unit::to_Ptr(action->get_actor());
-    TilePtr tile_to = Tile::to_Ptr(action->get_reactor());
+    UnitPtr actor = action->get_actor();
+    TilePtr tile_to = action->get_tile();
     TilePtr tile_from = actor->get_pos();
 
     if (!tile_to->free()) {
@@ -235,44 +240,42 @@ Result Core::do_move(MovePtr action) {
     tile_from->move_from();
     tile_to->move_to(actor);
     
-    map_updater(tiles[tile_from]);
-    map_updater(tiles[tile_to]);
     return Result::Success;
 }
 
 Result Core::do_atack(AtackPtr action) {
-    ActableObjPtr actor = ActableObject::to_Ptr(action->get_actor());
-    ActableObjPtr reactor = ActableObject::to_Ptr(action->get_reactor());
+    ActableObjPtr actor = action->get_actor();
+    UnitPtr reactor = action->get_reactor();
+    
+    Impact impact = action->get_impact();
+    Avoidance avoid = reactor->get_avoidance();
 
-    if (actor->get_id() == hero->get_id()) {
-        near_enemy = Unit::to_Ptr(reactor);
-    } else {
-        near_enemy = Unit::to_Ptr(actor);
-    }
-    reactor->react(action);
+    int damage = battle_system.calculate_damage(impact, avoid);
+    
+    reactor->take_damage(damage, actor);
+
     return Result::Success;
 }
 
 Result Core::do_interact(InteractPtr action) {
-    UnitPtr actor = Unit::to_Ptr(action->get_actor());
-    ActableObjPtr reactor = ActableObject::to_Ptr(action->get_reactor());
+    UnitPtr actor = action->get_actor();
+    ActableObjPtr reactor = action->get_reactor();
     reactor->react(action);
     return Result::Success;
 }
 
 Result Core::do_pick(PickPtr action) {
-    UnitPtr who = Unit::to_Ptr(action->get_actor());
-    ItemPtr what = Item::to_Ptr(action->get_reactor());
+    UnitPtr who = action->get_actor();
+    ItemPtr what = action->get_item();
 
     who->pick_item(what);
     return Result::Success;
 }
 
-Result Core::do_destroy(DestroyedPtr action) {
-    ActableObjPtr actor = ActableObject::to_Ptr(action->get_actor());
-    ActableObjPtr reactor = ActableObject::to_Ptr(action->get_reactor());
+Result Core::do_die(DiePtr action) {
+    ActableObjPtr actor = action->get_actor();
+    ActableObjPtr reactor = action->get_reactor();
 
-    reactor->react(action);
     TilePtr place_of_death = actor->get_pos();
     if (place_of_death->get_unit()->get_id() == actor->get_id()) {
         place_of_death->move_from();
@@ -282,26 +285,25 @@ Result Core::do_destroy(DestroyedPtr action) {
 
     objects.erase(actor->get_id());
     actable.erase(actor->get_id());
-    map_updater(tiles[place_of_death]);
     return Result::Success;
 }
 
 Result Core::do_action(ActionPtr action) {
     switch(action->get_type()) {
         case ActionType::Move:
-            return do_move(Move::to_Ptr(action));
+            return do_move(Move::cast(action));
             break;
         case ActionType::Atack:
-            return do_atack(Atack::to_Ptr(action));
+            return do_atack(Atack::cast(action));
             break;
         case ActionType::Pick:
-            return do_pick(Pick::to_Ptr(action));
+            return do_pick(Pick::cast(action));
             break;
         case ActionType::Interact:
-            return do_interact(Interact::to_Ptr(action));
+            return do_interact(Interact::cast(action));
             break;
-        case ActionType::Destroyed:
-            return do_destroy(Destroyed::to_Ptr(action));
+        case ActionType::Die:
+            return do_die(Die::cast(action));
             break;
     }
     return Result::Failure;

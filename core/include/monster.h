@@ -1,26 +1,21 @@
 #pragma once
 #include "unit.h"
-#include "tile.h"
-#include "core.h"
-#include "item.h"
-#include "stats.h"
-#include "action.h"
+#include "action_fwd.h"
 #include "monster_fwd.h"
 #include "visitor.h"
 #include "AI.h"
 
-#include <vector>
-
 class Monster : public Unit
 {
 public:
-    Monster(const AIPtr _ai, MonsterStatsPtr _stats);
+    Monster(const AIPtr _ai, UnitStats _stats, int _fraction);
     void act();
     void react(ActionPtr action);
-    MonsterStats* get_stats() { return MonsterStats::to_Ptr(stats).get(); }   
+    int get_fraction(){ return fraction; }
     DECLARE_COMMON_METHODS(Monster)
     DECLARE_VISIT(Monster)
 protected:
     AIPtr ai;
+    int fraction;
 };
 

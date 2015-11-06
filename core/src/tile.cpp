@@ -3,7 +3,7 @@
 #include "door.h"
 
 bool Tile::free() {
-    return !unit && !(immovables.size() && !Door::to_Ptr(immovables.front())->is_open());
+    return !unit && !(immovables.size() && !Door::cast(immovables.front())->is_open());
 }
 
 Coord Tile::get_coord(){
@@ -44,7 +44,7 @@ Result Tile::put_item(ItemPtr item) {
 Result Tile::move_to(UnitPtr _unit) { 
     if (unit) { return Result::Failure; }
     unit = _unit;
-    unit->set_pos(Tile::to_Ptr(main_core->get_object(this->get_id())));
+    unit->set_pos(Tile::cast(main_core->get_object(this->get_id())));
     return Result::Success;
 }
 

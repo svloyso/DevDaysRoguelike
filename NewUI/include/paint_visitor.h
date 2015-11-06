@@ -87,8 +87,7 @@ public:
     }    
 
     void visitMonster(Monster* m) {
-        MonsterStats* stats = m->get_stats();
-        int fraction = stats->fraction;
+        int fraction = m->get_fraction();
 
         switch(fraction) {
             case (0):

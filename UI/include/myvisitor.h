@@ -122,7 +122,7 @@ public:
             mobsColors[m->get_id()] = 30 + rand() % 77;
         color = mobsColors[m->get_id()];*/
     }
-	void visitKey (KeyPtr * k)
+	void visitKey (Key* k)
     {
         val = "!"; // "\u26B7";
         color = 33;

@@ -4,6 +4,7 @@
 #include <functional>
 #include <unordered_map>
 
+#include "battle_system.h"
 #include "basic_fwd.h"
 #include "core_fwd.h"
 #include "tile_fwd.h"
@@ -39,7 +40,7 @@ public:
 private:
     Result do_move(MovePtr action);
     Result do_atack(AtackPtr action);
-    Result do_destroy(DestroyedPtr action);
+    Result do_die(DiePtr action);
     Result do_interact(InteractPtr action);
     Result do_pick(PickPtr action);
 
@@ -59,6 +60,7 @@ private:
     std::unordered_map<TilePtr, Coord> tiles;
     HeroPtr hero;
     UnitPtr near_enemy;
+    BattleSystem battle_system;
 };
 
 

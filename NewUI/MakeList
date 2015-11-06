@@ -1,2 +1,2 @@
-UIOBJ = 
+UIOBJ = $(BINDIR)/windows.o
 

@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <string>
 
 #include "basic_fwd.h"
 #include "utils.h"
@@ -7,18 +8,17 @@
 #include "tile_fwd.h"
 #include "visitor.h"
 #include "core.h"
-#include "stats_fwd.h"
 
 #define DECLARE_COMMON_METHODS(name) \
-    static name##Ptr to_Ptr(ObjectPtr obj) {\
+    static name##Ptr cast(ObjectPtr obj) {\
         return std::dynamic_pointer_cast<name>(obj);\
     }\
     template< class... Args >\
-    static name##Ptr make_Ptr(const Args&... args) {\
+    static name##Ptr New(const Args&... args) {\
         return std::make_shared<name>(args...);\
     }\
     name##Ptr get_my_ptr() {\
-        return to_Ptr(main_core->get_object(get_id()));\
+        return cast(main_core->get_object(get_id()));\
     }
     
 #define DECLARE_VISIT(name) void visit(Visitor* v) { v->visit##name(this); }
@@ -31,6 +31,7 @@ public:
     virtual ~Object() {}
     int get_id() { return id; }
     virtual void visit(Visitor* v) {}
+    virtual std::string get_name() { return "Unnamed object"; }
 private:
     int id;
     static int next_id;
@@ -38,25 +39,20 @@ private:
 
 class ActableObject : public Object {
 public:
-    ActableObject(ActableStatsPtr _stats) : stats(_stats) {}
     virtual void act() = 0;
     virtual void react(ActionPtr action) = 0;
     virtual TilePtr get_pos() { return tile; }
     virtual void set_pos(TilePtr t) { tile = t; }
-    virtual ActableStats* get_stats() { return stats.get(); }
 
-    static ActableObjPtr to_Ptr(ObjectPtr obj) {
+    static ActableObjPtr cast(ObjectPtr obj) {
         return std::dynamic_pointer_cast<ActableObject>(obj);
     }
-protected:
-    ActableStatsPtr stats;
 private:
     TilePtr tile;
 };
 
 class Immovable : public ActableObject {
 public:
-    Immovable(ActableStatsPtr _stats = ActableStatsPtr()) : ActableObject(_stats) {}
     DECLARE_COMMON_METHODS(Immovable)
 };
 

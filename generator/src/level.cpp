@@ -632,7 +632,7 @@ void getMap()
             std::vector<ItemPtr> items;
 
             MyMob tempmob;
-            MonsterStatsPtr m;
+            UnitStats m;
             SkeletonAIPtr skelAI;
             MonsterPtr mob;
             KeyPtr key;
@@ -640,39 +640,37 @@ void getMap()
             switch(grid[i][j]) 
             {
                 case TILE_WALL:
-                    tile = std::make_shared<WallTile>();
+                    tile = WallTile::New();
                     break;
                 case TILE_DOOR:
-                    imms.push_back(std::make_shared<Door>());
-                    tile = std::make_shared<FloorTile>(UnitPtr(), std::vector<ItemPtr>(), imms);
+                    imms.push_back(Door::New());
+                    tile = FloorTile::New(UnitPtr(), std::vector<ItemPtr>(), imms);
                     break;
                 case TILE_ORC:
 
                     tempmob = gridMob[i][j];
 
-                    m = MonsterStats::make_Ptr();
-                    m->strength = tempmob.strength;
-                    m->hit_points = tempmob.health;
-                    m->max_hit_points = tempmob.health;
-                    m->area_of_sight = 5;
-                    m->fraction = tempmob.fraction;
+                    m.strength = tempmob.strength;
+                    m.hit_points = tempmob.health;
+                    m.max_hit_points = tempmob.health;
+                    m.area_of_sight = 5;
 
-                    skelAI = SkeletonAI::make_Ptr();
+                    skelAI = SkeletonAI::New();
 
-                    mob = Monster::make_Ptr(skelAI, m);
-                    tile = std::make_shared<FloorTile>(mob);
+                    mob = Monster::New(skelAI, m, tempmob.fraction);
+                    tile = FloorTile::New(mob);
 
                     break;
                 case TILE_KEY:
-                    items.push_back(std::make_shared<Key>());
-                    tile = std::make_shared<FloorTile>(UnitPtr(), items, std::vector< ImmovablePtr >());
+                    items.push_back(Key::New(0.1));
+                    tile = FloorTile::New(UnitPtr(), items, std::vector< ImmovablePtr >());
                     break;
                 case TILE_EXIT:
                     info.hero_init = Coord(i-1, j-1);
-                    tile = std::make_shared<FloorTile>();
+                    tile = FloorTile::New();
                     break;
                 default:
-                    tile = std::make_shared<FloorTile>();
+                    tile = FloorTile::New();
                     break;
             }
             row.push_back(tile);

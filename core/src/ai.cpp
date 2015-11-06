@@ -12,7 +12,7 @@
 
 HeroPtr find_hero(MonsterPtr monster) {
     auto stats = monster->get_stats();
-    int sight = stats->area_of_sight;
+    int sight = stats.area_of_sight;
 
     TilePtr my_pos = monster->get_pos();
     Coord my_coord = my_pos->get_coord();
@@ -22,7 +22,7 @@ HeroPtr find_hero(MonsterPtr monster) {
             TilePtr tile = main_core->get_tile(Coord(x, y));
             UnitPtr unit = tile->get_unit();
             if (unit == main_core->get_hero()) {
-                return Hero::to_Ptr(unit);
+                return Hero::cast(unit);
             }
         }
     }
@@ -104,7 +104,7 @@ void make_move(MonsterPtr monster) {
         coord_to.x += x_diff;
         coord_to.y += y_diff;
         TilePtr tile_to = main_core->get_tile(coord_to);
-        MovePtr move = Move::make_Ptr(monster, tile_to);
+        MovePtr move = Move::New(monster, tile_to);
         Result res = main_core->do_action(move);
         if(res == Result::Success) {
             break;
@@ -114,12 +114,10 @@ void make_move(MonsterPtr monster) {
 
 void atack(MonsterPtr monster, UnitPtr enemy) {
     AtackPtr action;
-    Damage damage = monster->get_damage();
-    action = Atack::make_Ptr(monster, enemy, damage);
+    Impact impact = monster->get_impact();
+    action = Atack::New(monster, enemy, impact);
     main_core->do_action(action);
 }
-
-
 
 void SkeletonAI::act(MonsterPtr monster) {
     HeroPtr hero = find_hero(monster);
@@ -133,7 +131,7 @@ void SkeletonAI::act(MonsterPtr monster) {
         } else {
             Coord coord_to = small_path_search(coord, hero_coord);
             TilePtr tile_to = main_core->get_tile(coord_to);
-            MovePtr move = Move::make_Ptr(monster, tile_to);
+            MovePtr move = Move::New(monster, tile_to);
             main_core->do_action(move);
         }
     } else {
